@@ -2,33 +2,28 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Notifikasis', {
-      id: {
+    await queryInterface.createTable('Aktifitas', {
+      id_aktivitas: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER.UNSIGNED
       },
-      userId: {
-        type: Sequelize.INTEGER.UNSIGNED,
+      email: {
+        type: Sequelize.STRING,
         references: {
           model: 'Users',
-          key: 'id'
+          key: 'email'
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
-      laporanId: {
-        type: Sequelize.INTEGER.UNSIGNED,
-        references: {
-          model: 'Laporans',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+      deskripsi_aktivitas: {
+        type: Sequelize.STRING(255)
       },
-      pesan: Sequelize.TEXT,
-      status: Sequelize.ENUM('Unread', 'Read'),
+      tanggal_aktivitas: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -41,6 +36,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Notifikasis');
+    await queryInterface.dropTable('Aktifitas');
   }
 };
