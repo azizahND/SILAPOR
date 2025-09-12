@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <!-- Tailwind output -->
+    <link href="/output.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-50 dark:bg-neutral-900">
+    <!-- Navbar Preline -->
+    <%- include('sidebar') %>
+    <!-- End Navbar -->
+
+    <main class="p-10">
+      <h1
+        class="text-3xl font-semibold underline text-gray-800 dark:text-white"
+      >
+        Hello world!
+      </h1>
+    </main>
+
+    <!-- Preline JS -->
+    <script src="../node_modules/preline/dist/preline.js"></script>
+  </body>
+</html>

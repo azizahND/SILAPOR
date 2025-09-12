@@ -4,8 +4,8 @@ const morgan = require("morgan");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 
-const laporanRoutes = require("./routes/laporan");
-const authRoutes = require("./routes/auth");
+// const laporanRoutes = require("./routes/laporan");
+// const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -24,8 +24,8 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Routes
-app.use("/laporan", laporanRoutes);
-app.use("/auth", authRoutes);
+// app.use("/laporan", laporanRoutes);
+// app.use("/auth", authRoutes);
 
 // Home
 app.get("/", (req, res) => {
