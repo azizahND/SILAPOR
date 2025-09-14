@@ -12,9 +12,6 @@ module.exports = (sequelize, DataTypes) => {
 
   Laporan.associate = function(models) {
     Laporan.belongsTo(models.User, { foreignKey: 'userId' });
-    Laporan.belongsTo(models.Barang, { foreignKey: 'barangId' });
-    Laporan.belongsTo(models.Komunikasi, { foreignKey: 'komunikasiId' });
-    Laporan.hasMany(models.Notifikasi, { foreignKey: 'laporanId' });
   };
 
   return Laporan;
