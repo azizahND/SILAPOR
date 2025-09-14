@@ -3,3 +3,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .form-input {
+        @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500;
+    }
+    
+    .btn-primary {
+        @apply px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors;
+    }
+    
+    .btn-secondary {
+        @apply px-6 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors;
+    }
+}
