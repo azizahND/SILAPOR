@@ -37,7 +37,7 @@ app.set("views", path.join(__dirname, "views"));
 // Routes
 app.use('/', reportRoutes);
 app.get('/', (req, res) => {
-    res.render('/report');
+    res.render('report-form');
 });
 
 
