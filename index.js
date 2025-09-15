@@ -7,6 +7,7 @@ const multer = require("multer");
 
 const reportRoutes = require('./routes/reportRoutes');
 const authRoutes = require('./routes/auth'); 
+const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use('/', authRoutes); 
 app.use('/reports', reportRoutes); 
+app.use('/mahasiswa', mahasiswaRoutes ); 
 
 
 // Jalankan server
