@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - SILAPOR Unand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preline@1.8.0/dist/preline.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body
+    class="font-[Inter,sans-serif] antialiased min-h-screen bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-[#eef2ff] via-white to-[#dcfce7]"
+  >
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-[#e0e7ff]/20 to-[#dcfce7]/20 opacity-50"
+    ></div>
+    <div
+      class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fill-rule=%22evenodd%22%3E%3Cg%20fill=%22%2322c55e%22%20fill-opacity=%220.05%22%3E%3Ccircle%20cx=%2230%22%20cy=%2230%22%20r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"
+    ></div>
+
+    <div
+      class="min-h-screen flex items-center justify-center px-4 py-8 relative z-10"
+    >
+      <div
+        class="flex w-full max-w-5xl bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 animate-[fade-in_0.6s_ease-out_forwards]"
+      >
+        <div
+          class="w-full lg:w-1/2 p-8 lg:p-12 animate-[slide-up_0.6s_ease-out_forwards]"
+        >
+          <div
+            class="flex items-center gap-3 mb-8 animate-[float_6s_ease-in-out_infinite]"
+          >
+            <img
+              src="/images/logo.png"
+              alt="Logo"
+              class="object-contain"
+              style="width: 70px; height: 70px"
+            />
+            <div>
+              <h1 class="text-xl font-bold text-gray-900">SILAPOR</h1>
+              <p class="text-sm text-gray-500">Universitas Andalas</p>
+            </div>
+          </div>
+
+          <div class="mb-8">
+            <h2
+              class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent"
+            >
+              Selamat Datang Kembali
+            </h2>
+            <p class="text-gray-600 text-md">
+              Silakan masuk ke akun Anda untuk melanjutkan
+            </p>
+          </div>
+
+          <form action="/login" method="POST" class="space-y-6">
+            <div class="space-y-2">
+              <label
+                for="email"
+                class="block text-sm font-semibold text-gray-700"
+              >
+                Alamat Email
+              </label>
+              <div class="relative group">
+                <div
+                  class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="h-5 w-5 text-gray-400 group-focus-within:text-[#22c55e] transition-colors"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="anda@example.com"
+                  class="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#f0fdf4] focus:border-[#22c55e] transition-all duration-200 bg-white/50 backdrop-blur-sm text-gray-900 placeholder-gray-400 hover:border-gray-300"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="password"
+                class="block text-sm font-semibold text-gray-700"
+              >
+                Kata Sandi
+              </label>
+              <div class="relative group">
+                <div
+                  class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="h-5 w-5 text-gray-400 group-focus-within:text-[#22c55e] transition-colors"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Masukkan kata sandi Anda"
+                  class="w-full pl-12 pr-12 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#f0fdf4] focus:border-[#22c55e] transition-all duration-200 bg-white/50 backdrop-blur-sm text-gray-900 placeholder-gray-400 hover:border-gray-300 font-[Inter,sans-serif]"
+                  required
+                  data-hs-toggle-password-options='{
+                    "target": "#password"
+                  }'
+                />
+                <button
+                  type="button"
+                  class="absolute inset-y-0 end-0 pr-4 flex items-center hs-toggle-password"
+                >
+                  <span class="hs-password-toggle-hide">
+                    <svg
+                      class="h-5 w-5 text-gray-400"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        class="hs-password-toggle-hide-icon"
+                        d="M9.88 9.88a3 3 0 1 0 4.24 4.24"
+                      ></path>
+                      <path
+                        class="hs-password-toggle-hide-icon"
+                        d="M10.73 15.68A16 16 0 0 1 12 16c2.5 0 4.84-.96 6.56-2.68A16 16 0 0 0 12 8c-1.33 0-2.65.24-3.86.73"
+                      ></path>
+                      <path
+                        class="hs-password-toggle-hide-icon"
+                        d="M3 3 21 21"
+                      ></path>
+                    </svg>
+                  </span>
+                  <span class="hs-password-toggle-show">
+                    <svg
+                      class="h-5 w-5 text-gray-400"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        class="hs-password-toggle-show-icon"
+                        d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input
+                  id="remember"
+                  name="remember"
+                  type="checkbox"
+                  class="h-4 w-4 text-[#16a34a] focus:ring-[#22c55e] border-gray-300 rounded"
+                />
+                <label for="remember" class="ml-2 block text-sm text-gray-700">
+                  Ingat saya
+                </label>
+              </div>
+              <a
+                href="#"
+                class="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors"
+              >
+                Lupa kata sandi?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-gradient-to-r from-[#16a34a] to-[#15803d] hover:from-[#15803d] hover:to-[#166534] text-white py-4 px-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:ring-4 focus:ring-[#f0fdf4] focus:outline-none"
+            >
+              <span class="flex items-center justify-center gap-2">
+                Masuk
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </span>
+            </button>
+          </form>
+
+          <p class="text-center text-sm text-gray-600 p-4">
+            Belum punya akun?
+            <a
+              href="/register"
+              class="text-[#16a34a] hover:text-[#15803d] font-semibold transition-colors"
+            >
+              Daftar di sini
+            </a>
+          </p>
+        </div>
+
+        <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-[#16a34a]/90 to-[#166534]/90 z-10"
+          ></div>
+          <img
+            src="/images/unand.jpg"
+            alt="Gedung Universitas"
+            class="w-full h-full object-cover"
+          />
+          <div
+            class="absolute inset-0 z-20 flex items-center justify-center p-12"
+          >
+            <div class="text-center text-white">
+              <div class="flex justify-center items-center">
+                <img
+                  src="/images/logo.png"
+                  alt="Logo"
+                  class="object-contain"
+                  style="width: 200px; height: 200px"
+                />
+              </div>
+              <p class="text-lg opacity-90 mb-6">
+                Sistem Informasi Laporan Penemuan & Kehilangan Universitas
+                Andalas
+              </p>
+              <div
+                class="flex items-center justify-center gap-2 text-sm opacity-75"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <span>Padang, Sumatera Barat</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const passwordInput = document.getElementById("password");
+        const toggleBtn = document.querySelector(".hs-toggle-password");
+        const showIcon = toggleBtn.querySelector(".hs-password-toggle-show");
+        const hideIcon = toggleBtn.querySelector(".hs-password-toggle-hide");
+        toggleBtn.addEventListener("click", function () {
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            showIcon.style.display = "none";
+            hideIcon.style.display = "inline";
+          } else {
+            passwordInput.type = "password";
+            showIcon.style.display = "inline";
+            hideIcon.style.display = "none";
+          }
+        });
+        // Initial state
+        showIcon.style.display = "inline";
+        hideIcon.style.display = "none";
+      });
+    </script>
+  </body>
+</html>

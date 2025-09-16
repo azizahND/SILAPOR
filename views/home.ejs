@@ -1,27 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <!-- Tailwind output -->
-    <link href="/output.css" rel="stylesheet" />
-  </head>
-  <body class="bg-gray-50 dark:bg-neutral-900">
-    <!-- Navbar Preline -->
-    <%- include('sidebar') %>
-    <%- include('navbar') %>
-    <!-- End Navbar -->
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Penemuan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .gradient-bg {
+        background-image: linear-gradient(to right, #22c55e, #16a34a);
+      }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-neutral-900">
+    <%- include('components/navbar') %>
 
-    <main class="p-10">
-      <h1
-        class="text-3xl font-semibold underline text-gray-800 dark:text-white"
-      >
-        Hello world!
-      </h1>
-    </main>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-    <!-- Preline JS -->
-    <script src="../node_modules/preline/dist/preline.js"></script>
-  </body>
+        <div class="gradient-bg rounded-2xl p-8 mb-10 shadow-lg text-white">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl lg:text-4xl font-bold mb-2">Selamat Datang!</h1>
+                    <p class="text-lg lg:text-xl opacity-90 font-light">Sistem Pelaporan Kehilangan dan Penemuan Barang</p>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <a href="/reports" class="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-md">
+                       <i class="fas fa-plus mr-2"></i>Buat Laporan Baru
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Laporan Penemuan Terbaru</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=200&fit=crop" alt="Dompet" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <circle cx="10" cy="10" r="3"></circle>
+                            </svg>
+                            Tersedia
+                        </span>
+                    </div>
+                    <div class="absolute top-4 right-4">
+                        <span class="text-xs text-white bg-black/50 px-2 py-1 rounded-full font-medium">2 jam lalu</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Dompet Kulit Hitam</h3>
+                        <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                             <i class="far fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">Dompet kulit hitam berisi KTP, SIM, dan beberapa kartu kredit. Ditemukan dalam kondisi lengkap.</p>
+                    
+                    <div class="space-y-3 mb-5">
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+                            Kantin Pusat, Lantai 1
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
+                            Ditemukan oleh: Ahmad Rizki
+                        </div>
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-hashtag w-4 h-4 mr-2"></i>
+                            ID: #FND001
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm">
+                            Klaim Barang
+                        </button>
+                        <button class="flex-1 bg-white hover:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-gray-700 dark:text-gray-300 py-3 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm">
+                            Detail
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</body>
 </html>
