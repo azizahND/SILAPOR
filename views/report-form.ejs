@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Laporan</title>
     <link href="/css/output.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-50">
-    <%- include('components/navbar') %>
-    
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-2xl mx-auto">
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h1 class="text-2xl font-bold text-green-600 mb-6 text-center">Form Laporan</h1>
                 
-                <form action="/reports" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form id="reportForm" action="/reports" method="POST" enctype="multipart/form-data" class="space-y-6">
                     <!-- Jenis Laporan -->
                     <div>
                         <label for="jenis_laporan" class="block text-sm font-medium text-gray-700 mb-2">
@@ -89,7 +89,7 @@
                                 class="px-6 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">
                             Back
                         </button>
-                        <button type="submit" 
+                        <button type="submit" id="submitBtn"
                                 class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
                             Kirim Laporan
                         </button>
@@ -99,11 +99,12 @@
         </div>
     </div>
 
-  
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('foto_barang');
             const dropZone = document.getElementById('dropZone');
+            const reportForm = document.getElementById('reportForm');
+            const submitBtn = document.getElementById('submitBtn');
             
             // Click to select file
             dropZone.addEventListener('click', function() {
@@ -165,7 +166,7 @@
                 dropZone.innerHTML = `
                     <div class="space-y-2">
                         <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         <div class="text-sm text-gray-600">
                             <span class="text-green-600 hover:text-green-500">Upload a file</span>
@@ -175,6 +176,56 @@
                     </div>
                 `;
             };
+
+            // Handle form submission
+            reportForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Disable submit button to prevent double submission
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Mengirim...';
+                
+                try {
+                    const formData = new FormData(reportForm);
+                    
+                    const response = await fetch('/reports', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        await Swal.fire({
+                            title: 'Berhasil!',
+                            text: 'Laporan Anda berhasil dikirim',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#16a34a'
+                        });
+                        
+                        // Redirect to my reports page
+                        window.location.href = '/reports/my-reports';
+                    } else {
+                        throw new Error(result.message || 'Gagal mengirim laporan');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    
+                    await Swal.fire({
+                        title: 'Gagal!',
+                        text: error.message || 'Terjadi kesalahan saat mengirim laporan',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc2626'
+                    });
+                } finally {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Kirim Laporan';
+                }
+            });
         });
     </script>
 </body>

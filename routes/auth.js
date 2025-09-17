@@ -11,4 +11,11 @@ router.get("/register", (req, res) => {
   res.render("register", { title: "SILAPOR - Register" });
 });
 
+router.get('/profile', (req, res) => {
+    res.render('profile');
+});
+
+router.get('/update-profile', (req, res) => {
+    res.render('editProfile');
+});
 module.exports = router;
