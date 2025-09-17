@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
       { expiresIn: "1h" },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.render("home", { user, token });
       }
     );
   } catch (err) {
