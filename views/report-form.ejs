@@ -177,55 +177,59 @@
                 `;
             };
 
-            // Handle form submission
-            reportForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Disable submit button to prevent double submission
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = 'Mengirim...';
-                
-                try {
-                    const formData = new FormData(reportForm);
-                    
-                    const response = await fetch('/reports', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        await Swal.fire({
-                            title: 'Berhasil!',
-                            text: 'Laporan Anda berhasil dikirim',
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#16a34a'
-                        });
-                        
-                        // Redirect to my reports page
-                        window.location.href = '/reports/my-reports';
-                    } else {
-                        throw new Error(result.message || 'Gagal mengirim laporan');
-                    }
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    
-                    await Swal.fire({
-                        title: 'Gagal!',
-                        text: error.message || 'Terjadi kesalahan saat mengirim laporan',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#dc2626'
-                    });
-                } finally {
-                    // Re-enable submit button
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Kirim Laporan';
-                }
+           reportForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Mengirim...';
+
+    try {
+        const formData = new FormData(reportForm);
+
+        // 🔑 ambil token dari localStorage
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("Token tidak ditemukan, silakan login ulang");
+        }
+
+        const response = await fetch('/reports', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            await Swal.fire({
+                title: 'Berhasil!',
+                text: 'Laporan Anda berhasil dikirim',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#16a34a'
             });
+            window.location.href = '/reports/my-reports';
+        } else {
+            throw new Error(result.message || 'Gagal mengirim laporan');
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        await Swal.fire({
+            title: 'Gagal!',
+            text: error.message || 'Terjadi kesalahan saat mengirim laporan',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#dc2626'
+        });
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Kirim Laporan';
+    }
+});
+
         });
     </script>
 </body>
