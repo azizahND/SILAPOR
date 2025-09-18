@@ -13,16 +13,6 @@ module.exports = {
         role: 'admin',
         createdAt: new Date(),
         updatedAt: new Date()
-      },
-      {
-        nama: 'budi',
-        email: 'budi@silapor.com',
-        no_telepon: '089876543210',
-        alamat: 'Bukittinggi, Indonesia',
-        password: await bcrypt.hash('user123', 10),
-        role: 'user',
-        createdAt: new Date(),
-        updatedAt: new Date()
       }
     ]);
   },

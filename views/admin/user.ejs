@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-gray-100 dark:bg-neutral-900">
+    <%- include('../components/sidebar') %>
+    <div class="ml-64 p-6">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Manajemen User</h1>
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 p-6 shadow-sm hover:shadow-xl transition-shadow duration-300">
+            
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                <thead class="bg-gray-50 dark:bg-neutral-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Nama</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">No. Telepon</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Alamat</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-neutral-800 divide-y divide-gray-200 dark:divide-neutral-700">
+                    <% users.forEach(user => { %>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"><%= user.nama %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.email %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.no_telepon %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.alamat %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.role %></td> 
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300">
+                            <form id="deleteForm-<%= user.email %>" action="/admin/userList/delete/<%= user.email %>" method="POST" onclick="confirmDelete(event, '<%= user.email %>')">
+                                <button type="submit" class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+                            </form>
+                            <form>
+                                <button type="submit" class="text-blue-600 hover:text-blue-900"><i class="fas fa-edit"></i> Edit</button>
+                            </form>
+                        </td> 
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+    </div>
+
+<script>
+function confirmDelete(event, userEmail) {
+    event.preventDefault(); 
+    Swal.fire({
+        title: 'Apakah Anda Yakin?',
+        text: "Data user ini akan dihapus secara permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const formId = 'deleteForm-' + userEmail;
+            const form = document.getElementById(formId);
+            
+            if (form) {
+                form.submit();
+            } else {
+                console.error("Form with ID '" + formId + "' not found.");
+            }
+        }
+    });
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+</html>

@@ -7,7 +7,8 @@ const fs = require('fs');
  */
 exports.showReportForm = (req, res) => {
   try {
-    res.render('report-form', { title: 'Form Laporan' });
+    const role = req.user.role;
+    res.render('report-form', { title: 'Form Laporan', role});
   } catch (error) {
     console.error('Error showing report form:', error);
     res.status(500).render('error', {
@@ -24,7 +25,8 @@ exports.createReport = async (req, res) => {
     const { jenis_laporan, nama_barang, lokasi_kejadian, tanggal_kejadian, deskripsi } = req.body;
 
     // Ambil email user dari JWT
-    const userEmail = req.user?.email;
+    const userEmail = req.user.email;
+    console.log('ini re.user',req.user)
     if (!userEmail) {
       return res.status(401).json({ success: false, message: 'User tidak ditemukan' });
     }
