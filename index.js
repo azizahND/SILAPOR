@@ -1,18 +1,21 @@
 require('dotenv').config();
 const express = require("express");
+const http = require('http');
 const path = require("path");
 const morgan = require("morgan");
-const session = require("express-session");
+const cookieParser = require('cookie-parser');
 
-// tambahan untuk livereload
 const livereload = require("livereload");
 const connectLivereload = require("connect-livereload");
 
-const reportRoutes = require('./routes/reportRoutes');
 const authRoutes = require('./routes/auth'); 
 const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
+const adminRoutes = require('./routes/adminRoute');
 
 const app = express();
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // ====== LiveReload Setup ======
 const liveReloadServer = livereload.createServer({ port: 35730 });
@@ -34,11 +37,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(session({
-    secret: "silapor-secret",
-    resave: false,
-    saveUninitialized: true
-}));
 
 // View engine
 app.set("view engine", "ejs");
@@ -46,8 +44,8 @@ app.set("views", path.join(__dirname, "views"));
 
 // Routes
 app.use('/', authRoutes); 
-app.use('/reports', reportRoutes); 
 app.use('/mahasiswa', mahasiswaRoutes ); 
+app.use('/admin', adminRoutes );
 
 // Jalankan server
 const PORT = process.env.PORT || 3000;

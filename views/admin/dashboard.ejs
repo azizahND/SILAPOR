@@ -7,29 +7,55 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      .gradient-bg {
-        background-image: linear-gradient(to right, #22c55e, #16a34a);
-      }
-    </style>
 </head>
 <body class="bg-gray-100 dark:bg-neutral-900">
-    <%- include('components/navbar') %>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-        <div class="gradient-bg rounded-2xl p-8 mb-10 shadow-lg text-white">
+    <%- include('../components/sidebar') %>
+    <div class="ml-64 p-6">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Dashboard Admin</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 p-6 shadow-sm hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center">
+                    <div class="bg-green-100 text-green-600 rounded-full p-3">
+                        <i class="fas fa-file-alt fa-2x"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Total Laporan</h2>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">150</p>
+                    </div>
+                </div>
+            </div>  
+            <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 p-6 shadow-sm hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center">
+                    <div class="bg-blue-100 text-blue-600 rounded-full p-3">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Laporan Diselesaikan</h2>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">120</p>
+                    </div>     
+                </div>
+            </div>
+            <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 p-6 shadow-sm hover:shadow-xl transition-shadow duration-300">
+                <div class="flex items-center">
+                    <div class="bg-red-100 text-red-600 rounded-full p-3">
+                        <i class="fas fa-hourglass-half fa-2x"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Laporan Pending</h2>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">30</p>
+                    </div>  
+                </div>
+            </div>
+        </div>
+        <div class="py-12">
+        <div class="bg-green-600 rounded-2xl p-8 mb-10 shadow-lg text-white">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div>
                     <h1 class="text-3xl lg:text-4xl font-bold mb-2">Selamat Datang!</h1>
                     <p class="text-lg lg:text-xl opacity-90 font-light">Sistem Pelaporan Kehilangan dan Penemuan Barang</p>
                 </div>
                 <div class="mt-6 md:mt-0">
-                    <a href="/mahasiswa/reports" class="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-md">
+                    <a href="../report-form.ejs" class="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-md">
                        <i class="fas fa-plus mr-2"></i>Buat Laporan Baru
                     </a>
                 </div>
@@ -90,5 +116,6 @@
             </div>
             </div>
     </div>
+    </div>  
 </body>
 </html>
