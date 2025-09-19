@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
 
     jwt.sign(
       payload,
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET_TOKEN,
       { expiresIn: "1h" },
       (err, token) => {
         if (err) throw err;
@@ -81,5 +81,15 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.error("Error during login: ", err);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.redirect("/"); 
+  } catch (err) {
+    console.error("Error during logout: ", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

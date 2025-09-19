@@ -1,81 +1,272 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User List</title>
+    <title>Manajemen User</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Style untuk transisi modal */
+        .modal-content {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 dark:bg-neutral-900">
+<body class="bg-gray-100 dark:bg-neutral-900 text-gray-800 dark:text-gray-200">
+    
     <%- include('../components/sidebar') %>
-    <div class="ml-64 p-6">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Manajemen User</h1>
-        <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 p-6 shadow-sm hover:shadow-xl transition-shadow duration-300">
-            
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                <thead class="bg-gray-50 dark:bg-neutral-700">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Nama</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">No. Telepon</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Alamat</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-neutral-800 divide-y divide-gray-200 dark:divide-neutral-700">
-                    <% users.forEach(user => { %>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"><%= user.nama %></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.email %></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.no_telepon %></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.alamat %></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.role %></td> 
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300">
-                            <form id="deleteForm-<%= user.email %>" action="/admin/userList/delete/<%= user.email %>" method="POST" onclick="confirmDelete(event, '<%= user.email %>')">
-                                <button type="submit" class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-                            </form>
-                            <form>
-                                <button type="submit" class="text-blue-600 hover:text-blue-900"><i class="fas fa-edit"></i> Edit</button>
-                            </form>
-                        </td> 
-                    </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+
+    <main class="p-4 sm:p-6 sm:ml-64 transition-all duration-300">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-0">Manajemen User</h1>
+            <button onclick="openCreateModal()" class="flex items-center gap-2 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                <i class="fas fa-plus-circle"></i>
+                <span>Tambah User</span>
+            </button>
+        </div>
+
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 p-4 sm:p-6 shadow-sm hover:shadow-xl transition-shadow duration-300">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                    <thead class="bg-gray-50 dark:bg-neutral-700/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Nama</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-neutral-300 uppercase tracking-wider">No. Telepon</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Alamat</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Role</th>
+                            <th class="px-6 py-3 text-center text-xs font-bold text-gray-500 dark:text-neutral-300 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-neutral-800 divide-y divide-gray-200 dark:divide-neutral-700">
+                        <% users.forEach(user => { %>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-neutral-700/50 transition-colors duration-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"><%= user.nama %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.email %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.no_telepon %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-neutral-300"><%= user.alamat %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <% if (user.role === 'admin') { %>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">Admin</span>
+                                <% } else { %>
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">User</span>
+                                <% } %>
+                            </td> 
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                                <div class="flex items-center justify-center gap-4">
+                                    <button 
+                                    class="text-blue-500 hover:text-blue-700 transition-colors duration-200" 
+                                    title="Edit"
+                                    data-user='<%= JSON.stringify(user) %>'
+                                    onclick="openEditModal(this.dataset.user)">
+                                        <i class="fas fa-edit fa-lg"></i>
+                                    </button> 
+                                    <% if (user.role == 'user') { %>
+                                        <form id="deleteForm-<%= user.email %>" action="/admin/userList/delete/<%= user.email %>" method="POST" class="inline-block">
+                                        <button type="button" onclick="confirmDelete(event, '<%= user.email %>')" class="text-red-500 hover:text-red-700 transition-colors duration-200" title="Delete">
+                                            <i class="fas fa-trash-alt fa-lg"></i>
+                                        </button>
+                                    </form>
+                                    <% } %>
+                                </div>
+                            </td> 
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div id="createUserModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl w-full max-w-md transform scale-95 opacity-0">
+            <form action="/admin/userList/create" method="POST">
+                <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-neutral-700">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">Tambah User Baru</h3>
+                    <button type="button" onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <i class="fas fa-times fa-lg"></i>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="create-nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama</label>
+                        <input type="text" id="create-nama" name="nama" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <div>
+                        <label for="create-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <input type="email" id="create-email" name="email" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <div>
+                        <label for="create-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                        <input type="password" id="create-password" name="password" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <div>
+                        <label for="create-no_telepon" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Telepon</label>
+                        <input type="text" id="create-no_telepon" name="no_telepon" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label for="create-alamat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat</label>
+                        <textarea id="create-alamat" name="alamat" rows="3" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+                    </div>
+                    <div>
+                        <label for="create-role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
+                        <select id="create-role" name="role" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                            <option value="user" selected>User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end items-center p-6 border-t border-gray-200 dark:border-neutral-700 space-x-3">
+                    <button type="button" onclick="closeCreateModal()" class="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-neutral-500 transition">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">Simpan User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="editUserModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl w-full max-w-md transform scale-95 opacity-0">
+            <form id="editUserForm" action="/admin/userList/update" method="POST">
+                <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-neutral-700">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white">Edit User</h3>
+                    <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <i class="fas fa-times fa-lg"></i>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <input type="hidden" id="edit-original-email" name="originalEmail">
+                    <div>
+                        <label for="edit-nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama</label>
+                        <input type="text" id="edit-nama" name="nama" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label for="edit-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <input type="email" id="edit-email" name="email" class="w-full px-3 py-2 bg-gray-200 dark:bg-neutral-900 border border-gray-300 dark:border-neutral-600 rounded-lg cursor-not-allowed" readonly>
+                        <p class="text-xs text-gray-500 mt-1">Email tidak dapat diubah.</p>
+                    </div>
+                    <div>
+                        <label for="edit-no_telepon" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. Telepon</label>
+                        <input type="text" id="edit-no_telepon" name="no_telepon" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label for="edit-alamat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alamat</label>
+                        <textarea id="edit-alamat" name="alamat" rows="3" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+                    </div>
+                    <div>
+                        <label for="edit-role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Role</label>
+                        <select id="edit-role" name="role" class="w-full px-3 py-2 bg-gray-50 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end items-center p-6 border-t border-gray-200 dark:border-neutral-700 space-x-3">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-neutral-600 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-neutral-500 transition">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-<script>
-function confirmDelete(event, userEmail) {
-    event.preventDefault(); 
-    Swal.fire({
-        title: 'Apakah Anda Yakin?',
-        text: "Data user ini akan dihapus secara permanen!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, Hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const formId = 'deleteForm-' + userEmail;
-            const form = document.getElementById(formId);
-            
-            if (form) {
-                form.submit();
-            } else {
-                console.error("Form with ID '" + formId + "' not found.");
-            }
-        }
-    });
-}
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const modalContent = modal.querySelector('.modal-content');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+        }, 50);
+    }
+    
+    // Fungsi generik untuk menutup modal
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const modalContent = modal.querySelector('.modal-content');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // Menutup modal jika klik di luar
+    document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+
+    // === FUNGSI SPESIFIK UNTUK MODAL CREATE ===
+    function openCreateModal() {
+        openModal('createUserModal');
+    }
+
+    function closeCreateModal() {
+        closeModal('createUserModal');
+        document.querySelector('#createUserModal form').reset();
+    }
+
+    function openEditModal(userData) {
+        const user = JSON.parse(userData);
+        document.getElementById('edit-original-email').value = user.email;
+        document.getElementById('edit-nama').value = user.nama;
+        document.getElementById('edit-email').value = user.email;
+        document.getElementById('edit-no_telepon').value = user.no_telepon;
+        document.getElementById('edit-alamat').value = user.alamat;
+        document.getElementById('edit-role').value = user.role;
+
+    const form = document.getElementById('editUserForm');
+    form.action = `/admin/userList/update/${user.email}`;
+
+        openModal('editUserModal');
+    }
+
+    function closeEditModal() {
+        closeModal('editUserModal');
+    }
+
+    function confirmDelete(event, userEmail) {
+        event.preventDefault(); 
+        Swal.fire({
+            title: 'Apakah Anda Yakin?',
+            text: `Data user dengan email ${userEmail} akan dihapus permanen!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            background: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff',
+            color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#000'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById(`deleteForm-${userEmail}`);
+                if (form) form.submit();
+            }
+        });
+    }
+    </script>
 </body>
-</html>
+</html> 

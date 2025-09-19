@@ -5,7 +5,8 @@ const fs = require('fs');
 exports.listUsers = async (req, res) => {
   try {
     const users = await User.findAll({ 
-        attributes: { exclude: ['password'] } 
+        attributes: { exclude: ['password'] },
+        order: [['createdAt', 'ASC']],
     });
     res.render('admin/user', { title: 'Manajemen User', users });
   } catch (error) {
@@ -53,7 +54,7 @@ exports.updateUser = async (req, res) => {
             { nama, email, no_telepon, alamat, role },
             { where: { email: userEmail } }
         );
-        res.redirect('/admin/user');
+        res.redirect('/admin/userList');
     }
     catch (error) {
         console.error('Error updating user:', error);
@@ -62,3 +63,17 @@ exports.updateUser = async (req, res) => {
         });
     }
 };
+
+exports.createUser = async (req, res) => {  
+    try {
+        const { nama, email, no_telepon, alamat, password, role } = req.body;
+        await User.create({ nama, email, no_telepon, alamat, password, role });
+        res.redirect('/admin/userList');
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).render('error', {  
+            message: 'Terjadi kesalahan saat membuat user baru',
+        });
+    }
+};
+

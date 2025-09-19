@@ -1,10 +1,7 @@
-const { Laporan } = require('../models');
+const { Laporan, User } = require('../models');
 const path = require('path');
 const fs = require('fs');
 
-/**
- * Menampilkan form untuk membuat laporan
- */
 exports.showReportForm = (req, res) => {
   try {
     const role = req.user.role;
@@ -98,3 +95,42 @@ exports.getUserReports = async (req, res) => {
     });
   }
 };
+
+exports.getAllReportsAdmin = async (req, res) => {
+  try {
+    const reports = await Laporan.findAll({
+      include: [
+        {
+          model : User,
+          atrributes: ['nama', 'email']}
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+    res.render('admin/dashboard', {
+      reports,
+    });
+  } catch (error) {
+    console.error('Error getting all reports:', error);
+    res.status(500).send("Terjadi kesalahan pada server");
+  }
+}
+
+exports.getAllReportsUser = async (req, res) => {
+  try {
+    const reports = await Laporan.findAll({
+      include: [
+        {
+          model : User,
+          atrributes: ['nama', 'email']}
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+    res.render('home', {
+      reports,
+    });
+  } catch (error) {
+    console.error('Error getting all reports:', error);
+    res.status(500).send("Terjadi kesalahan pada server");
+  }
+}
+

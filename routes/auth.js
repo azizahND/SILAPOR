@@ -18,4 +18,7 @@ router.get('/profile', (req, res) => {
 router.get('/update-profile', (req, res) => {
     res.render('editProfile');
 });
+
+router.post('/logout', authController.logout)
+
 module.exports = router;

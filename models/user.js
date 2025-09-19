@@ -30,7 +30,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   
   User.associate = function(models) {
-    User.hasMany(models.Laporan, { foreignKey: 'userId' });
+    User.hasMany(models.Laporan, { 
+      foreignKey: 'email',
+      onDelete: 'CASCADE',  
+      hooks: true          
+    });
   };
   
   return User;

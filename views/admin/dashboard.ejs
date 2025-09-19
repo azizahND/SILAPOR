@@ -65,9 +65,10 @@
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Laporan Penemuan Terbaru</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300">
+            <% reports.forEach(report => { %>
+                <div class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=200&fit=crop" alt="Dompet" class="w-full h-48 object-cover">
+                    <img src="/uploads/<%= report.foto_barang %>" alt="<%= report.nama_barang %>" class="w-full h-48 object-cover">
                     <div class="absolute top-4 left-4">
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -82,25 +83,18 @@
                 </div>
                 <div class="p-6">
                     <div class="flex items-start justify-between mb-3">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Dompet Kulit Hitam</h3>
-                        <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                             <i class="far fa-bookmark text-xl"></i>
-                        </button>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white"><%= report.nama_barang %></h3>
                     </div>
-                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">Dompet kulit hitam berisi KTP, SIM, dan beberapa kartu kredit. Ditemukan dalam kondisi lengkap.</p>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3"><%= report.deskripsi %></p>
                     
                     <div class="space-y-3 mb-5">
                         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                             <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
-                            Kantin Pusat, Lantai 1
+                            <%= report.lokasi %>
                         </div>
                         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                             <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
-                            Ditemukan oleh: Ahmad Rizki
-                        </div>
-                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <i class="fas fa-hashtag w-4 h-4 mr-2"></i>
-                            ID: #FND001
+                            Ditemukan oleh: <%= report.User.nama %>
                         </div>
                     </div>
                     
@@ -114,6 +108,8 @@
                     </div>
                 </div>
             </div>
+            <% }) %>
+
             </div>
     </div>
     </div>  
