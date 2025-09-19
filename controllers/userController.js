@@ -32,7 +32,7 @@ exports.showEditForm = async (req, res) => {
     try {
         const userEmail = req.params.email;
         const user = await User.findByPk(userEmail, {
-            attributes: { exclude: ['password'] } // Exclude password field
+            attributes: { exclude: ['password'] } 
         });
         if (!user) {
             return res.status(404).render('error', { message: 'User tidak ditemukan' });

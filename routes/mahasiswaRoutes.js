@@ -9,6 +9,7 @@ router.get('/home', verifyToken, role('user'), reportController.getAllReportsUse
 router.get('/reports', verifyToken, role('user'), reportController.showReportForm);
 router.post('/reports', verifyToken, role('user'), upload.single('foto_barang'), reportController.createReport);
 
-router.get('/my-reports', reportController.getUserReports);
+router.get('/my-reports', verifyToken,role('user'), reportController.getUserReports);
+
 
 module.exports = router;

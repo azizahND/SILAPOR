@@ -14,29 +14,23 @@ exports.showReportForm = (req, res) => {
   }
 };
 
-/**
- * Proses pembuatan laporan baru
- */
+
 exports.createReport = async (req, res) => {
   try {
-    const { jenis_laporan, nama_barang, lokasi_kejadian, tanggal_kejadian, deskripsi } = req.body;
+    const { jenis_laporan, nama_barang, lokasi_kejadian, tanggal_kejadian, deskripsi, foto_barang } = req.body;
 
-    // Ambil email user dari JWT
     const userEmail = req.user.email;
-    console.log('ini re.user',req.user)
     if (!userEmail) {
       return res.status(401).json({ success: false, message: 'User tidak ditemukan' });
     }
 
-    // Validasi input wajib
-    if (!jenis_laporan || !nama_barang || !lokasi_kejadian || !tanggal_kejadian || !deskripsi) {
+    if (!jenis_laporan || !nama_barang || !lokasi_kejadian || !tanggal_kejadian || !deskripsi || foto_barang) {
       return res.status(400).json({
         success: false,
         message: 'Semua field wajib diisi',
       });
     }
 
-    // Menyiapkan data laporan
     const reportData = {
       email: userEmail,
       jenis_laporan,
@@ -44,12 +38,11 @@ exports.createReport = async (req, res) => {
       lokasi: lokasi_kejadian,
       deskripsi,
       foto_barang: req.file ? req.file.filename : null,
-      status: 'Waiting for upload verification', // sesuai enum model
+      status: 'Waiting for upload verification', 
       tanggal_kejadian: new Date(tanggal_kejadian),
       tanggal_laporan: new Date(),
     };
 
-    // Simpan ke database
     await Laporan.create(reportData);
 
     res.json({
@@ -59,7 +52,6 @@ exports.createReport = async (req, res) => {
   } catch (error) {
     console.error('Error creating report:', error);
 
-    // Hapus file jika terjadi error saat upload
     if (req.file) {
       const filePath = path.join(req.file.destination, req.file.filename);
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
@@ -72,15 +64,18 @@ exports.createReport = async (req, res) => {
   }
 };
 
-/**
- * Mengambil semua laporan pengguna yang login
- */
+
 exports.getUserReports = async (req, res) => {
   try {
-    const userEmail = req.user?.email;
+    const userEmail = req.user.email;
 
     const reports = await Laporan.findAll({
-      where: { email: userEmail }, // hanya laporan user login
+      include: [
+        {
+          model : User,
+          atrributes: ['nama', 'email']}
+      ],
+      where: { email: userEmail }, 
       order: [['createdAt', 'DESC']],
     });
 
@@ -123,6 +118,7 @@ exports.getAllReportsUser = async (req, res) => {
           model : User,
           atrributes: ['nama', 'email']}
       ],
+      where: { status: 'On Progress' },
       order: [['createdAt', 'DESC']],
     });
     res.render('home', {
