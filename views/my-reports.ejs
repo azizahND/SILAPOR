@@ -26,8 +26,9 @@
   </head>
   <body class="bg-gray-100 dark:bg-neutral-900">
     <%- include('components/navbar') %>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-    <div class="bg-gray-100 pt-12 mb-8">
+    <div class="bg-gray-100 mb-8">
       <div class="container mx-auto px-4">
         <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">
           Laporan Saya
@@ -151,7 +152,7 @@
               </p>
             </div>
             <div class="flex gap-3">
-              <button data-user='<%= JSON.stringify(report) %>' onclick='openDetailModal(this.dataset.user)' class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
+              <button data-user='<%= JSON.stringify(report) %>' onclick='openDetailModal(this.dataset.user)' class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
                 <i class="fas fa-eye mr-2"></i>Detail
               </button>
               <button
@@ -172,6 +173,8 @@
         <% }) %>
       </div>
       <% } %>
+    </div>
+
     </div>
     
     <div id="editReportModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
