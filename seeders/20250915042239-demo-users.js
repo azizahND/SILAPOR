@@ -9,7 +9,7 @@ module.exports = {
         email: 'admin@silapor.com',
         no_telepon: '081234567890',
         alamat: 'Padang, Indonesia',
-        password: await bcrypt.hash('admin123', 10), // hash password
+        password: await bcrypt.hash('admin123', 10), 
         role: 'admin',
         createdAt: new Date(),
         updatedAt: new Date()

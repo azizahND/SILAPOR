@@ -1,5 +1,3 @@
-// middleware/verifyToken.js
-
 const jwt = require('jsonwebtoken');
 
 function verifyToken(req, res, next) {
@@ -14,8 +12,6 @@ function verifyToken(req, res, next) {
       return res.status(500).send({ auth: false, message: 'Gagal untuk melakukan verifikasi token.' });
     }
     
-    // Attach the decoded user data (including the role) to the request object
-    // This makes it available to subsequent middleware like checkRole
     req.user = decoded; 
     next();
   });

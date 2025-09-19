@@ -177,12 +177,10 @@
         const fileInput = document.getElementById("foto_barang");
         const dropZone = document.getElementById("dropZone");
 
-        // Click to select file
         dropZone.addEventListener("click", function () {
           fileInput.click();
         });
 
-        // Handle file drop
         dropZone.addEventListener("dragover", function (e) {
           e.preventDefault();
           dropZone.classList.add("border-green-400", "bg-green-50");
@@ -204,7 +202,6 @@
           }
         });
 
-        // Handle file input change
         fileInput.addEventListener("change", function (e) {
           if (e.target.files.length > 0) {
             updateFileDisplay(e.target.files[0]);
@@ -231,7 +228,6 @@
                 `;
         }
 
-        // Reset file input function
         window.resetFileInput = function () {
           fileInput.value = "";
           dropZone.innerHTML = `

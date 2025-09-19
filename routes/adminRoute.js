@@ -10,6 +10,7 @@ router.get('/dashboard', verifyToken, role('admin'), reportController.getAllRepo
 router.get('/reports', verifyToken, role('admin'), reportController.showReportForm);
 router.post('/reports', verifyToken, role('admin'), upload.single('foto_barang'), reportController.createReport);
 
+
 router.get('/userList', verifyToken, role('admin'), userController.listUsers);
 router.post('/userList/delete/:email', verifyToken, role('admin'), userController.deleteUser);
 router.post('/userList/create', verifyToken, role('admin'), userController.createUser);
