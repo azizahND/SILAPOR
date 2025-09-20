@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM("admin", "user"),
         allowNull: false,
       },
+      isVerified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

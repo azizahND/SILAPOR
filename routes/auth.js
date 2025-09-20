@@ -10,6 +10,9 @@ router.get("/", (req, res) => {
 router.get("/register", (req, res) => {
   res.render("register", { title: "SILAPOR - Register" });
 });
+router.get("/login", (req, res) => {
+  res.render("login", { title: "SILAPOR - Login" });
+});
 
 router.get('/profile', (req, res) => {
     res.render('profile');
@@ -18,7 +21,7 @@ router.get('/profile', (req, res) => {
 router.get('/update-profile', (req, res) => {
     res.render('editProfile');
 });
-
+router.get('/verify-email', authController.verifyEmail);
 router.post('/logout', authController.logout)
 
 module.exports = router;
