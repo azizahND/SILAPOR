@@ -1,41 +1,57 @@
-'use strict';
+"use strict";
+const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    nama: {
-      primaryKey: true,
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    no_telepon: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    alamat: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM('admin', 'user'),
-      allowNull: false,
+  class User extends Model {
+    static associate(models) {
+      User.hasMany(models.Laporan, {
+        foreignKey: "email",
+        sourceKey: "email",
+      });
+
+      User.hasMany(models.Claim, {
+        foreignKey: "email",
+        sourceKey: "email",
+      });
     }
-  }, {});
-  
-  User.associate = function(models) {
-    User.hasMany(models.Laporan, { 
-      foreignKey: 'email',
-      onDelete: 'CASCADE',  
-      hooks: true          
-    });
-  };
-  
+  }
+
+  User.init(
+    {
+      nama: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        primaryKey: true,
+      },
+      no_telepon: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      alamat: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      role: {
+        type: DataTypes.ENUM("admin", "user"),
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "User",
+      tableName: "Users",
+      timestamps: true,
+    }
+  );
+
   return User;
 };

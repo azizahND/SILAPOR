@@ -4,8 +4,14 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Claim extends Model {
     static associate(models) {
-      // contoh relasi, nanti bisa diatur kalau ada tabel laporan
-      // Claim.belongsTo(models.Laporan, { foreignKey: 'id_laporan' });
+      Claim.belongsTo(models.User, {
+        foreignKey: "email",
+        targetKey: "email",
+      });
+
+      Claim.belongsTo(models.Laporan, {
+        foreignKey: "id_laporan",
+      });
     }
   }
 
@@ -33,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Claim",
-      tableName: "claim",
+      tableName: "Claim",
       timestamps: false,
     }
   );
