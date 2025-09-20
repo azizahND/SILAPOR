@@ -200,177 +200,166 @@
               </div>
             </div>
 
-            <div class="space-y-2">
-              <label
-                for="password"
-                class="block text-sm font-semibold text-gray-700"
-                >Kata Sandi</label
-              >
-              <div class="relative group">
-                <div
-                  class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
-                >
-                  <svg
-                    class="h-5 w-5 text-gray-400 group-focus-within:text-[#22c55e] transition-colors"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Buat kata sandi baru"
-                  class="w-full pl-12 pr-12 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#f0fdf4] focus:border-[#22c55e] transition-all duration-200 bg-white/50 backdrop-blur-sm text-gray-900 placeholder-gray-400 hover:border-gray-300"
-                  required
-                  data-hs-toggle-password-options='{"target": "#password"}'
-                />
-                <button
-                  type="button"
-                  class="absolute inset-y-0 end-0 pr-4 flex items-center hs-toggle-password"
-                >
-                  <span class="hs-password-toggle-hide">
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path
-                        class="hs-password-toggle-hide-icon"
-                        d="M9.88 9.88a3 3 0 1 0 4.24 4.24"
-                      ></path>
-                      <path
-                        class="hs-password-toggle-hide-icon"
-                        d="M10.73 15.68A16 16 0 0 1 12 16c2.5 0 4.84-.96 6.56-2.68A16 16 0 0 0 12 8c-1.33 0-2.65.24-3.86.73"
-                      ></path>
-                      <path
-                        class="hs-password-toggle-hide-icon"
-                        d="M3 3 21 21"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span class="hs-password-toggle-show">
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path
-                        class="hs-password-toggle-show-icon"
-                        d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
+<div class="space-y-2">
+  <label
+    for="password"
+    class="block text-sm font-semibold text-gray-700"
+    >Kata Sandi</label
+  >
+  <div class="relative group">
+    <div
+      class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+    >
+      <svg
+        class="h-5 w-5 text-gray-400 group-focus-within:text-[#22c55e] transition-colors"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+        />
+      </svg>
+    </div>
 
-            <div class="space-y-2">
-              <label
-                for="confirm_password"
-                class="block text-sm font-semibold text-gray-700"
-                >Konfirmasi Kata Sandi</label
-              >
-              <div class="relative group">
-                <div
-                  class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
-                >
-                  <svg
-                    class="h-5 w-5 text-gray-400 group-focus-within:text-[#22c55e] transition-colors"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="password"
-                  name="confirm_password"
-                  id="confirm_password"
-                  placeholder="Ketik ulang kata sandi"
-                  class="w-full pl-12 pr-12 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#f0fdf4] focus:border-[#22c55e] transition-all duration-200 bg-white/50 backdrop-blur-sm text-gray-900 placeholder-gray-400 hover:border-gray-300"
-                  required
-                  data-hs-toggle-password-options='{"target": "#confirm_password"}'
-                />
-                <button
-                  type="button"
-                  class="absolute inset-y-0 end-0 pr-4 flex items-center hs-toggle-password"
-                >
-                  <span class="hs-password-toggle-hide">
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path
-                        class="hs-password-toggle-hide-icon"
-                        d="M9.88 9.88a3 3 0 1 0 4.24 4.24"
-                      ></path>
-                      <path
-                        class="hs-password-toggle-hide-icon"
-                        d="M10.73 15.68A16 16 0 0 1 12 16c2.5 0 4.84-.96 6.56-2.68A16 16 0 0 0 12 8c-1.33 0-2.65.24-3.86.73"
-                      ></path>
-                      <path
-                        class="hs-password-toggle-hide-icon"
-                        d="M3 3 21 21"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span class="hs-password-toggle-show">
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path
-                        class="hs-password-toggle-show-icon"
-                        d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
-                      ></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
+    <!-- Input Password -->
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="Buat kata sandi baru"
+      class="w-full pl-12 pr-12 py-4 border-2 border-gray-200 rounded-xl 
+            focus:ring-4 focus:ring-[#f0fdf4] focus:border-[#22c55e] 
+            transition-all duration-200 bg-white/50 backdrop-blur-sm 
+            text-gray-900 placeholder-gray-400 hover:border-gray-300"
+      required
+      data-hs-toggle-password-options='{"target": "#password"}'
+    />
+
+    <!-- Tombol Toggle Password -->
+    <button
+      type="button"
+      class="absolute inset-y-0 end-0 pr-4 flex items-center hs-toggle-password"
+    >
+      <span class="hs-password-toggle-hide">
+        <!-- icon hide -->
+      </span>
+      <span class="hs-password-toggle-show">
+        <!-- icon show -->
+      </span>
+    </button>
+
+    <!-- Warning Password Lemah -->
+    <div id="password-warning" 
+         class="hidden absolute top-full mt-2 right-0 w-72 z-50
+                bg-red-50 text-red-700 text-sm border border-red-200 
+                rounded-lg p-3 shadow-lg">
+      ⚠️ Kata sandi lemah.<br>
+      Gunakan minimal 8 karakter dengan huruf besar, kecil, angka, dan simbol.
+    </div>
+  </div>
+</div>
+
+<div class="space-y-2">
+  <label
+    for="confirm_password"
+    class="block text-sm font-semibold text-gray-700"
+    >Konfirmasi Kata Sandi</label
+  >
+  <div class="relative group">
+    <div
+      class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+    >
+      <svg
+        class="h-5 w-5 text-gray-400 group-focus-within:text-[#22c55e] transition-colors"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+        />
+      </svg>
+    </div>
+
+    <input
+      type="password"
+      name="confirm_password"
+      id="confirm_password"
+      placeholder="Ketik ulang kata sandi"
+      class="w-full pl-12 pr-12 py-4 border-2 border-gray-200 rounded-xl 
+            focus:ring-4 focus:ring-[#f0fdf4] focus:border-[#22c55e] 
+            transition-all duration-200 bg-white/50 backdrop-blur-sm 
+            text-gray-900 placeholder-gray-400 hover:border-gray-300"
+      required
+      data-hs-toggle-password-options='{"target": "#confirm_password"}'
+    />
+
+    <!-- Tombol Toggle Password -->
+    <button
+      type="button"
+      class="absolute inset-y-0 end-0 pr-4 flex items-center hs-toggle-password"
+    >
+      <span class="hs-password-toggle-hide">
+        <!-- icon hide -->
+      </span>
+      <span class="hs-password-toggle-show">
+        <!-- icon show -->
+      </span>
+    </button>
+
+    <!-- Warning Confirm Password -->
+    <div id="confirm-warning" 
+         class="hidden absolute top-full mt-2 right-0 w-72 z-50
+                bg-red-50 text-red-700 text-sm border border-red-200 
+                rounded-lg p-3 shadow-lg">
+      ⚠️ Kata sandi tidak cocok dengan yang di atas.
+    </div>
+  </div>
+</div>
+
+<script>
+  const passwordInput = document.getElementById("password");
+  const confirmInput = document.getElementById("confirm_password");
+  const warning = document.getElementById("password-warning");
+  const confirmWarning = document.getElementById("confirm-warning");
+
+  // Validasi password kuat
+  passwordInput.addEventListener("input", () => {
+    const value = passwordInput.value;
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (value && !strongPassword.test(value)) {
+      warning.classList.remove("hidden");
+    } else {
+      warning.classList.add("hidden");
+    }
+  });
+
+  passwordInput.addEventListener("blur", () => {
+    warning.classList.add("hidden");
+  });
+
+  // Validasi confirm password
+  confirmInput.addEventListener("input", () => {
+    if (confirmInput.value && confirmInput.value !== passwordInput.value) {
+      confirmWarning.classList.remove("hidden");
+    } else {
+      confirmWarning.classList.add("hidden");
+    }
+  });
+
+  confirmInput.addEventListener("blur", () => {
+    confirmWarning.classList.add("hidden");
+  });
+</script>
+
 
             <button
               type="submit"
