@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
+
 exports.register = async (req, res) => {
   const { nama, email, no_telepon, alamat, password } = req.body;
 
@@ -132,5 +133,78 @@ exports.logout = async (req, res) => {
   } catch (err) {
     console.error("Error during logout: ", err);
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+// Tampilkan profil user
+exports.showProfile = async (req, res) => {
+  try {
+    const userEmail = req.user.email; 
+    const user = await User.findOne({ where: { email: userEmail } });
+
+    if (!user) {
+      return res.status(404).send("User tidak ditemukan");
+    }
+
+    res.render("profile", { user });
+  } catch (err) {
+    console.error("Error showProfile:", err);
+    res.status(500).send("Gagal mengambil data profil");
+  }
+};
+
+// Tampilkan form edit
+exports.showEditProfile = async (req, res) => {
+  try {
+    const userEmail = req.user.email;
+    const user = await User.findOne({ where: { email: userEmail } });
+
+    if (!user) {
+      return res.status(404).send("User tidak ditemukan");
+    }
+
+    res.render("editProfile", { user });
+  } catch (err) {
+    console.error("Error showEditProfile:", err);
+    res.status(500).send("Gagal memuat form edit");
+  }
+};
+
+// Update profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const userEmail = req.user.email;
+    const { nama, email, alamat, no_hp, password, password_confirm } = req.body;
+
+    const user = await User.findOne({ where: { email: userEmail } });
+    if (!user) {
+      return res.status(404).send("User tidak ditemukan");
+    }
+
+    // Upload foto baru
+    if (req.file) {
+      if (user.foto && user.foto !== "default.jpg") {
+        const oldPath = path.join(__dirname, "../public/uploads", user.foto);
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
+      }
+      user.foto = req.file.filename;
+    }
+
+    // Update field
+    user.nama = nama || user.nama;
+    user.alamat = alamat || user.alamat;
+    user.no_telepon = no_hp || user.no_telepon; 
+
+    
+    await user.save();
+    
+    // Redirect ke halaman profile setelah berhasil update
+    return res.redirect("/profile");
+  } catch (error) {
+    console.error("Error update profile:", error);
+    return res.status(500).send("Terjadi kesalahan saat update profile");
   }
 };

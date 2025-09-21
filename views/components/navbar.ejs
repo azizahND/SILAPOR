@@ -64,37 +64,61 @@
         </button>
       </div>
     </div>
+
     <div
       id="hs-navbar-example"
-      class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block"
+      class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:flex sm:items-center sm:justify-end sm:gap-6"
       aria-labelledby="hs-navbar-example-collapse"
     >
-      <div
-        class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5"
+      <a
+        class="font-medium text-blue-500 focus:outline-hidden"
+        href="/mahasiswa/home"
+        aria-current="page"
+        >Beranda</a
       >
-        <a
-          class="font-medium text-blue-500 focus:outline-hidden"
-          href="/mahasiswa/home"
-          aria-current="page"
-          >Beranda</a
-        >
-        <a
-          class="font-medium text-gray-600 hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-          href="/mahasiswa/my-reports"
-          >Laporan Saya</a
-        >
-        <a
-          class="font-medium text-gray-600 hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-          href="#"
-          >Riwayat</a
-        >
-        <a
-          class="font-medium text-gray-600 hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-          href="/claim/my-claim"
-        >
-          Klaim
+      <a
+        class="font-medium text-gray-600 hover:text-gray-400"
+        href="/mahasiswa/my-reports"
+        >Laporan Saya</a
+      >
+      <a
+        class="font-medium text-gray-600 hover:text-gray-400"
+        href="#"
+        >Riwayat</a
+      >
+      <a
+        class="font-medium text-gray-600 hover:text-gray-400"
+        href="/claim/my-claim"
+      >
+        Klaim
+      </a>
+
+      <!-- Foto Profil -->
+      <div class="relative">
+        <a href="/profile" class="flex items-center focus:outline-none">
+          <img
+            src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200"
+            alt="Profile"
+            class="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-green-500 transition"
+          />
         </a>
+        </div>
       </div>
     </div>
   </nav>
 </header>
+
+<script>
+  const profileBtn = document.getElementById("profileMenuBtn");
+
+  profileBtn.addEventListener("click", () => {
+    profileMenu.classList.toggle("hidden");
+  });
+
+  // Klik di luar -> close menu
+  window.addEventListener("click", (e) => {
+    if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+      profileMenu.classList.add("hidden");
+    }
+  });
+</script>
