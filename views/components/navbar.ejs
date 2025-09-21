@@ -64,9 +64,10 @@
         </button>
       </div>
     </div>
+
     <div
       id="hs-navbar-example"
-      class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block"
+      class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:flex sm:items-center sm:justify-end sm:gap-6"
       aria-labelledby="hs-navbar-example-collapse"
     >
       <div
@@ -98,3 +99,18 @@
     </div>
   </nav>
 </header>
+
+<script>
+  const profileBtn = document.getElementById("profileMenuBtn");
+
+  profileBtn.addEventListener("click", () => {
+    profileMenu.classList.toggle("hidden");
+  });
+
+  // Klik di luar -> close menu
+  window.addEventListener("click", (e) => {
+    if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+      profileMenu.classList.add("hidden");
+    }
+  });
+</script>

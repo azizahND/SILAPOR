@@ -12,7 +12,8 @@ module.exports = {
         password: await bcrypt.hash('admin123', 10), 
         role: 'admin',
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        isVerified: 1
       }
     ]);
   },

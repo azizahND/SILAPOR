@@ -60,10 +60,8 @@ exports.createReport = async (req, res) => {
 
     await Laporan.create(reportData);
 
-    res.json({
-      success: true,
-      message: "Laporan berhasil dikirim",
-    });
+
+    return res.redirect("/mahasiswa/my-reports");
   } catch (error) {
     console.error("Error creating report:", error);
 
@@ -146,6 +144,7 @@ exports.getAllReportsUser = async (req, res) => {
     res.status(500).send("Terjadi kesalahan pada server");
   }
 };
+
 
 exports.claimReport = async (req, res) => {
   try {
