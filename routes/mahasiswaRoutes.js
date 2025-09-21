@@ -14,4 +14,13 @@ router.get('/my-reports', verifyToken,role('user'), reportController.getUserRepo
 router.post('/claim', verifyToken, role('user'), reportController.claimReport);
 
 
+// Update laporan
+router.post(
+  "/reports/update/:id",
+  verifyToken,
+  role("user"),
+  upload.single("foto_barang"),
+  reportController.updateReport
+);
+
 module.exports = router;

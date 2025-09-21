@@ -191,3 +191,46 @@ exports.claimReport = async (req, res) => {
     });
   }
 };
+
+exports.updateReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      nama_barang,
+      lokasi_kejadian,
+      deskripsi,
+    } = req.body;
+
+    const laporan = await Laporan.findOne({
+      where: {
+        id_laporan: id,            // ✅ ganti id → id_laporan
+        email: req.user.email,
+      },
+    });
+
+    if (!laporan) {
+      return res.status(404).json({ message: "Laporan tidak ditemukan" });
+    }
+
+    laporan.nama_barang = nama_barang;
+    laporan.lokasi = lokasi_kejadian;
+    laporan.deskripsi = deskripsi;
+
+    if (req.file) {
+      if (laporan.foto_barang) {
+        const oldPath = path.join("uploads", laporan.foto_barang);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      laporan.foto_barang = req.file.filename;
+    }
+
+    await laporan.save();
+
+    return res.redirect("/mahasiswa/my-reports");
+  } catch (error) {
+    console.error("Error update report:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+
