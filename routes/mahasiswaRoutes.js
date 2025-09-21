@@ -12,6 +12,7 @@ router.post('/reports', verifyToken, role('user'), upload.single('foto_barang'),
 router.get('/my-reports', verifyToken,role('user'), reportController.getUserReports);
 
 router.post('/claim', verifyToken, role('user'), reportController.claimReport);
-
-
+router.delete("/reports/delete/:id",verifyToken,role('user'), reportController.deleteReport);
 module.exports = router;
+
+
