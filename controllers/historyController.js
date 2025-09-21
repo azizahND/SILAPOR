@@ -5,12 +5,18 @@ const fs = require("fs");
 
 exports.getDoneReports = async (req, res) => {
   try {
+    const { filterJenis, searchNama } = req.query;
+
+    const whereClause = { status: "Done" };
+    if (filterJenis) whereClause.jenis_laporan = filterJenis;
+    if (searchNama) whereClause.nama_barang = { [Op.like]: `%${searchNama}%` };
+
     const reports = await Laporan.findAll({
-      where: { status: "Done" },
+      where: whereClause,
       include: [{ model: User }],
     });
 
-    res.render("user/history", { reports }); 
+    res.render("user/history", { reports, filterJenis, searchNama });
   } catch (err) {
     console.error("Error getDoneReports:", err);
     res.status(500).send("Terjadi kesalahan saat mengambil laporan");
