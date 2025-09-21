@@ -1,116 +1,61 @@
-<header
-  class="sticky top-0 z-50 relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3 dark:bg-neutral-800 shadow-md"
->
-  <nav
-    class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between"
-  >
-    <div class="flex items-center justify-between">
-      <a
-        class="flex-none text-xl font-semibold dark:text-white focus:outline-hidden focus:opacity-80"
-        href="#"
-        aria-label="Brand"
-      >
-        <span
-          class="inline-flex items-center gap-x-2 text-xl font-semibold dark:text-white"
-        >
-          <img class="w-10 h-auto" src="/images/logo.png" alt="Logo" />
-          SILAPOR
-        </span>
-      </a>
-      <div class="sm:hidden">
-        <button
-          type="button"
-          class="hs-collapse-toggle relative size-9 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
-          id="hs-navbar-example-collapse"
-          aria-expanded="false"
-          aria-controls="hs-navbar-example"
-          aria-label="Toggle navigation"
-          data-hs-collapse="#hs-navbar-example"
-        >
-          <!-- burger icon -->
-          <svg
-            class="hs-collapse-open:hidden shrink-0 size-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="3" x2="21" y1="6" y2="6" />
-            <line x1="3" x2="21" y1="12" y2="12" />
-            <line x1="3" x2="21" y1="18" y2="18" />
-          </svg>
-          <!-- close icon -->
-          <svg
-            class="hs-collapse-open:block hidden shrink-0 size-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
-          </svg>
-          <span class="sr-only">Toggle navigation</span>
-        </button>
-      </div>
-    </div>
+<header class="sticky top-0 z-50 w-full bg-white shadow-md py-3">
+  <nav class="max-w-[85rem] mx-auto px-4 flex items-center justify-between">
+    <!-- Brand -->
+    <a class="flex items-center gap-x-2 text-xl font-semibold dark:text-white" href="#">
+      <img class="w-10 h-auto" src="/images/logo.png" alt="Logo" />
+      SILAPOR
+    </a>
 
-    <div
-      id="hs-navbar-example"
-      class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:flex sm:items-center sm:justify-end sm:gap-6"
-      aria-labelledby="hs-navbar-example-collapse"
-    >
-      <div
-        class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5"
-      >
-        <a
-          class="font-medium text-blue-500 focus:outline-hidden"
-          href="/mahasiswa/home"
-          aria-current="page"
-          >Beranda</a
-        >
-        <a
-          class="font-medium text-gray-600 hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-          href="/mahasiswa/my-reports"
-          >Laporan Saya</a
-        >
-        <a
-          class="font-medium text-gray-600 hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-          href="#"
-          >Riwayat</a
-        >
-        <a
-          class="font-medium text-gray-600 hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-          href="/claim/my-claim"
-        >
-          Klaim
-        </a>
+    <!-- Menu Links + Profile -->
+    <div class="flex items-center gap-4">
+      <!-- Navigasi -->
+      <a href="/mahasiswa/home" class="nav-link font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400">Beranda</a>
+      <a href="/mahasiswa/my-reports" class="nav-link font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400">Laporan Saya</a>
+      <a href="/mahasiswa/history" class="nav-link font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400">Riwayat</a>
+      <a href="/claim/my-claim" class="nav-link font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400">Klaim</a>
+
+      <!-- Profile Dropdown -->
+      <div class="relative">
+        <button id="profileMenuBtn" class="flex items-center gap-2 focus:outline-none">
+          <img src="/images/profile.png" alt="Profile" class="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-neutral-600" />
+          <i class="fas fa-chevron-down text-gray-600 dark:text-gray-300"></i>
+        </button>
+
+        <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg py-2 z-50">
+          <a href="/mahasiswa/profile" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700">Profil Saya</a>
+          <form action="/logout" method="POST">
+            <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700">Logout</button>
+          </form>
+        </div>
       </div>
     </div>
   </nav>
 </header>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
   const profileBtn = document.getElementById("profileMenuBtn");
+  const profileMenu = document.getElementById("profileMenu");
 
-  profileBtn.addEventListener("click", () => {
+  // Dropdown Profile
+  profileBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // jangan trigger window click
     profileMenu.classList.toggle("hidden");
   });
 
-  // Klik di luar -> close menu
   window.addEventListener("click", (e) => {
     if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
       profileMenu.classList.add("hidden");
     }
   });
+
+  // Highlight link aktif
+  const currentPath = window.location.pathname;
+  document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("text-green-800", "border-b-2", "border-green-800");
+      link.classList.remove("text-gray-600");
+    }
+  });
+});
 </script>

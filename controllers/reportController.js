@@ -234,3 +234,21 @@ exports.updateReport = async (req, res) => {
 };
 
 
+
+exports.deleteReport = async (req, res) => {
+  try {
+    const laporan = await Laporan.findOne({
+      where: { id_laporan: req.params.id },
+    });
+
+    if (!laporan) {
+      return res.json({ success: false, message: "Laporan tidak ditemukan" });
+    }
+
+    await laporan.destroy();
+    res.json({ success: true, message: "Laporan berhasil dihapus" });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Terjadi kesalahan saat menghapus laporan" });
+  }
+};

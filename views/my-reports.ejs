@@ -250,31 +250,54 @@
     </div>
 
 <script>
-    function confirmDelete(reportId) {
-        Swal.fire({
-            title: "Apakah Anda yakin?",
-            text: "Laporan ini akan dihapus secara permanen!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#ef4444",
-            cancelButtonColor: "#6b7280",
-            confirmButtonText: "Ya, hapus!",
-            cancelButtonText: "Batal",
-            buttonsStyling: false,
-            customClass: {
-                confirmButton: "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mr-3",
-                cancelButton: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg",
-            },
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `/mahasiswa/reports/delete/${reportId}`;
-                document.body.appendChild(form);
-                form.submit();
-            }
+    function confirmDelete(id_laporan) {
+  Swal.fire({
+    title: "Apakah Anda yakin?",
+    text: "Laporan ini akan dihapus secara permanen!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#ef4444",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Ya, hapus!",
+    cancelButtonText: "Batal",
+    buttonsStyling: false,
+    customClass: {
+      confirmButton:
+        "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mr-3",
+      cancelButton:
+        "bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg",
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/mahasiswa/reports/delete/${id_laporan}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            Swal.fire({
+              title: "Berhasil!",
+              text: data.message,
+              icon: "success",
+              confirmButtonText: "OK",
+              customClass: {
+                confirmButton:
+                  "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg",
+              },
+            }).then(() => {
+              window.location.reload(); // reload halaman setelah OK
+            });
+          } else {
+            Swal.fire("Error", data.message, "error");
+          }
+        })
+        .catch(() => {
+          Swal.fire("Error", "Terjadi kesalahan server", "error");
         });
     }
+  });
+}
+
 
     const editModal = document.getElementById('editReportModal');
     const editForm = document.getElementById('editReportForm');

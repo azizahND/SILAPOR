@@ -60,7 +60,8 @@ app.use('/', authRoutes);
 app.use('/mahasiswa', mahasiswaRoutes ); 
 app.use('/admin', adminRoutes );
 app.use("/claim", claimRoutes);
-app.use("/history", historyRoutes);
+app.use("/mahasiswa/history", historyRoutes);
+
 
 // Jalankan server
 const PORT = process.env.PORT || 3000;
