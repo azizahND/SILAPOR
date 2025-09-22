@@ -10,12 +10,20 @@ module.exports = {
         allowNull: false
       },
       id_laporan: {
-        type: Sequelize.INTEGER,
-        allowNull: true
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: true,
+        references: {
+        model: "Laporans",
+        key: "id_laporan",
+        },
       },
       email: {
         type: Sequelize.STRING(255),
-        allowNull: false
+        allowNull: false,
+        references: {
+        model: "Users",
+        key: "email",
+        },
       },
       tanggal_claim: {
         type: Sequelize.DATEONLY,

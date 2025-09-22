@@ -1,6 +1,7 @@
 const { Laporan, User, Claim } = require("../models");
 const path = require("path");
 const fs = require("fs");
+const { where } = require("sequelize");
 
 exports.showReportForm = (req, res) => {
   try {
@@ -86,9 +87,14 @@ exports.getUserReports = async (req, res) => {
         {
           model: User,
           atrributes: ["nama", "email"],
+          where: {email : userEmail}
         },
+        {
+          model: Claim, 
+          attributes: ["email", "tanggal_claim"],
+          include: [{ model: User, attributes: ["nama", "email", "no_telepon", "alamat"] }]
+        }
       ],
-      where: { email: userEmail },
       order: [["createdAt", "DESC"]],
     });
 

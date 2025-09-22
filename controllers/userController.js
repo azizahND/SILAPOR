@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require("bcryptjs");
 
 exports.listUsers = async (req, res) => {
   try {
@@ -67,7 +68,9 @@ exports.updateUser = async (req, res) => {
 exports.createUser = async (req, res) => {  
     try {
         const { nama, email, no_telepon, alamat, password, role } = req.body;
-        await User.create({ nama, email, no_telepon, alamat, password, role });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        await User.create({ nama, email, no_telepon, alamat, password: hashedPassword, role, isVerified: 1 });
         res.redirect('/admin/userList');
     } catch (error) {
         console.error('Error creating user:', error);
