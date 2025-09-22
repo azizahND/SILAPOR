@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       Claim.belongsTo(models.Laporan, {
         foreignKey: "id_laporan",
       });
+
+      Claim.belongsTo(models.User, {
+      foreignKey: "email"
+    });
     }
   }
 
