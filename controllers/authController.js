@@ -175,7 +175,7 @@ exports.showEditProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const userEmail = req.user.email;
-    const { nama, email, alamat, no_hp, password, password_confirm } = req.body;
+    const { nama, email, alamat, no_telepon, password, password_confirm } = req.body;
 
     const user = await User.findOne({ where: { email: userEmail } });
     if (!user) {
@@ -196,7 +196,7 @@ exports.updateProfile = async (req, res) => {
     // Update field
     user.nama = nama || user.nama;
     user.alamat = alamat || user.alamat;
-    user.no_telepon = no_hp || user.no_telepon; 
+    user.no_telepon = no_telepon || user.no_telepon; 
 
     
     await user.save();

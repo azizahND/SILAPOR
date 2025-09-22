@@ -13,6 +13,7 @@
     <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
       <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Edit Profile</h2>
       <form action="/update-profile" method="POST" enctype="multipart/form-data" class="space-y-5">
+       
         <!-- Foto Profil -->
         <div class="flex flex-col items-center">
           <div class="relative group">
@@ -44,7 +45,7 @@
         <!-- Nomor HP -->
         <div>
           <label class="block text-sm font-medium text-gray-600 mb-1">Nomor HP</label>
-          <input type="text" name="no_hp" value="<%= user ? user.no_telepon : '' %>" 
+          <input type="text" name="no_telepon" value="<%= user ? user.no_telepon : '' %>" 
                  class="block w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all">
         </div>
 
