@@ -13,7 +13,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -131,25 +130,26 @@
 
     <div
       id="modal-kontak"
-      class="hs-overlay hidden fixed top-0 left-0 w-full h-full z-[60] overflow-x-hidden overflow-y-auto"
+      class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+      role="dialog"
+      tabindex="-1"
     >
       <div
-        class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto"
+        class="bg-white rounded-2xl shadow-lg dark:bg-neutral-800 p-6 w-full max-w-md"
       >
-        <div class="bg-white rounded-2xl shadow-lg dark:bg-neutral-800 p-6">
-          <h3 class="text-xl font-semibold mb-4">Kontak Pelapor</h3>
-          <div
-            id="kontak-content"
-            class="space-y-3 text-gray-700 dark:text-gray-300"
-          ></div>
-          <div class="mt-6 text-right">
-            <button
-              type="button"
-              class="hs-overlay-close bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-            >
-              Tutup
-            </button>
-          </div>
+        <h3 class="text-xl font-semibold mb-4">Kontak Pelapor</h3>
+        <div
+          id="kontak-content"
+          class="space-y-3 text-gray-700 dark:text-gray-300"
+        ></div>
+        <div class="mt-6 text-right">
+          <button
+            type="button"
+            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            data-hs-overlay="#modal-kontak"
+          >
+            Tutup
+          </button>
         </div>
       </div>
     </div>
@@ -173,14 +173,13 @@
             if (result.success) {
               const kontak = result.kontakPelapor;
               document.getElementById("kontak-content").innerHTML = `
-    <p><strong>Nama:</strong> ${kontak.nama}</p>
-    <p><strong>Email:</strong> ${kontak.email}</p>
-    <p><strong>No. Telepon:</strong> ${kontak.no_telepon}</p>
-    <p><strong>Alamat:</strong> ${kontak.alamat}</p>
-  `;
+                <p><strong>Nama:</strong> ${kontak.nama}</p>
+                <p><strong>Email:</strong> ${kontak.email}</p>
+                <p><strong>No. Telepon:</strong> ${kontak.no_telepon}</p>
+                <p><strong>Alamat:</strong> ${kontak.alamat}</p>
+              `;
 
-             
-              window.HSOverlay.open("#modal-kontak");
+              HSOverlay.open(document.getElementById("modal-kontak"));
             } else {
               alert(result.message);
             }
