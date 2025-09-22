@@ -94,7 +94,7 @@
             </p>
           </div>
 
-          <form action="/register" method="POST" class="space-y-6">
+          <form id="registerForm" action="/register" method="POST" class="space-y-6">
             <div class="space-y-2">
               <label
                 for="nama"
@@ -429,14 +429,12 @@
   passwordInput.addEventListener("input", () => {
     const value = passwordInput.value;
     const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
     if (value && !strongPassword.test(value)) {
       warning.classList.remove("hidden");
     } else {
       warning.classList.add("hidden");
     }
   });
-
   passwordInput.addEventListener("blur", () => {
     warning.classList.add("hidden");
   });
@@ -449,11 +447,67 @@
       confirmWarning.classList.add("hidden");
     }
   });
-
   confirmInput.addEventListener("blur", () => {
     confirmWarning.classList.add("hidden");
   });
+
+  // Client-side validation before submit
+  document.getElementById("registerForm").addEventListener("submit", function(e) {
+    const nama = document.getElementById("nama").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const no_telepon = document.getElementById("no_telepon").value.trim();
+    const alamat = document.getElementById("alamat").value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = confirmInput.value;
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    let valid = true;
+    let errorMsg = "";
+    if (!nama || !email || !no_telepon || !alamat || !password || !confirmPassword) {
+      valid = false;
+      errorMsg = "Semua kolom harus diisi.";
+    } else if (!strongPassword.test(password)) {
+      valid = false;
+      errorMsg = "Kata sandi lemah. Gunakan minimal 8 karakter dengan huruf besar, kecil, angka, dan simbol.";
+    } else if (password !== confirmPassword) {
+      valid = false;
+      errorMsg = "Konfirmasi kata sandi tidak cocok.";
+    }
+    if (!valid) {
+      e.preventDefault();
+      showPopup(errorMsg, false);
+    }
+  });
+
+  // Popup notification
+  function showPopup(message, success) {
+    let popup = document.getElementById("register-popup");
+    if (!popup) {
+      popup = document.createElement("div");
+      popup.id = "register-popup";
+      popup.className = "fixed top-8 left-1/2 transform -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl shadow-lg px-6 py-4 text-center text-lg font-semibold transition-all duration-300";
+      document.body.appendChild(popup);
+    }
+    popup.innerHTML = success
+      ? `<span class='text-green-600 dark:text-green-400'>${message}</span>`
+      : `<span class='text-red-600 dark:text-red-400'>${message}</span>`;
+    popup.style.display = "block";
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 4000);
+  }
+
+  // Show popup after successful registration (server-side can set a flag)
+  // EJS block moved outside script for popup notification
 </script>
+
+  <% if (typeof success !== 'undefined' && success) { %>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        showPopup("Registrasi berhasil! Silakan cek email untuk verifikasi.", true);
+      });
+    </script>
+  <% } %>
 
 
             <button

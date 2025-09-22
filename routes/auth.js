@@ -17,6 +17,16 @@ router.get("/register", (req, res) => {
 router.get("/login", (req, res) => {
   res.render("login", { title: "SILAPOR - Login" });
 });
+// Forget password routes
+router.get("/forget-password", (req, res) => {
+  res.render("forgetPassword");
+});
+
+router.post("/forget-password", authController.forgetPassword);
+
+router.post("/reset-password", authController.resetPassword);
+// Reset password routes
+router.get("/reset-password", authController.showResetPasswordForm);
 
 // Profile routes
 router.get("/profile", verifyToken, role("user"), authController.showProfile);

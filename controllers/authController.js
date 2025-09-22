@@ -125,6 +125,87 @@ exports.login = async (req, res) => {
   }
 };
 
+// Forget Password
+exports.forgetPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.render("forgetPassword", { error: "Email tidak terdaftar." });
+    }
+
+    // generate token reset password (berlaku 1 jam)
+    const token = jwt.sign(
+      { email: user.email },
+      process.env.JWT_SECRET_TOKEN,
+      { expiresIn: "1h" }
+    );
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // link reset password
+    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+
+    // kirim email
+    await transporter.sendMail({
+      from: `"SILAPOR" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "Reset Password SILAPOR",
+      html: `<h3>Halo ${user.nama}</h3>
+             <p>Klik link berikut untuk reset password akun Anda:</p>
+             <a href="${resetLink}">${resetLink}</a>`,
+    });
+
+    return res.render("forgetPassword", { success: "Link reset password sudah dikirim ke email Anda." });
+  } catch (err) {
+    console.error("Forget Password Error:", err);
+    res.status(500).send("Server Error");
+  }
+};
+
+// Show Reset Password Form
+exports.showResetPasswordForm = async (req, res) => {
+  const { token } = req.query;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    // Token valid, render form
+    return res.render("resetPassword", { token });
+  } catch (err) {
+    console.error("Reset Password Token Error:", err);
+    return res.status(400).send("Token tidak valid atau sudah kadaluarsa");
+  }
+};
+
+// Handle Reset Password
+exports.resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const user = await User.findOne({ where: { email: decoded.email } });
+    if (!user) {
+      return res.status(404).send("User tidak ditemukan");
+    }
+    // Validasi password kuat
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!strongPassword.test(password)) {
+      return res.render("resetPassword", { token, error: "Password harus minimal 8 karakter dan kombinasi huruf, angka, simbol." });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = hashedPassword;
+    await user.save();
+    return res.render("resetPasswordDone", { msg: "Password berhasil direset. Silakan login." });
+  } catch (err) {
+    console.error("Reset Password Error:", err);
+    return res.status(400).send("Token tidak valid atau sudah kadaluarsa");
+  }
+};
 
 exports.logout = async (req, res) => {
   try {
