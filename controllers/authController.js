@@ -45,14 +45,21 @@ exports.register = async (req, res) => {
     // link verifikasi
     const verifyLink = `http://localhost:3000/verify-email?token=${token}`;
 
+    // Render email template
+    const ejs = require('ejs');
+    const path = require('path');
+    const emailTemplatePath = path.join(__dirname, '../email/emailRegis.ejs');
+    const emailHtml = await ejs.renderFile(emailTemplatePath, {
+      nama: newUser.nama,
+      verifyLink
+    });
+
     // kirim email
     await transporter.sendMail({
       from: `"SILAPOR" <${process.env.EMAIL_USER}>`,
       to: newUser.email,
       subject: "Verifikasi Email Anda",
-      html: `<h3>Halo ${newUser.nama}</h3>
-             <p>Terima kasih sudah mendaftar. Klik link berikut untuk verifikasi akun:</p>
-             <a href="${verifyLink}">${verifyLink}</a>`,
+      html: emailHtml,
     });
 
     return res.render("checkEmail", { msg: "Registrasi berhasil, silakan cek email untuk verifikasi." });
