@@ -16,6 +16,17 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+
+    // generate token verifikasi (berlaku 15 menit, unik per user)
+    const crypto = require('crypto');
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const token = jwt.sign(
+      { email: email, rawToken },
+      process.env.JWT_SECRET_TOKEN,
+      { expiresIn: "15m" }
+    );
+
+    // simpan token ke user
     const newUser = await User.create({
       nama,
       email,
@@ -24,14 +35,9 @@ exports.register = async (req, res) => {
       role: "user",
       password: hashedPassword,
       isVerified: false,
+      emailVerifyToken: rawToken,
+      emailVerifyTokenUsed: false,
     });
-
-    // generate token verifikasi (berlaku 1 hari)
-    const token = jwt.sign(
-      { email: newUser.email },
-      process.env.JWT_SECRET_TOKEN,
-      { expiresIn: "1d" }
-    );
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -71,20 +77,22 @@ exports.register = async (req, res) => {
 
 exports.verifyEmail = async (req, res) => {
   const { token } = req.query;
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
-
     const user = await User.findOne({ where: { email: decoded.email } });
     if (!user) return res.status(404).send("User tidak ditemukan");
-
+    // cek token cocok dan belum dipakai
     if (user.isVerified) {
       return res.render("login", { msg: "Akun sudah diverifikasi, silakan login." });
     }
-
+    if (user.emailVerifyTokenUsed || user.emailVerifyToken !== decoded.rawToken) {
+      return res.status(400).send("Token sudah dipakai atau tidak valid.");
+    }
+    // verifikasi sukses, tandai token sudah dipakai
     user.isVerified = true;
+    user.emailVerifyTokenUsed = true;
+    user.emailVerifyToken = null;
     await user.save();
-
     return res.render("registerDone", { msg: "Email berhasil diverifikasi, silakan login." });
   } catch (err) {
     console.error("Verify Email Error:", err);
@@ -141,12 +149,18 @@ exports.forgetPassword = async (req, res) => {
       return res.render("forgetPassword", { error: "Email tidak terdaftar." });
     }
 
-    // generate token reset password (berlaku 1 jam)
+    // generate token reset password (berlaku 15 menit, unik per user)
+    const crypto = require('crypto');
+    const rawToken = crypto.randomBytes(32).toString('hex');
     const token = jwt.sign(
-      { email: user.email },
+      { email: user.email, rawToken },
       process.env.JWT_SECRET_TOKEN,
-      { expiresIn: "1h" }
+      { expiresIn: "15m" }
     );
+    // simpan token ke user
+    user.resetPasswordToken = rawToken;
+    user.resetPasswordTokenUsed = false;
+    await user.save();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -181,6 +195,12 @@ exports.showResetPasswordForm = async (req, res) => {
   const { token } = req.query;
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN);
+    const user = await User.findOne({ where: { email: decoded.email } });
+    if (!user) return res.status(404).send("User tidak ditemukan");
+    // cek token cocok dan belum dipakai
+    if (user.resetPasswordTokenUsed || user.resetPasswordToken !== decoded.rawToken) {
+      return res.status(400).send("Token sudah dipakai atau tidak valid.");
+    }
     // Token valid, render form
     return res.render("resetPassword", { token });
   } catch (err) {
@@ -198,6 +218,10 @@ exports.resetPassword = async (req, res) => {
     if (!user) {
       return res.status(404).send("User tidak ditemukan");
     }
+    // cek token cocok dan belum dipakai
+    if (user.resetPasswordTokenUsed || user.resetPasswordToken !== decoded.rawToken) {
+      return res.status(400).send("Token sudah dipakai atau tidak valid.");
+    }
     // Validasi password kuat
     const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!strongPassword.test(password)) {
@@ -206,6 +230,8 @@ exports.resetPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     user.password = hashedPassword;
+    user.resetPasswordTokenUsed = true;
+    user.resetPasswordToken = null;
     await user.save();
     return res.render("resetPasswordDone", { msg: "Password berhasil direset. Silakan login." });
   } catch (err) {
