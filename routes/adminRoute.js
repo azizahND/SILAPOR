@@ -11,7 +11,7 @@ router.get(
   "/dashboard",
   verifyToken,
   role("admin"),
-  reportController.getAllReportsAdmin
+  reportController.getDashboard
 );
 router.get(
   "/reports",
@@ -59,6 +59,13 @@ router.post(
   verifyToken,
   role("admin"),
   userController.updateUser
+);
+
+router.get(
+  "/pengajuan",
+  verifyToken,
+  role("admin"),
+  reportController.getAllReportsAdmin
 );
 
 module.exports = router;
