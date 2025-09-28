@@ -87,22 +87,16 @@
                 <%= report.nama_barang %>
               </h3>
             </div>
-            <p
-              class="text-gray-600 text-sm mb-4 line-clamp-3"
-            >
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
               <%= report.deskripsi %>
             </p>
 
             <div class="space-y-3 mb-5">
-              <div
-                class="flex items-center text-sm text-gray-500"
-              >
+              <div class="flex items-center text-sm text-gray-500">
                 <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
                 <%= report.lokasi %>
               </div>
-              <div
-                class="flex items-center text-sm text-gray-500"
-              >
+              <div class="flex items-center text-sm text-gray-500">
                 <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
                 Ditemukan oleh: <%= report.User.nama %>
               </div>
@@ -184,22 +178,28 @@
       role="dialog"
       tabindex="-1"
     >
-      <div
-        class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md"
-      >
+      <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
         <h3 class="text-xl font-semibold mb-4">Kontak Pelapor</h3>
-        <div
-          id="kontak-content"
-          class="space-y-3 text-gray-700 "
-        ></div>
-        <div class="mt-6 text-right">
+        <div id="kontak-content" class="space-y-3 text-gray-700"></div>
+       
+        <div class="mt-6 flex justify-between gap-3">
+          <button
+            id="btn-whatsapp"
+            class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center"
+          >
+            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+          </button>
+          </div>
+
+            <div class="mt-4 flex justify-end">
           <button
             type="button"
-            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg"
             data-hs-overlay="#modal-kontak"
           >
             Tutup
           </button>
+          </div>
         </div>
       </div>
     </div>
@@ -228,6 +228,18 @@
                 <p><strong>No. Telepon:</strong> ${kontak.no_telepon}</p>
                 <p><strong>Alamat:</strong> ${kontak.alamat}</p>
               `;
+
+              const btnWA = document.getElementById("btn-whatsapp");
+              btnWA.onclick = () => {
+                const noHP = kontak.no_telepon.replace(/[^0-9]/g, "");
+                const pesan = encodeURIComponent(
+                  `Halo ${kontak.nama}, saya ingin menghubungi terkait laporan barang.`
+                );
+                const linkWA = `https://wa.me/${noHP}?text=${pesan}`;
+                window.open(linkWA, "_blank");
+
+                HSOverlay.close(document.getElementById("modal-kontak"));
+              };
 
               HSOverlay.open(document.getElementById("modal-kontak"));
             } else {

@@ -161,6 +161,12 @@ exports.claimReport = async (req, res) => {
     const { id_laporan } = req.body;
     const emailUser = req.user.email;
 
+    await Claim.create({
+      id_laporan,
+      email: emailUser,
+      tanggal_claim: new Date(),
+    });
+
     const laporan = await Laporan.findByPk(id_laporan);
     if (!laporan) {
       return res
@@ -168,28 +174,15 @@ exports.claimReport = async (req, res) => {
         .json({ success: false, message: "Laporan tidak ditemukan" });
     }
 
-    if (laporan.email === emailUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Kamu tidak bisa klaim laporan milikmu sendiri" });
-    }
-
-    await Claim.create({
-      id_laporan,
-      email: emailUser,
-      tanggal_claim: new Date(),
-    });
-
     laporan.status = "Claimed";
     await laporan.save();
 
-    // Ambil data kontak pelapor
+  
     const pelapor = await User.findOne({
       where: { email: laporan.email },
       attributes: ["nama", "email", "no_telepon", "alamat"],
     });
 
-    // 🔥 Tambahkan log hasil tarik data ke terminal
     console.log("Data kontak pelapor:", pelapor.toJSON());
 
     res.json({
@@ -217,7 +210,7 @@ exports.updateReport = async (req, res) => {
 
     const laporan = await Laporan.findOne({
       where: {
-        id_laporan: id,            // ✅ ganti id → id_laporan
+        id_laporan: id,           
         email: req.user.email,
       },
     });
