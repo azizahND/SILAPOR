@@ -157,14 +157,13 @@ exports.claimReport = async (req, res) => {
     const { id_laporan } = req.body;
     const emailUser = req.user.email;
 
-    // Simpan ke tabel Claim
     await Claim.create({
       id_laporan,
       email: emailUser,
       tanggal_claim: new Date(),
     });
 
-    // Update status laporan jadi Claimed
+
     const laporan = await Laporan.findByPk(id_laporan);
     if (!laporan) {
       return res
@@ -175,13 +174,12 @@ exports.claimReport = async (req, res) => {
     laporan.status = "Claimed";
     await laporan.save();
 
-    // Ambil data kontak pelapor
+  
     const pelapor = await User.findOne({
       where: { email: laporan.email },
       attributes: ["nama", "email", "no_telepon", "alamat"],
     });
 
-    // 🔥 Tambahkan log hasil tarik data ke terminal
     console.log("Data kontak pelapor:", pelapor.toJSON());
 
     res.json({
@@ -209,7 +207,7 @@ exports.updateReport = async (req, res) => {
 
     const laporan = await Laporan.findOne({
       where: {
-        id_laporan: id,            // ✅ ganti id → id_laporan
+        id_laporan: id,           
         email: req.user.email,
       },
     });
