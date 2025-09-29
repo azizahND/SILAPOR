@@ -17,14 +17,36 @@ router.get(
   "/reports",
   verifyToken,
   role("admin"),
-  reportController.showReportForm
+  reportController.showAdminReportForm
 );
 router.post(
   "/reports",
   verifyToken,
   role("admin"),
   upload.single("foto_barang"),
-  reportController.createReport
+  reportController.createReportAdmin
+);
+
+router.get(
+  "/my-reports",
+  verifyToken,
+  role("admin"),
+  reportController.getAdminReports
+);
+
+router.post(
+  "/reports/update/:id",
+  verifyToken,
+  role("admin"),
+  upload.single("foto_barang"),
+  reportController.updateReportAdmin
+);
+
+router.delete(
+  "/reports/delete/:id",
+  verifyToken,
+  role("admin"),
+  reportController.deleteReportAdmin
 );
 
 router.get(
