@@ -49,24 +49,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
-      emailVerifyToken: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      emailVerifyTokenUsed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      resetPasswordToken: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      resetPasswordTokenUsed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
     },
     {
       sequelize,
