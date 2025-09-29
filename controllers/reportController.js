@@ -81,13 +81,21 @@ exports.createReport = async (req, res) => {
 exports.getUserReports = async (req, res) => {
   try {
     const userEmail = req.user.email;
-
+    
     const reports = await Laporan.findAll({
+      where: { email: userEmail,
+        status : [ 
+          "Waiting for upload verification",
+          "Upload verification rejected",
+          "On progress",
+          "Claimed",
+          "Waiting for end verification",
+          "End verification rejected"]
+      },
       include: [
         {
           model: User,
-          atrributes: ["nama", "email"],
-          where: {email : userEmail}
+          atrributes: ["nama", "email"]
         },
         {
           model: Claim, 
@@ -110,7 +118,7 @@ exports.getUserReports = async (req, res) => {
   }
 };
 
-exports.getAllReportsAdmin = async (req, res) => {
+exports.getDashboard = async (req, res) => {
   try {
     const reports = await Laporan.findAll({
       include: [
@@ -122,6 +130,12 @@ exports.getAllReportsAdmin = async (req, res) => {
       where: { status: "On Progress" }, 
       order: [["createdAt", "DESC"]],   
     });
+
+      const reports = await Laporan.findAll({
+        where: { status: "Waiting for upload verification" },
+        include: [{ model: User }],
+        order: [["createdAt", "DESC"]],
+      });
 
     res.render("admin/dashboard", {
       reports,
@@ -160,14 +174,12 @@ exports.claimReport = async (req, res) => {
     const { id_laporan } = req.body;
     const emailUser = req.user.email;
 
-    // Simpan ke tabel Claim
     await Claim.create({
       id_laporan,
       email: emailUser,
       tanggal_claim: new Date(),
     });
 
-    // Update status laporan jadi Claimed
     const laporan = await Laporan.findByPk(id_laporan);
     if (!laporan) {
       return res
@@ -178,13 +190,12 @@ exports.claimReport = async (req, res) => {
     laporan.status = "Claimed";
     await laporan.save();
 
-    // Ambil data kontak pelapor
+  
     const pelapor = await User.findOne({
       where: { email: laporan.email },
       attributes: ["nama", "email", "no_telepon", "alamat"],
     });
 
-    // 🔥 Tambahkan log hasil tarik data ke terminal
     console.log("Data kontak pelapor:", pelapor.toJSON());
 
     res.json({
@@ -212,7 +223,7 @@ exports.updateReport = async (req, res) => {
 
     const laporan = await Laporan.findOne({
       where: {
-        id_laporan: id,            // ✅ ganti id → id_laporan
+        id_laporan: id,           
         email: req.user.email,
       },
     });
@@ -341,6 +352,8 @@ exports.getAdminReports = async (req, res) => {
   try {
     const adminEmail = req.user.email;
 
+exports.getAllReportsAdmin = async (req, res) => {
+  try {
     const reports = await Laporan.findAll({
       include: [
         {
@@ -350,6 +363,10 @@ exports.getAdminReports = async (req, res) => {
         },
         {
           model: Claim, 
+          atrributes: ["nama", "email"],
+        },  
+        {
+          model: Claim,
           attributes: ["email", "tanggal_claim"],
           include: [{ model: User, attributes: ["nama", "email", "no_telepon", "alamat"] }]
         }
@@ -474,4 +491,48 @@ exports.deleteReportAdmin = async (req, res) => {
       message: "Terjadi kesalahan saat menghapus laporan" 
     });
   }
+};
+    }); 
+    res.render("admin/report", {
+      reports,
+    });
+  }
+  catch (error) {
+    console.error("Error getting all reports:", error);
+    res.status(500).send("Terjadi kesalahan pada server");
+  }
+};
+
+exports.acceptClaim = async (req, res) => {
+  try {
+    const { id_laporan } = req.params;
+    const { lokasi_penyerahan, tanggal_penyerahan, nama_pengklaim, no_telepon_pengklaim} = req.body || {};
+
+    console.log("req.file:", req.file);
+
+    if (!lokasi_penyerahan || !nama_pengklaim || !no_telepon_pengklaim || !tanggal_penyerahan || !req.file) {
+      return res.status(400).json({ success: false, message: "Semua field wajib diisi" });
+    }
+    console.log(id_laporan);
+
+    const laporan = await Laporan.findByPk(id_laporan);
+    if (!laporan) {
+      return res.status(404).json({ success: false, message: "Laporan tidak ditemukan" });
+    }
+    if (laporan.email !== req.user.email) {
+      return res.status(403).json({ success: false, message: "Kamu tidak berhak menerima claim untuk laporan ini" });
+    }
+    laporan.status = "Done";
+    laporan.lokasi_penyerahan = lokasi_penyerahan;
+    laporan.tanggal_penyerahan = new Date(tanggal_penyerahan);  
+    laporan.pengklaim = nama_pengklaim;
+    laporan.no_hp_pengklaim = no_telepon_pengklaim;
+    laporan.foto_bukti = req.file ? req.file.filename : null ;
+    await laporan.save();
+    
+    return res.redirect("/mahasiswa/history")
+  } catch (error) {
+    console.error("Error accepting claim:", error);
+    res.status(500).json({ success: false, message: "Terjadi kesalahan saat menerima claim" });
+  } 
 };

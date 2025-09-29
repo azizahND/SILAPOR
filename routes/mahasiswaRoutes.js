@@ -10,6 +10,7 @@ router.get('/reports', verifyToken, role('user'), reportController.showReportFor
 router.post('/reports', verifyToken, role('user'), upload.single('foto_barang'), reportController.createReport);
 
 router.get('/my-reports', verifyToken,role('user'), reportController.getUserReports);
+router.post('/my-reports/accept-claim/:id_laporan', verifyToken, role('user'),upload.single('bukti'), reportController.acceptClaim);
 
 router.post('/claim', verifyToken, role('user'), reportController.claimReport);
 router.delete("/reports/delete/:id",verifyToken,role('user'), reportController.deleteReport);

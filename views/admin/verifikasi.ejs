@@ -65,9 +65,22 @@
           role="dialog"
           tabindex="-1"
         >
-          <div class="bg-white dark:bg-neutral-800 rounded-xl shadow-md w-full max-w-md">
+          <div
+            class="bg-white dark:bg-neutral-800 rounded-xl shadow-md w-full max-w-md relative"
+          >
+            <!-- Tombol X -->
+            <button
+              type="button"
+              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              data-hs-overlay="#verifyModal-<%= report.id_laporan %>"
+            >
+              ✕
+            </button>
+
             <!-- Header -->
-            <div class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700">
+            <div
+              class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700"
+            >
               <h3 class="font-bold text-gray-800 dark:text-white">
                 Detail Laporan
               </h3>
@@ -92,9 +105,7 @@
             </div>
 
             <!-- Footer -->
-            <form
-              method="POST"
-              action="/admin/verifikasi/<%= report.id_laporan %>"
+            <div
               class="flex flex-col items-end gap-3 py-3 px-4 border-t border-gray-200 dark:border-neutral-700"
             >
               <p class="text-sm text-gray-700 dark:text-gray-300 mr-auto">
@@ -102,20 +113,118 @@
               </p>
               <div class="flex gap-2">
                 <button
-                  name="action"
-                  value="reject"
-                  type="submit"
+                  type="button"
                   class="py-2 px-3 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700"
+                  data-hs-overlay="#rejectModal-<%= report.id_laporan %>"
                 >
                   Tidak
                 </button>
-                <button
-                  name="action"
-                  value="approve"
-                  type="submit"
-                  class="py-2 px-3 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700"
+                <form
+                  method="POST"
+                  action="/admin/verifikasi/<%= report.id_laporan %>"
                 >
-                  Ya
+                  <button
+                    name="action"
+                    value="approve"
+                    type="submit"
+                    class="py-2 px-3 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700"
+                  >
+                    Ya
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Reject -->
+        <div
+          id="rejectModal-<%= report.id_laporan %>"
+          class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+          role="dialog"
+          tabindex="-1"
+        >
+          <div
+            class="bg-white dark:bg-neutral-800 rounded-xl shadow-md w-full max-w-md relative"
+          >
+            <!-- Tombol X -->
+            <button
+              type="button"
+              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              data-hs-overlay="#rejectModal-<%= report.id_laporan %>"
+            >
+              ✕
+            </button>
+
+            <!-- Header -->
+            <div
+              class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700"
+            >
+              <h3 class="font-bold text-gray-800 dark:text-white">
+                Alasan Penolakan
+              </h3>
+            </div>
+
+            <!-- Body -->
+            <form
+              method="POST"
+              action="/admin/verifikasi/<%= report.id_laporan %>"
+              class="p-4 space-y-3"
+            >
+              <input type="hidden" name="action" value="reject" />
+              <input
+                type="hidden"
+                id="alasanFinal-<%= report.id_laporan %>"
+                name="alasan"
+              />
+
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="alasan-<%= report.id_laporan %>"
+                  value="Data tidak valid"
+                />
+                Data tidak valid
+              </label>
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="alasan-<%= report.id_laporan %>"
+                  value="Bukti foto tidak jelas"
+                />
+                Bukti foto tidak jelas
+              </label>
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="alasan-<%= report.id_laporan %>"
+                  value="Informasi tidak lengkap"
+                />
+                Informasi tidak lengkap
+              </label>
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="alasan-<%= report.id_laporan %>"
+                  value="lainnya"
+                />
+                Lainnya
+              </label>
+              <textarea
+                id="alasanLainnya-<%= report.id_laporan %>"
+                class="hidden w-full mt-2 p-2 border rounded-lg"
+                placeholder="Tulis alasan lainnya..."
+              ></textarea>
+
+              <!-- Footer -->
+              <div class="flex justify-end gap-2">
+                <button
+                  id="btnTolak-<%= report.id_laporan %>"
+                  type="submit"
+                  disabled
+                  class="py-2 px-3 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                >
+                  Tolak
                 </button>
               </div>
             </form>
@@ -124,5 +233,55 @@
         <% }) %>
       </div>
     </div>
+
+    <!-- Data reports disimpan aman -->
+    <script id="reports-data" type="application/json">
+      <%- JSON.stringify(reports) %>
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const reports = JSON.parse(
+          document.getElementById("reports-data").textContent
+        );
+
+        reports.forEach((report) => {
+          const radios = document.querySelectorAll(
+            `input[name="alasan-${report.id_laporan}"]`
+          );
+          const textarea = document.getElementById(
+            `alasanLainnya-${report.id_laporan}`
+          );
+          const btnTolak = document.getElementById(
+            `btnTolak-${report.id_laporan}`
+          );
+          const alasanFinal = document.getElementById(
+            `alasanFinal-${report.id_laporan}`
+          );
+
+          radios.forEach((radio) => {
+            radio.addEventListener("change", () => {
+              if (radio.value === "lainnya") {
+                textarea.classList.remove("hidden");
+                btnTolak.disabled = true;
+              } else {
+                textarea.classList.add("hidden");
+                btnTolak.disabled = false;
+                alasanFinal.value = radio.value;
+              }
+            });
+          });
+
+          textarea.addEventListener("input", () => {
+            if (textarea.value.trim() !== "") {
+              btnTolak.disabled = false;
+              alasanFinal.value = textarea.value.trim();
+            } else {
+              btnTolak.disabled = true;
+            }
+          });
+        });
+      });
+    </script>
   </body>
 </html>

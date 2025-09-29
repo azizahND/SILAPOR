@@ -1,7 +1,7 @@
 const { Laporan, User } = require("../models");
 
 module.exports = {
-  // ambil semua laporan yang statusnya "Waiting for upload verification"
+  
   getPendingReports: async (req, res) => {
     try {
       const reports = await Laporan.findAll({
