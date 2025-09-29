@@ -161,18 +161,24 @@ exports.claimReport = async (req, res) => {
     const { id_laporan } = req.body;
     const emailUser = req.user.email;
 
-    await Claim.create({
-      id_laporan,
-      email: emailUser,
-      tanggal_claim: new Date(),
-    });
-
     const laporan = await Laporan.findByPk(id_laporan);
     if (!laporan) {
       return res
         .status(404)
         .json({ success: false, message: "Laporan tidak ditemukan" });
     }
+
+    if (laporan.email === emailUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Kamu tidak bisa klaim laporan milikmu sendiri" });
+    }
+
+    await Claim.create({
+      id_laporan,
+      email: emailUser,
+      tanggal_claim: new Date(),
+    });
 
     laporan.status = "Claimed";
     await laporan.save();
@@ -263,6 +269,7 @@ exports.deleteReport = async (req, res) => {
 exports.getAllReportsAdmin = async (req, res) => {
   try {
     const reports = await Laporan.findAll({
+      where: { status: "On Progress" }, 
       include: [
         {
           model: User,
