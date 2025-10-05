@@ -8,90 +8,23 @@
   aria-label="Sidebar"
 >
   <div class="relative flex flex-col h-full max-h-full">
-    <!-- Header -->
-    <header class="py-4 px-2 flex justify-between items-center gap-x-2">
-      <a
-        class="flex-none font-semibold text-xl text-black focus:outline-hidden focus:opacity-80 hs-overlay-minified:hidden"
-        href="#"
-        aria-label="Brand"
-        >Brand</a
-      >
-
-      <div class="lg:hidden">
-        <!-- Close Button -->
-        <button
-          type="button"
-          class="flex justify-center items-center gap-x-3 size-6 bg-white border border-gray-200 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
-          data-hs-overlay="#hs-sidebar-content-push-to-mini-sidebar"
-        >
-          <svg
-            class="shrink-0 size-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
-          </svg>
-          <span class="sr-only">Close</span>
-        </button>
-        <!-- End Close Button -->
-      </div>
-      <div class="hidden lg:block">
-        <!-- Toggle Button -->
-        <button
-          type="button"
-          class="flex justify-center items-center flex-none gap-x-3 size-9 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
-          aria-haspopup="dialog"
-          aria-expanded="false"
-          aria-controls="hs-sidebar-content-push-to-mini-sidebar"
-          aria-label="Minify navigation"
-          data-hs-overlay-minifier="#hs-sidebar-content-push-to-mini-sidebar"
-        >
-          <svg
-            class="hidden hs-overlay-minified:block shrink-0 size-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <rect width="18" height="18" x="3" y="3" rx="2" />
-            <path d="M15 3v18" />
-            <path d="m8 9 3 3-3 3" />
-          </svg>
-          <svg
-            class="hs-overlay-minified:hidden shrink-0 size-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <rect width="18" height="18" x="3" y="3" rx="2" />
-            <path d="M15 3v18" />
-            <path d="m10 15-3-3 3-3" />
-          </svg>
-          <span class="sr-only">Navigation Toggle</span>
-        </button>
-        <!-- End Toggle Button -->
-      </div>
-    </header>
-    <!-- End Header -->
+ <!-- Profile Section -->
+    <div class="px-4 py-4 border-b border-gray-200">
+      <a href="/admin/profile" class="flex flex-col items-center group">
+        <div class="relative">
+          <img class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-green-400 transition-colors duration-200" 
+               src="<%= typeof user !== 'undefined' && user && user.foto ? '/uploads/' + user.foto : '/uploads/default.jpg' %>" 
+               alt="Profile Photo">
+          <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+        </div>
+        <div class="mt-2 text-center">
+          <p class="text-sm font-medium text-gray-900 group-hover:text-green-600 transition-colors duration-200">
+            <%= typeof user !== 'undefined' && user ? user.nama : 'Admin' %>
+          </p>
+        </div>
+      </a>
+    </div>
+    <!-- End Profile Section -->
 
     <!-- Body -->
     <nav
@@ -175,6 +108,34 @@
                 />
               </svg>
               <span class="hs-overlay-minified:hidden">Verifikasi Laporan</span>
+            </a>
+          </li>
+          
+          
+           <li>
+            <a
+              href="/admin/my-reports"
+              class="min-h-[36px] w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+            >
+              <svg
+                class="size-4"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <line x1="10" y1="9" x2="8" y2="9" />
+              </svg>
+              <span class="hs-overlay-minified:hidden">Laporan Saya</span>
             </a>
           </li>
 

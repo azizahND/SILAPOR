@@ -326,3 +326,215 @@ exports.acceptClaim = async (req, res) => {
     res.status(500).json({ success: false, message: "Terjadi kesalahan saat menerima claim" });
   } 
 };
+
+exports.createReportAdmin = async (req, res) => {
+  try {
+    const {
+      jenis_laporan,
+      nama_barang,
+      lokasi_kejadian,
+      tanggal_kejadian,
+      deskripsi,
+    } = req.body;
+
+    // Validasi input
+    if (
+      !jenis_laporan ||
+      !nama_barang ||
+      !lokasi_kejadian ||
+      !tanggal_kejadian ||
+      !deskripsi
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Semua field wajib diisi",
+      });
+    }
+
+    // Data laporan untuk admin
+    const reportData = {
+      email: req.user.email, // Admin yang membuat laporan
+      jenis_laporan,
+      nama_barang,
+      lokasi: lokasi_kejadian,
+      deskripsi,
+      foto_barang: req.file ? req.file.filename : null,
+      status: "Waiting for upload verification", 
+      tanggal_kejadian: new Date(tanggal_kejadian),
+      tanggal_laporan: new Date(),
+    };
+
+    const newReport = await Laporan.create(reportData);
+
+    // Redirect ke halaman my-reports admin dengan pesan sukses
+    return res.redirect("/admin/my-reports");
+  } catch (error) {
+    console.error("Error creating admin report:", error);
+
+    // Hapus file jika ada error
+    if (req.file) {
+      const filePath = path.join(req.file.destination, req.file.filename);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Terjadi kesalahan saat menyimpan laporan",
+    });
+  }
+};
+
+exports.getAdminReports = async (req, res) => {
+  try {
+    const adminEmail = req.user.email;
+
+    const reports = await Laporan.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["nama", "email"],
+          where: { email: adminEmail }
+        },
+        {
+          model: Claim, 
+          attributes: ["email", "tanggal_claim"],
+          include: [{ model: User, attributes: ["nama", "email", "no_telepon", "alamat"] }]
+        }
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.render("admin/my-reports", {
+      title: "Laporan Saya - Admin",
+      reports,
+      success: req.query.success, // Ambil parameter success dari URL
+    });
+  } catch (error) {
+    console.error("Error getting admin reports:", error);
+    res.status(500).render("error", {
+      message: "Terjadi kesalahan saat memuat data laporan",
+    });
+  }
+};
+
+// Method untuk menampilkan form laporan admin
+exports.showAdminReportForm = (req, res) => {
+  try {
+    res.render("admin/report-form", { 
+      title: "Form Laporan Admin",
+      role: req.user.role 
+    });
+  } catch (error) {
+    console.error("Error showing admin report form:", error);
+    res.status(500).render("error", {
+      message: "Terjadi kesalahan saat memuat halaman form laporan",
+    });
+  }
+};
+
+// Method khusus untuk admin update laporan
+exports.updateReportAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      nama_barang,
+      lokasi_kejadian,
+      deskripsi,
+    } = req.body;
+
+    // Validasi input
+    if (!nama_barang || !lokasi_kejadian || !deskripsi) {
+      return res.status(400).json({ 
+        success: false,
+        message: "Semua field wajib diisi" 
+      });
+    }
+
+    const laporan = await Laporan.findOne({
+      where: {
+        id_laporan: id,
+        email: req.user.email, // Admin yang membuat laporan
+      },
+    });
+
+    if (!laporan) {
+      return res.status(404).json({ 
+        success: false,
+        message: "Laporan tidak ditemukan" 
+      });
+    }
+
+    // Update data laporan
+    laporan.nama_barang = nama_barang;
+    laporan.lokasi = lokasi_kejadian;
+    laporan.deskripsi = deskripsi;
+
+    // Handle foto update
+    if (req.file) {
+      // Hapus foto lama jika ada
+      if (laporan.foto_barang) {
+        const oldPath = path.join("uploads", laporan.foto_barang);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      laporan.foto_barang = req.file.filename;
+    }
+
+    await laporan.save();
+
+    // Redirect ke my-reports admin dengan pesan sukses
+    return res.redirect("/admin/my-reports");
+  } catch (error) {
+    console.error("Error updating admin report:", error);
+    
+    // Hapus file jika ada error
+    if (req.file) {
+      const filePath = path.join(req.file.destination, req.file.filename);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    return res.status(500).json({ 
+      success: false,
+      message: "Terjadi kesalahan saat memperbarui laporan" 
+    });
+  }
+};
+
+// Method khusus untuk admin delete laporan
+exports.deleteReportAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const laporan = await Laporan.findOne({
+      where: { 
+        id_laporan: id,
+        email: req.user.email // Admin yang membuat laporan
+      },
+    });
+
+    if (!laporan) {
+      return res.json({ 
+        success: false, 
+        message: "Laporan tidak ditemukan" 
+      });
+    }
+
+    // Hapus foto jika ada
+    if (laporan.foto_barang) {
+      const filePath = path.join("uploads", laporan.foto_barang);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    await laporan.destroy();
+    
+    res.json({ 
+      success: true, 
+      message: "Laporan berhasil dihapus" 
+    });
+  } catch (error) {
+    console.error("Error deleting admin report:", error);
+    res.json({ 
+      success: false, 
+      message: "Terjadi kesalahan saat menghapus laporan" 
+    });
+  }
+};
