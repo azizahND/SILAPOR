@@ -80,3 +80,72 @@ exports.createUser = async (req, res) => {
     }
 };
 
+// Admin profile methods
+exports.showAdminProfile = async (req, res) => {
+    try {
+        const userEmail = req.user.email; 
+        const user = await User.findOne({ where: { email: userEmail } });
+
+        if (!user) {
+            return res.status(404).send("User tidak ditemukan");
+        }
+
+        res.render("admin/profile", { user });
+    } catch (err) {
+        console.error("Error showAdminProfile:", err);
+        res.status(500).send("Gagal mengambil data profil");
+    }
+};
+
+exports.showAdminEditProfile = async (req, res) => {
+    try {
+        const userEmail = req.user.email;
+        const user = await User.findOne({ where: { email: userEmail } });
+
+        if (!user) {
+            return res.status(404).send("User tidak ditemukan");
+        }
+
+        res.render("admin/edit-profile", { user });
+    } catch (err) {
+        console.error("Error showAdminEditProfile:", err);
+        res.status(500).send("Gagal memuat form edit");
+    }
+};
+
+exports.updateAdminProfile = async (req, res) => {
+    try {
+        const userEmail = req.user.email;
+        const { nama, email, alamat, no_telepon } = req.body;
+
+        const user = await User.findOne({ where: { email: userEmail } });
+        if (!user) {
+            return res.status(404).send("User tidak ditemukan");
+        }
+
+        // Upload foto baru
+        if (req.file) {
+            if (user.foto && user.foto !== "default.jpg") {
+                const oldPath = path.join(__dirname, "../public/uploads", user.foto);
+                if (fs.existsSync(oldPath)) {
+                    fs.unlinkSync(oldPath);
+                }
+            }
+            user.foto = req.file.filename;
+        }
+
+        // Update field
+        user.nama = nama || user.nama;
+        user.alamat = alamat || user.alamat;
+        user.no_telepon = no_telepon || user.no_telepon; 
+
+        await user.save();
+        
+        // Redirect ke halaman profile setelah berhasil update
+        return res.redirect("/admin/profile");
+    } catch (error) {
+        console.error("Error updateAdminProfile:", error);
+        return res.status(500).send("Terjadi kesalahan saat update profile");
+    }
+};
+
