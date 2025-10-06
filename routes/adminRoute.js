@@ -6,6 +6,7 @@ const verifyToken = require("../middleware/validTokenMiddleware");
 const role = require("../middleware/checkRoleMiddleware");
 const userController = require("../controllers/userController");
 const verificationController = require("../controllers/verificationController");
+const historyController = require("../controllers/historyController");
 
 router.get(
   "/dashboard",
@@ -96,5 +97,12 @@ router.get(
 router.get("/profile", verifyToken, role("admin"), userController.showAdminProfile);
 router.get("/edit-profile", verifyToken, role("admin"), userController.showAdminEditProfile);
 router.post("/update-profile", verifyToken, role("admin"), upload.single("foto"), userController.updateAdminProfile);
+
+
+
+router.get("/history", verifyToken, role('admin'), historyController.getDoneReportsAdmin);
+router.get("/history/:id", verifyToken, role('admin'), historyController.getReportHistoryByIdAdmin);
+router.get("/history/download/:id", verifyToken, role('admin'), historyController.downloadReportPdfAdmin);
+module.exports = router;
 
 module.exports = router;

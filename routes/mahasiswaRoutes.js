@@ -4,6 +4,8 @@ const upload = require('../middleware/upload');
 const reportController = require('../controllers/reportController');
 const verifyToken= require ('../middleware/validTokenMiddleware');
 const role = require("../middleware/checkRoleMiddleware");
+const historyController = require("../controllers/historyController");
+
 
 router.get('/home', verifyToken, role('user'), reportController.getAllReportsUser);
 router.get('/reports', verifyToken, role('user'), reportController.showReportForm);
@@ -14,7 +16,13 @@ router.post('/my-reports/accept-claim/:id_laporan', verifyToken, role('user'),up
 
 router.post('/claim', verifyToken, role('user'), reportController.claimReport);
 router.delete("/reports/delete/:id",verifyToken,role('user'), reportController.deleteReport);
+router.get("/history", verifyToken, role('user'), historyController.getDoneReports);
+router.get("/history/:id", verifyToken, role('user'), historyController.getReportHistoryById);
+router.get("/history/download/:id", verifyToken, role('user'), historyController.downloadReportPdf);
+
 module.exports = router;
+
+
 
 // Update laporan
 router.post(

@@ -67,6 +67,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      foto: {
+        type: DataTypes.STRING,       // menyimpan nama file / URL
+        allowNull: false,
+        defaultValue: "default.jpg",  // default jika user belum upload foto
+      },
     },
     {
       sequelize,
