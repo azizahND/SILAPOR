@@ -5,14 +5,13 @@ const path = require("path");
 const morgan = require("morgan");
 const cookieParser = require('cookie-parser');
 
-const livereload = require("livereload");
-const connectLivereload = require("connect-livereload");
+// const livereload = require("livereload");
+// const connectLivereload = require("connect-livereload");
 
 const authRoutes = require('./routes/auth'); 
 const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
 const adminRoutes = require('./routes/adminRoute');
 const claimRoutes = require("./routes/claimRoutes");
-const historyRoutes = require("./routes/historyRoute");
 
 const app = express();
 app.use(express.json())
@@ -20,23 +19,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // ====== LiveReload Setup ======
-const liveReloadServer = livereload.createServer({ port: 35730 });
+// const liveReloadServer = livereload.createServer({ port: 35730 });
 
-liveReloadServer.watch(path.join(__dirname, "public"));
-liveReloadServer.watch(path.join(__dirname, "views"));
+// liveReloadServer.watch(path.join(__dirname, "public"));
+// liveReloadServer.watch(path.join(__dirname, "views"));
 
-app.use(connectLivereload());
+// app.use(connectLivereload());
 
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
+// liveReloadServer.server.once("connection", () => {
+//   setTimeout(() => {
+//     liveReloadServer.refresh("/");
+//   }, 100);
+// });
 // ====== End LiveReload Setup ======
 
 // Middleware
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(express.json());    
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -60,7 +59,7 @@ app.use('/', authRoutes);
 app.use('/mahasiswa', mahasiswaRoutes ); 
 app.use('/admin', adminRoutes );
 app.use("/claim", claimRoutes);
-app.use("/mahasiswa/history", historyRoutes);
+
 
 
 // Jalankan server

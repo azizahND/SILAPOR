@@ -26,6 +26,12 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      foto: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'default.jpg',
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
