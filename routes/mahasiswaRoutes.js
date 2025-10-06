@@ -20,9 +20,6 @@ router.get("/history", verifyToken, role('user'), historyController.getDoneRepor
 router.get("/history/:id", verifyToken, role('user'), historyController.getReportHistoryById);
 router.get("/history/download/:id", verifyToken, role('user'), historyController.downloadReportPdf);
 
-module.exports = router;
-
-
 
 // Update laporan
 router.post(

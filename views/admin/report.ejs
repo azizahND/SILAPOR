@@ -40,78 +40,76 @@
           Laporan Penemuan Terbaru
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <% reports.forEach(report => { %>
-          <div
-            class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
-          >
-            <div class="relative">
-              <img
-                src="/uploads/<%= report.foto_barang %>"
-                alt="<%= report.nama_barang %>"
-                class="w-full h-48 object-cover"
-              />
-              <div class="absolute top-4 left-4">
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <% reports.forEach(report => { %>
+        <div
+          class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
+        >
+          <div class="relative">
+            <img
+              src="/uploads/<%= report.foto_barang %>"
+              alt="<%= report.nama_barang %>"
+              class="w-full h-48 object-cover"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              >
+                <svg
+                  class="w-3 h-3 mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
                 >
-                  <svg
-                    class="w-3 h-3 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <circle cx="10" cy="10" r="3"></circle>
-                  </svg>
-                  Tersedia
-                </span>
-              </div>
-              <div class="absolute top-4 right-4">
-                <span
-                  class="text-xs text-white bg-black/50 px-2 py-1 rounded-full font-medium"
-                  >2 jam lalu</span
-                >
-              </div>
+                  <circle cx="10" cy="10" r="3"></circle>
+                </svg>
+                Tersedia
+              </span>
             </div>
-            <div class="p-6">
-              <div class="flex items-start justify-between mb-3">
-                <h3 class="text-xl font-bold text-gray-900">
-                  <%= report.nama_barang %>
-                </h3>
-              </div>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                <%= report.deskripsi %>
-              </p>
-
-              <div class="space-y-3 mb-5">
-                <div class="flex items-center text-sm text-gray-500">
-                  <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
-                  <%= report.lokasi %>
-                </div>
-                <div class="flex items-center text-sm text-gray-500">
-                  <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
-                  Ditemukan oleh: <%= report.User.nama %>
-                </div>
-              </div>
-
-              <div class="flex gap-4">
-                <button
-                  class="btn-klaim flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
-                  data-id="<%= report.id_laporan %>"
-                >
-                  Klaim Barang
-                </button>
-
-                <button
-                  class="flex-1 bg-white hover:bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
-                  data-hs-overlay="#detailModal-<%= report.id_laporan %>"
-                >
-                  Detail
-                </button>
-              </div>
+            <div class="absolute top-4 right-4">
+              <span
+                class="text-xs text-white bg-black/50 px-2 py-1 rounded-full font-medium"
+                >2 jam lalu</span
+              >
             </div>
           </div>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-3">
+              <h3 class="text-xl font-bold text-gray-900">
+                <%= report.nama_barang %>
+              </h3>
+            </div>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+              <%= report.deskripsi %>
+            </p>
 
-                    <div
+            <div class="space-y-3 mb-5">
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+                <%= report.lokasi %>
+              </div>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
+                Ditemukan oleh: <%= report.User.nama %>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <button
+                class="btn-klaim flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
+                data-id="<%= report.id_laporan %>"
+              >
+                Klaim Barang
+              </button>
+
+              <button
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                data-hs-overlay="#detailModal-<%= report.id_laporan %>"
+              >
+                <i class="fas fa-info-circle mr-2"></i>Detail 
+              </button>
+            </div>
+          </div>
+          <div
           id="detailModal-<%= report.id_laporan %>"
           class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
           role="dialog"
@@ -160,26 +158,37 @@
               </button>
           </div>
         </div>
-          <% }) %>
-        </div>
       </div>
-      <div
-        id="modal-kontak"
-        class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
-        role="dialog"
-        tabindex="-1"
-      >
-        <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
-          <h3 class="text-xl font-semibold mb-4">Kontak Pelapor</h3>
-          <div id="kontak-content" class="space-y-3 text-gray-700"></div>
-          <div class="mt-6 text-right">
-            <button
-              type="button"
-              class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-              data-hs-overlay="#modal-kontak"
-            >
-              Tutup
-            </button>
+    </div>
+            <% }) %>
+
+    <div
+      id="modal-kontak"
+      class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
+        <h3 class="text-xl font-semibold mb-4">Kontak Pelapor</h3>
+        <div id="kontak-content" class="space-y-3 text-gray-700"></div>
+       
+        <div class="mt-6 flex justify-between gap-3">
+          <button
+            id="btn-whatsapp"
+            class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center"
+          >
+            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+          </button>
+          </div>
+
+            <div class="mt-4 flex justify-end">
+          <button
+            type="button"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg"
+            data-hs-overlay="#modal-kontak"
+          >
+            Tutup
+          </button>
           </div>
         </div>
       </div>
@@ -192,13 +201,13 @@
           const id_laporan = btn.dataset.id;
 
           try {
-            const response = await fetch("/mahasiswa/claim", {
+            const response = await fetch("/admin/claim", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ id_laporan }),
-            });
+            }); 
 
             const result = await response.json();
             if (result.success) {
@@ -209,6 +218,18 @@
                 <p><strong>No. Telepon:</strong> ${kontak.no_telepon}</p>
                 <p><strong>Alamat:</strong> ${kontak.alamat}</p>
               `;
+
+              const btnWA = document.getElementById("btn-whatsapp");
+              btnWA.onclick = () => {
+                const noHP = kontak.no_telepon.replace(/[^0-9]/g, "");
+                const pesan = encodeURIComponent(
+                  `Halo ${kontak.nama}, saya ingin menghubungi terkait laporan barang.`
+                );
+                const linkWA = `https://wa.me/${noHP}?text=${pesan}`;
+                window.open(linkWA, "_blank");
+
+                HSOverlay.close(document.getElementById("modal-kontak"));
+              };
 
               HSOverlay.open(document.getElementById("modal-kontak"));
             } else {

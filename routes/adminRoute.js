@@ -7,6 +7,7 @@ const role = require("../middleware/checkRoleMiddleware");
 const userController = require("../controllers/userController");
 const verificationController = require("../controllers/verificationController");
 const historyController = require("../controllers/historyController");
+const claimController = require("../controllers/claimController");
 
 router.get(
   "/dashboard",
@@ -103,6 +104,9 @@ router.post("/update-profile", verifyToken, role("admin"), upload.single("foto")
 router.get("/history", verifyToken, role('admin'), historyController.getDoneReportsAdmin);
 router.get("/history/:id", verifyToken, role('admin'), historyController.getReportHistoryByIdAdmin);
 router.get("/history/download/:id", verifyToken, role('admin'), historyController.downloadReportPdfAdmin);
-module.exports = router;
+
+router.post('/claim', verifyToken, role('admin'), reportController.claimReport);
+router.get("/my-claim", verifyToken, role('admin'), claimController.getMyClaimsAdmin);
+router.post("/my-claim/cancel/:id_laporan", verifyToken, role('admin'), claimController.cancelClaimAdmin);
 
 module.exports = router;
