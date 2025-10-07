@@ -27,6 +27,8 @@ router.post("/forget-password", authController.forgetPassword);
 router.post("/reset-password", authController.resetPassword);
 // Reset password routes
 router.get("/reset-password", authController.showResetPasswordForm);
+router.get("/changePassword", verifyToken, role("user"), authController.showChangePasswordForm);
+router.post("/changePassword", verifyToken, role("user"), authController.changePassword);
 
 // Profile routes
 router.get("/profile", verifyToken, role("user"), authController.showProfile);
