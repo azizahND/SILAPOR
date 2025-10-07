@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laporan Saya</title>
     <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
+
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -62,7 +64,7 @@
         </div>
       </div>
       <% } else { %>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4">
@@ -83,12 +85,27 @@
                 </div>
                 <div>
                     <h3 class="text-2xl font-bold text-gray-900">
-                        <%= reports.filter(r => r.status === 'On Progress' || r.status === 'Pending').length %>
+                        <%= reports.filter(r => r.status === 'On progress' || r.status === 'Pending').length %>
                     </h3>
                     <p class="text-gray-600">Dalam Proses</p>
                 </div>
             </div>
         </div>
+
+         <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-times text-red-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900">
+                            <%= reports.filter(r => r.status === 'Upload verification rejected').length %>
+                        </h3>
+                        <p class="text-gray-600">Ditolak</p>
+                    </div>
+                 </div>
+          </div>
+
         <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
             <div class="flex items-center">
                 <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
@@ -109,7 +126,7 @@
         <div
           class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-lg hover:shadow-2xl card-hover"
         >
-          <div class="relative overflow-hidden group">
+          <div class="relative overflow-hidden group">  
             <img
               src="/uploads/<%= report.foto_barang %>"
               alt="<%= report.nama_barang %>"
@@ -142,12 +159,21 @@
               <% if (report.status === 'Claimed' && report.Claims && report.Claims.length > 0  ) { %>
                 <button
                   onclick="openContactModal('<%= report.Claims[0].User.nama %>', '<%= report.Claims[0].User.no_telepon %>', '<%= report.Claims[0].User.email %>')"
-                  class="bg-green-500 hover:bg-green-600 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg flex items-center"
+                  class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
                 >
-                  <i class="fas fa-address-card mr-2"></i> Hubungi Pengklaim
+                  <i class="fas fa-address-card mr-2"></i> Hubungi
                 </button>
-                <button>
-                  
+                <button
+                  class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg" 
+                >
+                  <i class="fas fa-trash-alt mr-2"></i>Tolak Claim
+                </button>
+                <button 
+                  type="button"
+                  class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                  data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+                >
+                  <i class="fas fa-check mr-2"></i>Terima Claim
                 </button>
               <% } else { %>
               <button
@@ -166,12 +192,83 @@
             </div>
           </div>
         </div>
-        <% }) %>
-      </div>
-      <% } %>
+        </div>
+        
+        
+<div
+  id="acceptModal-<%= report.id_laporan %>"
+  class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+  role="dialog"
+  tabindex="-1"
+>
+  <div class="bg-white rounded-xl shadow-md w-full max-w-md">
+    <!-- Header -->
+    <div class="py-3 px-4 border-b border-gray-200">
+      <h3 class="font-bold text-gray-800">
+        Terima Klaim & Bukti Penyerahan
+      </h3>
+    </div>
+    <!-- Body -->
+    <div class="p-6">
+      <p class="text-gray-700 mb-4">
+        Apakah Anda yakin ingin menerima klaim ini? Silakan unggah bukti penyerahan agar tercatat dengan benar.
+      </p>
+
+      <!-- Form untuk bukti -->
+      <form action="/mahasiswa/my-reports/accept-claim/<%= report.id_laporan %>" method="POST" enctype="multipart/form-data">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Nama Pengklaim</label>
+          <input type="text" name="nama_pengklaim" id="nama_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.nama : '' %>" readonly
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">No. HP Pengklaim</label>
+          <input type="text" name="no_telepon_pengklaim" id="no_telepon_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.no_telepon : '' %>" readonly
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Email Pengklaim</label>
+          <input type="email" name="email_pengklaim" id="email_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.email : '' %>" readonly
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Lokasi Penyerahan</label>
+          <input type="text" name="lokasi_penyerahan" id="lokasi_penyerahan-<%= report.id_laporan %>" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Masukkan lokasi penyerahan"/>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Tanggal Penyerahan</label>
+          <input type="date" name="tanggal_penyerahan" id="tanggal_penyerahan-<%= report.id_laporan %>" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="bukti">Upload Bukti Penyerahan</label>
+          <input type="file" name="bukti" id="bukti-<%= report.id_laporan %>" accept="image" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
+        </div>
+        <div class="flex justify-end space-x-3">
+          <button
+            type="button"
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+            data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+          >
+            Batal
+          </button>
+          <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Terima Klaim
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+      <% }) %>
     </div>
 
     </div>
+    <% } %>
     
     <div id="editReportModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
         <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 opacity-0">
@@ -212,37 +309,59 @@
         </div>
     </div>
 
-        <div id="detailReportModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform scale-95 opacity-0 max-h-[90vh] flex flex-col">
-            <div class="flex justify-between items-center p-5 border-b border-gray-200">
-                <h3 class="text-xl font-bold text-gray-800">Detail Laporan</h3>
-                <button type="button" onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition">
-                    <i class="fas fa-times fa-lg"></i>
-                </button>
-            </div>
-            <div class="p-6 space-y-4 overflow-y-auto">
-                <img id="detail-foto" src="" alt="Foto Barang" class="w-full h-64 object-cover rounded-lg mb-4">
-                <h2 id="detail-nama-barang" class="text-3xl font-bold text-gray-900"></h2>
-                
-                <div class="flex flex-wrap items-center gap-4 text-gray-600">
-                    <span id="detail-status-badge" class="px-3 py-1.5 rounded-full text-sm font-semibold"></span>
-                    <div class="flex items-center">
-                        <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
-                        <span id="detail-lokasi"></span>
-                    </div>
-                    <div class="flex items-center">
-                        <i class="fas fa-calendar-alt mr-2 text-blue-500"></i>
-                        <span id="detail-tanggal"></span> </div>
+    <div id="detailReportModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
+    <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-4xl transform scale-95 opacity-0 max-h-[90vh] flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
+            <h3 class="text-xl font-semibold text-gray-800">Detail Laporan</h3>
+            <button type="button" onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition">
+                <i class="fas fa-times fa-lg"></i>
+            </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+
+                <div class="md:col-span-2 bg-slate-100 rounded-xl flex items-center justify-center p-4">
+                    <img id="detail-foto" src="" alt="Foto Barang" class="max-h-[70vh] w-auto object-contain rounded-md">
                 </div>
 
-                <div class="prose  max-w-none mt-4">
-                    <p id="detail-keterangan" class="text-gray-700"></p>
+                <div class="md:col-span-3 flex flex-col">
+                    <div class="mb-3">
+                         <span id="detail-status-badge" class="px-3 py-1.5 rounded-full text-sm font-semibold"></span>
+                    </div>
+
+                    <h2 id="detail-nama-barang" class="text-3xl font-bold text-gray-900 mb-5"></h2>
+                    
+                    <div class="space-y-4 border-t border-gray-200 pt-5">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-slate-400 mt-1 w-5 text-center"></i>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-500">Lokasi</p>
+                                <p id="detail-lokasi" class="font-semibold text-gray-800"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-calendar-alt text-slate-400 mt-1 w-5 text-center"></i>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-500">Tanggal Dilaporkan</p>
+                                <p id="detail-tanggal" class="font-semibold text-gray-800"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 border-t border-gray-200 pt-5">
+                         <h4 class="text-base font-semibold text-gray-800 mb-2">Deskripsi</h4>
+                         <p id="detail-keterangan" class="text-gray-600 leading-relaxed"></p>
+                    </div>
                 </div>
-            </div>
-             <div class="flex justify-end items-center p-5 border-t border-gray-200">
-                <button type="button" onclick="closeDetailModal()" class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Tutup</button>
+
             </div>
         </div>
+
+        <div class="flex justify-end items-center p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl flex-shrink-0">
+            <button type="button" onclick="closeDetailModal()" class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Tutup</button>
+        </div>
+    </div>
     </div>
 
 <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
@@ -360,7 +479,7 @@
         document.getElementById('detail-foto').src = `/uploads/${report.foto_barang}`;
         document.getElementById('detail-nama-barang').textContent = report.nama_barang;
         document.getElementById('detail-lokasi').textContent = report.lokasi;
-        document.getElementById('detail-keterangan').textContent = report.keterangan;
+        document.getElementById('detail-keterangan').textContent = report.deskripsi;
         
         document.getElementById('detail-tanggal').textContent = new Date(report.createdAt || Date.now()).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
 

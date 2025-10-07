@@ -321,7 +321,7 @@ exports.showEditProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const userEmail = req.user.email;
-    const { nama, email, alamat, no_telepon, password, password_confirm } = req.body;
+    const { nama, alamat, no_telepon } = req.body;
 
     const user = await User.findOne({ where: { email: userEmail } });
     if (!user) {
@@ -331,7 +331,7 @@ exports.updateProfile = async (req, res) => {
     // Upload foto baru
     if (req.file) {
       if (user.foto && user.foto !== "default.jpg") {
-        const oldPath = path.join(__dirname, "../public/uploads", user.foto);
+        const oldPath = path.join("public", "upload", user.foto);
         if (fs.existsSync(oldPath)) {
           fs.unlinkSync(oldPath);
         }

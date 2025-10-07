@@ -13,7 +13,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password: Sequelize.STRING,
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       role: {
         type: Sequelize.ENUM("admin", "user"),
         allowNull: false,
@@ -26,6 +29,39 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      foto: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "default.jpg",
+      },
+
+      // === Kolom verifikasi email ===
+      isVerified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      emailVerifyToken: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      emailVerifyTokenUsed: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+
+      // === Kolom reset password ===
+      resetPasswordToken: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      resetPasswordTokenUsed: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -36,7 +72,8 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface) {
+
+  async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Users");
   },
 };

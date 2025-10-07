@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       pengklaim: DataTypes.STRING,
       no_hp_pengklaim: DataTypes.STRING(50),
+      alasan: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      }
     },
     {
       sequelize,

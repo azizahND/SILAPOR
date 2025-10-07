@@ -65,6 +65,11 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ["none", "approve", "denied"],
       },
+      alasan: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+
       pengklaim: {
         type: Sequelize.STRING,
       },

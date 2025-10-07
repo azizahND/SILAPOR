@@ -1,7 +1,6 @@
 const { Laporan, User } = require("../models");
 
 module.exports = {
-  // ambil semua laporan yang statusnya "Waiting for upload verification"
   getPendingReports: async (req, res) => {
     try {
       const reports = await Laporan.findAll({
@@ -17,11 +16,10 @@ module.exports = {
     }
   },
 
-  // update status laporan
   verifyReport: async (req, res) => {
     try {
       const { id } = req.params;
-      const { action } = req.body; // "approve" atau "reject"
+      const { action, alasan } = req.body;
 
       const laporan = await Laporan.findByPk(id);
       if (!laporan) {
@@ -31,9 +29,11 @@ module.exports = {
       if (action === "approve") {
         laporan.status = "On progress";
         laporan.verifikasi_action = "approve";
+        laporan.alasan = null;
       } else {
         laporan.status = "Upload verification rejected";
         laporan.verifikasi_action = "denied";
+        laporan.alasan = alasan;
       }
 
       await laporan.save();

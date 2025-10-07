@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Laporan Penemuan</title>
+    <title>Laporan Pengajuan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -13,41 +13,32 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      .gradient-bg {
-        background-image: linear-gradient(to right, #22c55e, #16a34a);
-      }
-    </style>
   </head>
   <body class="bg-gray-100">
-    <%- include('components/navbar') %>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="gradient-bg rounded-2xl p-8 mb-10 shadow-lg text-white">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-          <div>
-            <h1 class="text-3xl lg:text-4xl font-bold mb-2">Selamat Datang!</h1>
-            <p class="text-lg lg:text-xl opacity-90 font-light">
-              Sistem Pelaporan Kehilangan dan Penemuan Barang
-            </p>
-          </div>
-          <div class="mt-6 md:mt-0">
-            <a
-              href="/mahasiswa/reports"
-              class="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-md"
-            >
-              <i class="fas fa-plus mr-2"></i>Buat Laporan Baru
-            </a>
+    <%- include('../components/sidebar') %>
+    <div class="ml-64 p-6">
+      <div class="py-2">
+        <div class="bg-green-600 rounded-2xl p-8 mb-10 shadow-lg text-white">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <div>
+              <p class="text-lg lg:text-xl opacity-90 font-light">
+                Sistem Pelaporan Kehilangan dan Penemuan Barang
+              </p>
+            </div>
+            <div class="mt-6 md:mt-0">
+              <a
+                href="/admin/reports"
+                class="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-md"
+              >
+                <i class="fas fa-plus mr-2"></i>Buat Laporan Baru
+              </a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <h2 class="text-2xl font-semibold text-gray-800 mb-6">
-        Laporan Penemuan Terbaru
-      </h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+          Laporan Penemuan Terbaru
+        </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <% reports.forEach(report => { %>
@@ -210,13 +201,13 @@
           const id_laporan = btn.dataset.id;
 
           try {
-            const response = await fetch("/mahasiswa/claim", {
+            const response = await fetch("/admin/claim", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ id_laporan }),
-            });
+            }); 
 
             const result = await response.json();
             if (result.success) {

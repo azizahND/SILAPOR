@@ -1,39 +1,26 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Laporan Diklaim</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      .gradient-bg {
-        background-image: linear-gradient(to right, #22c55e, #16a34a);
-      }
-    </style>
-  </head>
-  <body class="bg-gray-100 dark:bg-neutral-900">
-    <%- include('components/navbar') %>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+    <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <%- include('../components/sidebar') %>
+    <div class="ml-64 p-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">
         Laporan Diklaim
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <% reports.forEach(report => { %>
         <div
-          class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
+          class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
         >
           <div class="relative">
             <img
@@ -45,25 +32,25 @@
 
           <div class="p-6">
             <div class="flex items-start justify-between mb-3">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+              <h3 class="text-xl font-bold text-gray-900">
                 <%= report.nama_barang %>
               </h3>
             </div>
             <p
-              class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3"
+              class="text-gray-600 text-sm mb-4 line-clamp-3"
             >
               <%= report.deskripsi %>
             </p>
 
             <div class="space-y-3 mb-5">
               <div
-                class="flex items-center text-sm text-gray-500 dark:text-gray-400"
+                class="flex items-center text-sm text-gray-500"
               >
                 <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
                 <%= report.lokasi %>
               </div>
               <div
-                class="flex items-center text-sm text-gray-500 dark:text-gray-400"
+                class="flex items-center text-sm text-gray-500"
               >
                 <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
                 Ditemukan oleh: <%= report.User.nama %>
@@ -83,7 +70,7 @@
 
               <button
                 type="button"
-                class="flex-1 bg-white hover:bg-gray-100 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
+                class="flex-1 bg-white hover:bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
                 data-report="<%- encodeURIComponent(JSON.stringify(report)) %>"
                 onclick="openDetailModal(this.dataset.report)"
               >
@@ -103,22 +90,22 @@
       tabindex="-1"
     >
       <div
-        class="bg-white dark:bg-neutral-800 rounded-xl shadow-md w-full max-w-md"
+        class="bg-white rounded-xl shadow-md w-full max-w-md"
       >
-        <div class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700">
-          <h3 class="font-bold text-gray-800 dark:text-white">
+        <div class="py-3 px-4 border-b border-gray-200">
+          <h3 class="font-bold text-gray-800">
             Konfirmasi Batal Klaim
           </h3>
         </div>
         <div class="p-4">
-          <p class="text-gray-800 dark:text-neutral-400 mb-4">
+          <p class="text-gray-800 mb-4">
             Apakah kamu yakin ingin membatalkan klaim laporan
             <span id="modalItemName" class="font-semibold"></span>?
           </p>
 
           <div class="space-y-2">
             <label
-              class="flex items-center gap-2 text-sm text-gray-700 dark:text-neutral-300"
+              class="flex items-center gap-2 text-sm text-gray-700"
             >
               <input
                 type="radio"
@@ -129,7 +116,7 @@
               Barang sudah ditemukan
             </label>
             <label
-              class="flex items-center gap-2 text-sm text-gray-700 dark:text-neutral-300"
+              class="flex items-center gap-2 text-sm text-gray-700"
             >
               <input
                 type="radio"
@@ -140,7 +127,7 @@
               Ingin klaim laporan lain
             </label>
             <label
-              class="flex items-center gap-2 text-sm text-gray-700 dark:text-neutral-300"
+              class="flex items-center gap-2 text-sm text-gray-700"
             >
               <input
                 type="radio"
@@ -151,7 +138,7 @@
               Tidak jadi klaim
             </label>
             <label
-              class="flex items-start gap-2 text-sm text-gray-700 dark:text-neutral-300"
+              class="flex items-start gap-2 text-sm text-gray-700"
             >
               <input
                 type="radio"
@@ -166,16 +153,16 @@
               id="alasanLainnya"
               name="alasanLainnya"
               placeholder="Tulis alasan lainnya..."
-              class="w-full mt-2 hidden p-2 border rounded-lg text-sm dark:bg-neutral-700 dark:text-white"
+              class="w-full mt-2 hidden p-2 border rounded-lg text-sm"
             ></textarea>
           </div>
         </div>
         <div
-          class="flex justify-end gap-2 py-3 px-4 border-t border-gray-200 dark:border-neutral-700"
+          class="flex justify-end gap-2 py-3 px-4 border-t border-gray-200"
         >
           <button
             type="button"
-            class="py-2 px-3 text-sm font-medium rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-neutral-700 dark:text-white"
+            class="py-2 px-3 text-sm font-medium rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300"
             data-hs-overlay="#cancelModal"
           >
             Tidak
@@ -201,7 +188,7 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
     >
       <div
-        class="bg-white dark:bg-neutral-800 p-6 rounded-xl w-full max-w-lg shadow-lg relative"
+        class="bg-white p-6 rounded-xl w-full max-w-lg shadow-lg relative"
       >
         <button
           onclick="closeDetailModal()"
@@ -210,11 +197,11 @@
           &times;
         </button>
 
-        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">
           Detail Laporan
         </h2>
 
-        <div class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+        <div class="space-y-2 text-sm text-gray-700">
           <div class="text-center">
             <strong>Foto Barang:</strong><br />
             <img
@@ -246,14 +233,15 @@
         </a>
       </div>
     </div>
+    </div>  
 
-    <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
+        <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
     <script>
       function openCancelModal(button) {
         const id = button.dataset.id;
         const nama = button.dataset.nama;
         document.getElementById("modalItemName").textContent = nama;
-        document.getElementById("cancelForm").action = "/claim/cancel/" + id;
+        document.getElementById("cancelForm").action = "/admin/my-claim/cancel/" + id;
 
         document
           .querySelectorAll(".alasan-radio")
@@ -329,5 +317,5 @@
         document.getElementById("detailModal").classList.add("hidden");
       }
     </script>
-  </body>
+</body>
 </html>
