@@ -28,7 +28,7 @@
         </div>
         <div class="">
           <form method="GET" action="/mahasiswa/history" class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
-            <select name="filterJenis" class="rounded-lg border p-2 bg-orange-100 text-orange-500 border-2 border-orange-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+            <select name="filterJenis" class="rounded-lg border p-2 bg-yellow-500 text-white border-2 border-yellow-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
               <option value="">Semua Jenis</option>
               <option class="bg-white text-black" value="Penemuan" <%= filterJenis === 'Penemuan' ? 'selected' : '' %> >Penemuan</option>
               <option class="bg-white text-black" value="Kehilangan" <%= filterJenis === 'Kehilangan' ? 'selected' : '' %>>Kehilangan</option>
@@ -37,7 +37,7 @@
             <input type="text" name="searchNama" placeholder="Cari nama barang..." value="<%= searchNama %>" 
               class="rounded-lg border border-2 border-grey-200 p-2 flex-1 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" />
 
-            <button type="submit" class="bg-blue-100 text-blue-500 border-2 border-blue-500 px-4 py-2 rounded-lg hover:font-bold transition">
+            <button type="submit" class="bg-blue-500 text-white border-2 border-blue-500 px-4 py-2 rounded-lg hover:font-bold transition">
               Cari / Filter
             </button>
           </form>
@@ -138,7 +138,7 @@
             <!-- Tombol Detail & Unduh -->
             <div class="grid grid-cols-2 justify-center text-center mb-5 gap-3 px-5">
               <button 
-                class="bg-blue-100 rounded-md text-blue-500 p-2 detail-btn"
+                class="bg-green-500 rounded-md text-white p-2 detail-btn"
                 data-id="<%= report.id_laporan %>"
                 data-nama="<%= report.nama_barang %>"
                 data-jenis="<%= report.jenis_laporan %>"
@@ -151,7 +151,7 @@
               </button>
 
               <a href="/mahasiswa/history/download/<%= report.id_laporan %>" 
-                class="bg-teal-100 rounded-md text-teal-700 p-2 block text-center">
+                class="bg-blue-500 rounded-md text-white p-2 block text-center">
                 <i class="fa fa-download mr-2"></i>Unduh
               </a>
             </div>

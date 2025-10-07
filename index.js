@@ -11,7 +11,6 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth'); 
 const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
 const adminRoutes = require('./routes/adminRoute');
-const claimRoutes = require("./routes/claimRoutes");
 
 const app = express();
 app.use(express.json())
@@ -58,7 +57,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use('/', authRoutes); 
 app.use('/mahasiswa', mahasiswaRoutes ); 
 app.use('/admin', adminRoutes );
-app.use("/claim", claimRoutes);
 
 
 
