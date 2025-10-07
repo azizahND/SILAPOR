@@ -18,21 +18,13 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
-      nama: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         primaryKey: true,
       },
-      no_telepon: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      alamat: {
+      nama: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -44,6 +36,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM("admin", "user"),
         allowNull: false,
       },
+      no_telepon: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      alamat: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      foto: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "default.jpg",
+      },
+
+      // === Verifikasi email ===
       isVerified: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -58,6 +65,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+
+      // === Reset password ===
       resetPasswordToken: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -66,11 +75,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
-      },
-      foto: {
-        type: DataTypes.STRING,       // menyimpan nama file / URL
-        allowNull: false,
-        defaultValue: "default.jpg",  // default jika user belum upload foto
       },
     },
     {
