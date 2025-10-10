@@ -7,41 +7,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
   </head>
-  <body class="bg-gray-100 dark:bg-neutral-900">
+  <body class="bg-gray-100">
     <%- include('../components/sidebar') %>
 
-    <div class="ml-64 p-6">
-      <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
+    <div class="lg:ml-64 p-4 sm:p-6">
+      <h1 class="text-2xl font-semibold text-gray-800 mb-6">
         Verifikasi Laporan
       </h1>
 
-      <div class="space-y-6">
+      <div class="space-y-4 sm:space-y-6 ">
         <% reports.forEach(report => { %>
         <!-- Card -->
         <div
-          class="flex bg-white dark:bg-neutral-800 rounded-xl shadow-md overflow-hidden"
+          class="flex flex-col sm:flex-row bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
         >
           <!-- Foto barang -->
-          <img
-            src="/uploads/<%= report.foto_barang %>"
-            alt="<%= report.nama_barang %>"
-            class="w-48 h-48 object-cover"
-          />
+          <div class="w-full sm:w-48 h-48 sm:h-auto flex-shrink-0">
+            <img
+              src="/uploads/<%= report.foto_barang %>"
+              alt="<%= report.nama_barang %>"
+              class="w-full h-full object-cover"
+            />
+          </div>
 
           <!-- Info -->
-          <div class="flex-1 p-4 flex flex-col justify-between">
+          <div class="flex-1 p-4 sm:p-6 flex flex-col justify-between">
             <div>
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+              <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                 <%= report.nama_barang %>
               </h3>
-              <p class="text-gray-600 dark:text-gray-400">
-                Dibuat oleh: <%= report.User.nama %>
-              </p>
-              <p class="text-sm text-gray-500">
-                Jenis laporan: <%= report.jenis_laporan %>
-              </p>
+              <div class="space-y-1 text-sm sm:text-base">
+                <p class="text-gray-600">
+                  <span class="font-medium">Dibuat oleh:</span> <%= report.User.nama %>
+                </p>
+                <p class="text-gray-500">
+                  <span class="font-medium">Jenis laporan:</span> <%= report.jenis_laporan %>
+                </p>
+              </div>
               <span
-                class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800"
+                class="inline-block mt-3 px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800"
               >
                 <%= report.status %>
               </span>
@@ -50,7 +54,7 @@
             <!-- Tombol buka modal -->
             <button
               type="button"
-              class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold"
+              class="mt-4 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-colors duration-200 shadow-sm hover:shadow-md"
               data-hs-overlay="#verifyModal-<%= report.id_laporan %>"
             >
               Verifikasi
@@ -61,17 +65,17 @@
         <!-- Modal Verifikasi -->
         <div
           id="verifyModal-<%= report.id_laporan %>"
-          class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+          class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           tabindex="-1"
         >
           <div
-            class="bg-white dark:bg-neutral-800 rounded-xl shadow-md w-full max-w-md relative"
+            class="bg-white rounded-xl shadow-2xl w-full max-w-md relative max-h-[90vh] overflow-y-auto"
           >
             <!-- Tombol X -->
             <button
               type="button"
-              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200"
               data-hs-overlay="#verifyModal-<%= report.id_laporan %>"
             >
               ✕
@@ -79,42 +83,44 @@
 
             <!-- Header -->
             <div
-              class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700"
+              class="py-4 px-4 sm:px-6 border-b border-gray-200"
             >
-              <h3 class="font-bold text-gray-800 dark:text-white">
+              <h3 class="font-bold text-lg sm:text-xl text-gray-800">
                 Detail Laporan
               </h3>
             </div>
 
             <!-- Body -->
-            <div class="p-4 space-y-2">
+            <div class="p-4 sm:p-6 space-y-3">
               <img
                 src="/uploads/<%= report.foto_barang %>"
                 alt="<%= report.nama_barang %>"
-                class="rounded-lg w-full object-cover mb-4"
+                class="rounded-lg w-full object-cover mb-4 shadow-sm"
               />
-              <p><strong>Nama pelapor:</strong> <%= report.User.nama %></p>
-              <p><strong>Nama barang:</strong> <%= report.nama_barang %></p>
-              <p><strong>Jenis laporan:</strong> <%= report.jenis_laporan %></p>
-              <p>
-                <strong>Tanggal laporan:</strong>
-                <%= report.tanggal_laporan.toLocaleDateString("id-ID") %>
-              </p>
-              <p><strong>Lokasi:</strong> <%= report.lokasi %></p>
-              <p><strong>Deskripsi:</strong> <%= report.deskripsi %></p>
+              <div class="space-y-2 text-sm sm:text-base">
+                <p><strong class="text-gray-700">Nama pelapor:</strong> <span class="text-gray-600"><%= report.User.nama %></span></p>
+                <p><strong class="text-gray-700">Nama barang:</strong> <span class="text-gray-600"><%= report.nama_barang %></span></p>
+                <p><strong class="text-gray-700">Jenis laporan:</strong> <span class="text-gray-600"><%= report.jenis_laporan %></span></p>
+                <p>
+                  <strong class="text-gray-700">Tanggal laporan:</strong>
+                  <span class="text-gray-600"><%= report.tanggal_laporan.toLocaleDateString("id-ID") %></span>
+                </p>
+                <p><strong class="text-gray-700">Lokasi:</strong> <span class="text-gray-600"><%= report.lokasi %></span></p>
+                <p><strong class="text-gray-700">Deskripsi:</strong> <span class="text-gray-600"><%= report.deskripsi %></span></p>
+              </div>
             </div>
 
             <!-- Footer -->
             <div
-              class="flex flex-col items-end gap-3 py-3 px-4 border-t border-gray-200 dark:border-neutral-700"
+              class="flex flex-col items-end gap-3 py-4 px-4 sm:px-6 border-t border-gray-200 bg-gray-50"
             >
-              <p class="text-sm text-gray-700 dark:text-gray-300 mr-auto">
+              <p class="text-sm text-gray-700 mr-auto font-medium">
                 Setujui laporan ini?
               </p>
-              <div class="flex gap-2">
+              <div class="flex gap-2 w-full sm:w-auto">
                 <button
                   type="button"
-                  class="py-2 px-3 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700"
+                  class="flex-1 sm:flex-none py-2.5 px-4 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 shadow-sm hover:shadow-md"
                   data-hs-overlay="#rejectModal-<%= report.id_laporan %>"
                 >
                   Tidak
@@ -122,12 +128,13 @@
                 <form
                   method="POST"
                   action="/admin/verifikasi/<%= report.id_laporan %>"
+                  class="flex-1 sm:flex-none"
                 >
                   <button
                     name="action"
                     value="approve"
                     type="submit"
-                    class="py-2 px-3 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700"
+                    class="w-full py-2.5 px-4 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors duration-200 shadow-sm hover:shadow-md"
                   >
                     Ya
                   </button>
@@ -140,17 +147,17 @@
         <!-- Modal Reject -->
         <div
           id="rejectModal-<%= report.id_laporan %>"
-          class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+          class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           tabindex="-1"
         >
           <div
-            class="bg-white dark:bg-neutral-800 rounded-xl shadow-md w-full max-w-md relative"
+            class="bg-white rounded-xl shadow-2xl w-full max-w-md relative max-h-[90vh] overflow-y-auto"
           >
             <!-- Tombol X -->
             <button
               type="button"
-              class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              class="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200"
               data-hs-overlay="#rejectModal-<%= report.id_laporan %>"
             >
               ✕
@@ -158,9 +165,9 @@
 
             <!-- Header -->
             <div
-              class="py-3 px-4 border-b border-gray-200 dark:border-neutral-700"
+              class="py-4 px-4 sm:px-6 border-b border-gray-200"
             >
-              <h3 class="font-bold text-gray-800 dark:text-white">
+              <h3 class="font-bold text-lg sm:text-xl text-gray-800">
                 Alasan Penolakan
               </h3>
             </div>
@@ -169,7 +176,7 @@
             <form
               method="POST"
               action="/admin/verifikasi/<%= report.id_laporan %>"
-              class="p-4 space-y-3"
+              class="p-4 sm:p-6 space-y-3"
             >
               <input type="hidden" name="action" value="reject" />
               <input
@@ -178,51 +185,59 @@
                 name="alasan"
               />
 
-              <label class="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="alasan-<%= report.id_laporan %>"
-                  value="Data tidak valid"
-                />
-                Data tidak valid
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="alasan-<%= report.id_laporan %>"
-                  value="Bukti foto tidak jelas"
-                />
-                Bukti foto tidak jelas
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="alasan-<%= report.id_laporan %>"
-                  value="Informasi tidak lengkap"
-                />
-                Informasi tidak lengkap
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="alasan-<%= report.id_laporan %>"
-                  value="lainnya"
-                />
-                Lainnya
-              </label>
+              <div class="space-y-3">
+                <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+                  <input
+                    type="radio"
+                    name="alasan-<%= report.id_laporan %>"
+                    value="Data tidak valid"
+                    class="w-4 h-4 text-green-600"
+                  />
+                  <span class="text-sm sm:text-base text-gray-700">Data tidak valid</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+                  <input
+                    type="radio"
+                    name="alasan-<%= report.id_laporan %>"
+                    value="Bukti foto tidak jelas"
+                    class="w-4 h-4 text-green-600"
+                  />
+                  <span class="text-sm sm:text-base text-gray-700">Bukti foto tidak jelas</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+                  <input
+                    type="radio"
+                    name="alasan-<%= report.id_laporan %>"
+                    value="Informasi tidak lengkap"
+                    class="w-4 h-4 text-green-600"
+                  />
+                  <span class="text-sm sm:text-base text-gray-700">Informasi tidak lengkap</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+                  <input
+                    type="radio"
+                    name="alasan-<%= report.id_laporan %>"
+                    value="lainnya"
+                    class="w-4 h-4 text-green-600"
+                  />
+                  <span class="text-sm sm:text-base text-gray-700">Lainnya</span>
+                </label>
+              </div>
+              
               <textarea
                 id="alasanLainnya-<%= report.id_laporan %>"
-                class="hidden w-full mt-2 p-2 border rounded-lg"
+                class="hidden w-full mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                rows="3"
                 placeholder="Tulis alasan lainnya..."
               ></textarea>
 
               <!-- Footer -->
-              <div class="flex justify-end gap-2">
+              <div class="flex justify-end gap-2 pt-4">
                 <button
                   id="btnTolak-<%= report.id_laporan %>"
                   type="submit"
                   disabled
-                  class="py-2 px-3 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                  class="py-2.5 px-6 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   Tolak
                 </button>

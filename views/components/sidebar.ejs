@@ -85,7 +85,6 @@
             </a>
           </li>
 
-          <!-- Pengajuan Laporan -->
           <li>
             <a
               href="/admin/pengajuan"
@@ -113,7 +112,6 @@
             </a>
           </li>
 
-          <!-- Verifikasi Laporan -->
           <li>
             <a
               href="/admin/verifikasi"
@@ -138,7 +136,6 @@
             </a>
           </li>
 
-          <!-- Laporan Saya -->
           <li>
             <a
               href="/admin/my-reports"
@@ -166,7 +163,6 @@
             </a>
           </li>
 
-          <!-- Claim -->
           <li>
             <a
               href="/admin/my-claim"
@@ -190,7 +186,6 @@
             </a>
           </li>
 
-          <!-- Riwayat -->
           <li>
             <a
               href="/admin/history"
@@ -212,6 +207,7 @@
               <span class="hs-overlay-minified:hidden">Riwayat</span>
             </a>
           </li>
+
 
           <li class="pt-2">
             <div class="border-t border-gray-200"></div>
@@ -273,6 +269,10 @@
   </div>
 </div>
 
+<!-- Halaman Notifikasi -->
+<div id="notif-container" class="fixed top-5 right-5 space-y-3 z-50"></div>
+<script src="/socket.io/socket.io.js"></script>
+
 <script>
   window.addEventListener("DOMContentLoaded", () => {
     const menuItems = document.querySelectorAll("a[data-menu]");
@@ -317,4 +317,70 @@
       }
     });
   });
+</script>
+
+<script>
+  // fungsi untuk menambahkan notifikasi
+  function showNotification(title, message, time = "Baru saja") {
+    const container = document.getElementById("notif-container");
+
+    // elemen notifikasi
+    const notif = document.createElement("div");
+    notif.className =
+      "max-w-sm w-full bg-white shadow-lg rounded-xl border border-gray-200 p-4 flex items-start space-x-3 animate-slide-in";
+
+    notif.innerHTML = `
+    <div class="flex-shrink-0">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15 17h5l-1.405-1.405M19 13v-1a7 7 0 10-14 0v1l-2 2v1h16v-1l-2-2z" />
+      </svg>
+    </div>
+
+    <div class="ml-2 flex-1">
+      <p class="text-sm font-semibold text-gray-800">${title}</p>
+      <p class="text-sm text-gray-600">${message}</p>
+      <p class="text-xs text-gray-400 mt-1">${time}</p>
+    </div>
+
+    <button class="ml-2 text-gray-400 hover:text-gray-600 close-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 8.586l4.95-4.95a1 1 0 111.414 1.414L11.414 10l4.95 4.95a1 1 0 01-1.414 1.414L10 11.414l-4.95 4.95a1 1 0 01-1.414-1.414L8.586 10 3.636 5.05a1 1 0 011.414-1.414L10 8.586z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  `;
+
+    // tambahkan ke container
+    container.appendChild(notif);
+
+    // close otomatis setelah 5 detik
+    setTimeout(() => {
+      notif.remove();
+    }, 5000);
+
+    // close manual
+    notif.querySelector(".close-btn").addEventListener("click", () => {
+      notif.remove();
+    });
+  }
+
+  // contoh pemanggilan otomatis
+
+  const socket = io();
+
+  // contoh: server mengirim event "new-report"
+  socket.on("connect", () => {
+    console.log("Connected with ID:", socket.id);
+  });
+
+ 
+  socket.on("report", (data) => {
+    console.log("Received report:", data);
+    showNotification("Laporan Baru", `Laporan menunggu verifikasi.`);
+  });
+  socket.on("reminder", (msg) => {
+    showNotification("Pengingat", msg);
+  });
+  // contoh notifikasi lain muncul setelah 3 detik
+
 </script>

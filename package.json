@@ -32,7 +32,9 @@
     "pizzip": "^3.2.0",
     "preline": "^3.2.3",
     "sequelize": "^6.37.7",
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "socket.io": "^4.8.1",
+    "websocket": "^1.0.35"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",

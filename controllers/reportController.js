@@ -1,3 +1,4 @@
+const nodemailer = require("nodemailer");
 const { Laporan, User, Claim } = require("../models");
 const path = require("path");
 const fs = require("fs");
@@ -59,8 +60,45 @@ exports.createReport = async (req, res) => {
       tanggal_laporan: new Date(),
     };
 
-    await Laporan.create(reportData);
+    const create = await Laporan.create(reportData);
 
+    const io = req.app.get('io');
+    io.emit("report", { message: "Laporan baru telah dibuat", report: create });
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail", // bisa diganti SMTP lain
+      auth: {
+        user: process.env.EMAIL_USER, // email pengirim dari .env
+        pass: process.env.EMAIL_PASS, // password aplikasi Gmail / SMTP key
+      },
+    });
+
+    // Contoh kirim ke admin (atau bisa juga ke userEmail)
+    const mailOptions = {
+      from: `"SILAPOR Notification" <${process.env.EMAIL_USER}>`,
+      to: "sisteminformasiunand23@gmail.com",
+      subject: "📢 Laporan Baru Diterima",
+      html: `
+        <h3>Laporan Baru</h3>
+        <p>Jenis Laporan: <b>${jenis_laporan}</b></p>
+        <p>Nama Barang: <b>${nama_barang}</b></p>
+        <p>Lokasi: ${lokasi_kejadian}</p>
+        <p>Tanggal Kejadian: ${tanggal_kejadian}</p>
+        <p>Deskripsi: ${deskripsi}</p>
+        <p>Pelapor: ${userEmail}</p>
+        <hr/>
+        <p>Silakan cek dashboard admin untuk verifikasi laporan.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.error("Gagal kirim email:", err);
+      } else {
+        console.log("Email terkirim:", info.response);
+      }
+    });
+    console.log("ini berhasil")
 
     return res.redirect("/mahasiswa/my-reports");
   } catch (error) {
