@@ -14,28 +14,28 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
   </head>
-  <body class="bg-gray-100 dark:bg-neutral-900">
+  <body class="bg-gray-100">
     <%- include('../components/navbar') %>
 
     <div
-      class="bg-white dark:bg-neutral-800 rounded-2xl border border-gray-200 dark:border-neutral-700 overflow-hidden shadow-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 my-10"
+      class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 my-10"
     >
     <div class="grid grid-cols-2">
         <div class="">
-          <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-6">
             Riwayat Laporan Selesai
           </h2>
         </div>
         <div class="">
           <form method="GET" action="/mahasiswa/history" class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
-            <select name="filterJenis" class="rounded-lg border p-2 bg-yellow-500 text-white border-2 border-yellow-500 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white">
+            <select name="filterJenis" class="rounded-lg border p-2 bg-yellow-500 text-white border-2 border-yellow-500">
               <option value="">Semua Jenis</option>
               <option class="bg-white text-black" value="Penemuan" <%= filterJenis === 'Penemuan' ? 'selected' : '' %> >Penemuan</option>
               <option class="bg-white text-black" value="Kehilangan" <%= filterJenis === 'Kehilangan' ? 'selected' : '' %>>Kehilangan</option>
             </select>
 
             <input type="text" name="searchNama" placeholder="Cari nama barang..." value="<%= searchNama %>" 
-              class="rounded-lg border border-2 border-grey-200 p-2 flex-1 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white" />
+              class="rounded-lg border border-2 border-grey-200 p-2 flex-1" />
 
             <button type="submit" class="bg-blue-500 text-white border-2 border-blue-500 px-4 py-2 rounded-lg hover:font-bold transition">
               Cari / Filter
@@ -47,46 +47,46 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Penemuan -->
-    <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-neutral-700 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
+    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
         <div class="flex items-center">
-            <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mr-4">
-                <i class="fas fa-search text-green-600 dark:text-green-400"></i>
+            <div class="w-12 h-12 bg-green-100  rounded-xl flex items-center justify-center mr-4">
+                <i class="fas fa-search text-green-600"></i>
             </div>
             <div>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 class="text-2xl font-bold text-gray-900">
                     <%= reports.filter(r => r.jenis_laporan === 'Penemuan').length %>
                 </h3>
-                <p class="text-gray-600 dark:text-gray-400">Penemuan</p>
+                <p class="text-gray-600">Penemuan</p>
             </div>
         </div>
     </div>
 
     <!-- Kehilangan -->
-    <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-neutral-700 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
+    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
         <div class="flex items-center">
-            <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mr-4">
-                <i class="fas fa-exclamation text-red-600 dark:text-red-400"></i>
+            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4">
+                <i class="fas fa-exclamation text-red-600"></i>
             </div>
             <div>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 class="text-2xl font-bold text-gray-900">
                     <%= reports.filter(r => r.jenis_laporan === 'Kehilangan').length %>
                 </h3>
-                <p class="text-gray-600 dark:text-gray-400">Kehilangan</p>
+                <p class="text-gray-600">Kehilangan</p>
             </div>
         </div>
     </div>
 
     <!-- Total Laporan -->
-    <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-neutral-700 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
+    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
         <div class="flex items-center">
-            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mr-4">
-                <i class="fas fa-list text-blue-600 dark:text-blue-400"></i>
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
+                <i class="fas fa-list text-blue-600"></i>
             </div>
             <div>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 class="text-2xl font-bold text-gray-900">
                     <%= reports.length %>
                 </h3>
-                <p class="text-gray-600 dark:text-gray-400">Total Laporan</p>
+                <p class="text-gray-600">Total Laporan</p>
             </div>
         </div>
     </div>
@@ -98,16 +98,16 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
         
         <% reports.forEach(report => { %>
-          <div class="relative bg-white dark:bg-neutral-800 rounded-2xl border-2 border-gray-200 dark:border-neutral-700 overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="relative bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
             
             <!-- Badge Jenis Laporan -->
             <div class="absolute top-4 left-4 z-10">
               <% if (report.jenis_laporan === "Penemuan") { %>
-                <span class="bg-lime-100 text-lime-800 text-xs font-bold p-1 rounded dark:bg-green-200 dark:text-green-900">
+                <span class="bg-lime-100 text-lime-800 text-xs font-bold p-1 rounded">
                   Penemuan
                 </span>
               <% } else if (report.jenis_laporan === "Kehilangan") { %>
-                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold p-1 rounded dark:bg-red-200 dark:text-red-900">
+                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold p-1 rounded">
                   Kehilangan
                 </span>
               <% } %>
@@ -123,14 +123,14 @@
 
             <!-- Konten -->
             <div class="p-6">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+              <h3 class="text-lg font-semibold text-gray-800 mb-2">
                 <%= report.nama_barang %>
               </h3>
-              <p class="text-sm text-gray-600 dark:text-neutral-400 mb-4">
+              <p class="text-sm text-gray-600 mb-4">
                 Dilaporkan pada: 
                 <%= new Date(report.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) %>
               </p>
-              <p class="text-gray-700 dark:text-neutral-300">
+              <p class="text-gray-700">
                 <%= report.deskripsi || "Tidak ada deskripsi" %>
               </p>
             </div>
@@ -162,45 +162,45 @@
 
     <!-- Modal Detail -->
     <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-      <div class="bg-white dark:bg-neutral-800 rounded-2xl p-6 max-w-lg w-full relative">
+      <div class="bg-white rounded-2xl p-6 max-w-lg w-full relative">
         <button id="closeModal" class="absolute top-7 right-6 text-red-500 hover:text-gray-800 bg-red-100 p-1 rounded-md font-bold">
           ✕
         </button>
-        <h2 class="text-xl font-bold mb-5 text-gray-800 dark:text-white">Detail Laporan</h2>
+        <h2 class="text-xl font-bold mb-5 text-gray-800">Detail Laporan</h2>
 
         <div class="space-y-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Barang</label>
+            <label class="block text-sm font-medium text-gray-700">Nama Barang</label>
             <input id="modalNama" type="text" readonly
-              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white" />
+              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jenis Laporan</label>
+            <label class="block text-sm font-medium text-gray-700">Jenis Laporan</label>
             <input id="modalJenis" type="text" readonly
-              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white" />
+              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal Kejadian</label>
+            <label class="block text-sm font-medium text-gray-700">Tanggal Kejadian</label>
             <input id="modalTanggal" type="text" readonly
-              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white" />
+              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi</label>
+            <label class="block text-sm font-medium text-gray-700">Lokasi</label>
             <input id="modalLokasi" type="text" readonly
-              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white" />
+              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deskripsi</label>
+            <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
             <textarea id="modalDeskripsi" rows="3" readonly
-              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"></textarea>
+              class="w-full rounded-lg border-2 p-2 mt-1 border-gray-400"></textarea>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Foto Barang</label>
+            <label class="block text-sm font-medium text-gray-700">Foto Barang</label>
             <img id="modalFoto" src="" alt="Foto Barang" class="w-full h-48 object-cover rounded-lg mt-1" />
           </div>
         </div>
