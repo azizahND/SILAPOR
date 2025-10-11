@@ -14,19 +14,17 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-100 ">
     <%- include('../components/navbar') %>
 
-    <div
-      class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 my-10"
-    >
-    <div class="grid grid-cols-2">
-        <div class="">
-          <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+    
+    <div class="grid grid-cols-2 max-w-7xl mx-auto px-12">
+        <div class="mt-12">
+          <h2 class="text-3xl font-semibold text-gray-800 mb-6">
             Riwayat Laporan Selesai
           </h2>
         </div>
-        <div class="">
+        <div class="mt-10">
           <form method="GET" action="/mahasiswa/history" class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
             <select name="filterJenis" class="rounded-lg border p-2 bg-yellow-500 text-white border-2 border-yellow-500">
               <option value="">Semua Jenis</option>
@@ -45,7 +43,7 @@
     </div>
       
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 max-w-7xl mx-auto px-12">
     <!-- Penemuan -->
     <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
         <div class="flex items-center">
@@ -95,7 +93,7 @@
 
 
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 max-w-7xl mx-auto mb-20 px-12">
         
         <% reports.forEach(report => { %>
           <div class="relative bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -205,7 +203,6 @@
           </div>
         </div>
       </div>
-    </div>
 
     <script>
       const modal = document.getElementById("detailModal");

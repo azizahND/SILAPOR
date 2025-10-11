@@ -26,9 +26,7 @@
 
     <!-- Konten Utama -->
     <main class="flex-1 ml-64 p-8 transition-all duration-300">
-      <div
-        class="bg-white rounded-2xl border border-gray-200overflow-hidden shadow-sm max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 my-10"
-      >
+      
         <!-- Header dan Filter -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <h2 class="text-2xl font-semibold text-gray-800">
@@ -42,7 +40,7 @@
           >
             <select
               name="filterJenis"
-              class="rounded-lg border p-2 bg-yellow-500 text-white border-2 border-orange-500"
+              class="rounded-lg border p-2 bg-yellow-500 text-white border-2 border-yellow-500"
             >
               <option value="">Semua Jenis</option>
               <option
@@ -64,7 +62,7 @@
               name="searchNama"
               placeholder="Cari nama barang..."
               value="<%= searchNama %>"
-              class="rounded-lg border-2 border-gray-300 p-2 flex-1"
+              class="rounded-xl border-2 border-gray-300 p-2 flex-1"
             />
 
             <button
@@ -218,7 +216,6 @@
             </div>
           <% }) %>
         </div>
-      </div>
     </main>
 
     <!-- Modal -->
