@@ -21,7 +21,7 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="text-lg font-semibold text-gray-800">Total Laporan</h2>
-                        <p class="text-2xl font-bold text-gray-900">150</p>
+                        <p class="text-2xl font-bold text-gray-900"><%= report.length %></p>
                     </div>
                 </div>
             </div>  
@@ -32,7 +32,7 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="text-lg font-semibold text-gray-800">Laporan Diselesaikan</h2>
-                        <p class="text-2xl font-bold text-gray-900">120</p>
+                        <p class="text-2xl font-bold text-gray-900"><%= report.filter(r => r.status === 'Done').length %></p>
                     </div>     
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="ml-4">
                         <h2 class="text-lg font-semibold text-gray-800">Laporan Pending</h2>
-                        <p class="text-2xl font-bold text-gray-900">30</p>
+                        <p class="text-2xl font-bold text-gray-900"><%= report.filter(r => r.status === 'Waiting for upload verification').length %></p>
                     </div>  
                 </div>
             </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Saya - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -183,6 +184,75 @@
                         </div>
                     </div>
                 </div>
+                <div
+  id="acceptModal-<%= report.id_laporan %>"
+  class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+  role="dialog"
+  tabindex="-1"
+>
+  <div class="bg-white rounded-xl shadow-md w-full max-w-md">
+    <!-- Header -->
+    <div class="py-3 px-4 border-b border-gray-200">
+      <h3 class="font-bold text-gray-800">
+        Terima Klaim & Bukti Penyerahan
+      </h3>
+    </div>
+    <!-- Body -->
+    <div class="p-6">
+      <p class="text-gray-700 mb-4">
+        Apakah Anda yakin ingin menerima klaim ini? Silakan unggah bukti penyerahan agar tercatat dengan benar.
+      </p>
+
+      <!-- Form untuk bukti -->
+      <form action="/admin/my-reports/accept-claim/<%= report.id_laporan %>" method="POST" enctype="multipart/form-data">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Nama Pengklaim</label>
+          <input type="text" name="nama_pengklaim" id="nama_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.nama : '' %>" readonly
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">No. HP Pengklaim</label>
+          <input type="text" name="no_telepon_pengklaim" id="no_telepon_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.no_telepon : '' %>" readonly
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Email Pengklaim</label>
+          <input type="email" name="email_pengklaim" id="email_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.email : '' %>" readonly
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Lokasi Penyerahan</label>
+          <input type="text" name="lokasi_penyerahan" id="lokasi_penyerahan-<%= report.id_laporan %>" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Masukkan lokasi penyerahan"/>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="keterangan">Tanggal Penyerahan</label>
+          <input type="date" name="tanggal_penyerahan" id="tanggal_penyerahan-<%= report.id_laporan %>" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2" for="bukti">Upload Bukti Penyerahan</label>
+          <input type="file" name="bukti" id="bukti-<%= report.id_laporan %>" accept="image" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
+        </div>
+        <div class="flex justify-end space-x-3">
+          <button
+            type="button"
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+            data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+          >
+            Batal
+          </button>
+          <button type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Terima Klaim
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
                 <% }) %>
             </div>
             <% } %>

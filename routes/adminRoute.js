@@ -53,6 +53,7 @@ router.delete(
 );
 
 router.post('/my-reports/reapply-report/:id_laporan', verifyToken, role('admin'),reportController.reapplyReportAdmin);
+router.post('/my-reports/accept-claim/:id_laporan', verifyToken, role('admin'),upload.single('bukti'), reportController.acceptClaimAdmin);
 
 router.get(
   "/verifikasi",

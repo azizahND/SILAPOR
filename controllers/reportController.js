@@ -158,13 +158,14 @@ exports.getUserReports = async (req, res) => {
 
 exports.getDashboard = async (req, res) => {
   try {
+    const report = await Laporan.findAll();
       const reports = await Laporan.findAll({
         where: { status: "Waiting for upload verification" },
         include: [{ model: User }],
         order: [["createdAt", "DESC"]],
       });
     res.render("admin/dashboard", {
-      reports,
+      reports,report
     });
   } catch (error) {
     console.error("Error getting all reports:", error);
@@ -359,6 +360,40 @@ exports.acceptClaim = async (req, res) => {
     await laporan.save();
     
     return res.redirect("/mahasiswa/history")
+  } catch (error) {
+    console.error("Error accepting claim:", error);
+    res.status(500).json({ success: false, message: "Terjadi kesalahan saat menerima claim" });
+  } 
+};
+
+exports.acceptClaimAdmin = async (req, res) => {
+  try {
+    const { id_laporan } = req.params;
+    const { lokasi_penyerahan, tanggal_penyerahan, nama_pengklaim, no_telepon_pengklaim} = req.body || {};
+
+    console.log("req.file:", req.file);
+
+    if (!lokasi_penyerahan || !nama_pengklaim || !no_telepon_pengklaim || !tanggal_penyerahan || !req.file) {
+      return res.status(400).json({ success: false, message: "Semua field wajib diisi" });
+    }
+    console.log(id_laporan);
+
+    const laporan = await Laporan.findByPk(id_laporan);
+    if (!laporan) {
+      return res.status(404).json({ success: false, message: "Laporan tidak ditemukan" });
+    }
+    if (laporan.email !== req.user.email) {
+      return res.status(403).json({ success: false, message: "Kamu tidak berhak menerima claim untuk laporan ini" });
+    }
+    laporan.status = "Done";
+    laporan.lokasi_penyerahan = lokasi_penyerahan;
+    laporan.tanggal_penyerahan = new Date(tanggal_penyerahan);  
+    laporan.pengklaim = nama_pengklaim;
+    laporan.no_hp_pengklaim = no_telepon_pengklaim;
+    laporan.foto_bukti = req.file ? req.file.filename : null ;
+    await laporan.save();
+    
+    return res.redirect("/admin/history")
   } catch (error) {
     console.error("Error accepting claim:", error);
     res.status(500).json({ success: false, message: "Terjadi kesalahan saat menerima claim" });
