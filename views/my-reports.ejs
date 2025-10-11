@@ -188,6 +188,15 @@
                 >
                 <i class="fas fa-trash-alt mr-2"></i>Hapus
               </button>
+              <% if (report.status === 'Upload verification rejected') { %>
+                <form action="/mahasiswa/my-reports/reapply-report/<%= report.id_laporan %>" method="POST" class="flex-1">
+              <button
+                class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <i class="fas fa-upload mr-2"></i>Ajukan Ulang
+              </button>
+              </form>
+              <% } %>
               <% } %>
             </div>
           </div>

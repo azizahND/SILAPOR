@@ -576,3 +576,36 @@ exports.deleteReportAdmin = async (req, res) => {
     });
   }
 };
+
+exports.reapplyReport = async (req, res) => {
+  try {
+    const { id_laporan } = req.params;
+    const laporan = await Laporan.findByPk(id_laporan);
+    if (!laporan) {
+      return res.status(404).send("Laporan tidak ditemukan");
+    }
+    laporan.status = "Waiting for upload verification";
+    await laporan.save();
+    res.redirect("/mahasiswa/my-reports");
+  } catch (error) {
+    console.error("Error mengajukan ulang laporan:", error);
+    res.status(500).send("Terjadi kesalahan pada server");
+  }
+};
+
+exports.reapplyReportAdmin = async (req, res) => {
+  try {
+    const { id_laporan } = req.params;
+    const laporan = await Laporan.findByPk(id_laporan);
+    if (!laporan) {
+      return res.status(404).send("Laporan tidak ditemukan");
+    }
+    laporan.status = "Waiting for upload verification";
+    await laporan.save();
+    res.redirect("/admin/my-reports");
+  } catch (error) {
+    console.error("Error mengajukan ulang laporan:", error);
+    res.status(500).send("Terjadi kesalahan pada server");
+  }
+};
+

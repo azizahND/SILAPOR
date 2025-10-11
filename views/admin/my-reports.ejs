@@ -138,26 +138,48 @@
                             <button data-user='<%= JSON.stringify(report) %>' onclick='openDetailModal(this.dataset.user)' class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
                                 <i class="fas fa-eye mr-2"></i>Detail
                             </button>
-                            <% if (report.status === 'Claimed' && report.Claims && report.Claims.length > 0) { %>
-                                <button onclick="openContactModal('<%= report.Claims[0].User.nama %>', '<%= report.Claims[0].User.no_telepon %>', '<%= report.Claims[0].User.email %>')" class="bg-blue-500 hover:bg-green-600 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
-                                    <i class="fas fa-address-card mr-2"></i> Hubungi Pengklaim
-                                </button>
-                            <% } else { %>
-                            <% if (report.status === 'Upload verification rejected') { %>
-                                <%# Jika status ditolak, tombol Edit dinonaktifkan %>
-                                <button disabled class="bg-gray-300 text-gray-500 py-2.5 px-4 rounded-xl font-semibold text-sm cursor-not-allowed shadow-md">
-                                    <i class="fas fa-edit mr-2"></i>Edit
-                                </button>
-                            <% } else { %>
-                                <%# Jika status lain (Pending, On progress, dll), tombol Edit aktif %>
-                                <button data-user='<%= JSON.stringify(report) %>' onclick='openEditModal(this.dataset.user)' class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
-                                    <i class="fas fa-edit mr-2"></i>Edit
-                                </button>
-                            <% } %>
-                                <button onclick="confirmDelete('<%= report.id_laporan %>')" class="bg-red-500 hover:bg-red-200 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
-                                    <i class="fas fa-trash-alt mr-2"></i>Hapus
-                                </button>
-                            <% } %>
+<% if (report.status === 'Claimed' && report.Claims && report.Claims.length > 0  ) { %>
+                <button
+                  onclick="openContactModal('<%= report.Claims[0].User.nama %>', '<%= report.Claims[0].User.no_telepon %>', '<%= report.Claims[0].User.email %>')"
+                  class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  <i class="fas fa-address-card mr-2"></i> Hubungi
+                </button>
+                <button
+                  class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg" 
+                >
+                  <i class="fas fa-trash-alt mr-2"></i>Tolak Claim
+                </button>
+                <button 
+                  type="button"
+                  class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                  data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+                >
+                  <i class="fas fa-check mr-2"></i>Terima Claim
+                </button>
+              <% } else { %>
+              <button
+               data-user='<%= JSON.stringify(report) %>' onclick='openEditModal(this.dataset.user)'
+                class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <i class="fas fa-edit mr-2"></i>Edit
+              </button>
+              <button
+                onclick="confirmDelete('<%= report.id_laporan %>')"
+                class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                <i class="fas fa-trash-alt mr-2"></i>Hapus
+              </button>
+              <% if (report.status === 'Upload verification rejected') { %>
+                <form action="/admin/my-reports/reapply-report/<%= report.id_laporan %>" method="POST" class="flex-1">
+              <button
+                class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <i class="fas fa-upload mr-2"></i>Ajukan Ulang
+              </button>
+              </form>
+              <% } %>
+              <% } %>
                         </div>
                     </div>
                 </div>

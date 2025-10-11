@@ -52,6 +52,7 @@ router.delete(
   reportController.deleteReportAdmin
 );
 
+router.post('/my-reports/reapply-report/:id_laporan', verifyToken, role('admin'),reportController.reapplyReportAdmin);
 
 router.get(
   "/verifikasi",
