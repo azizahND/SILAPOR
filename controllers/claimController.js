@@ -2,7 +2,6 @@ const { Claim, Laporan, User } = require("../models");
 
 exports.getMyClaims = async (req, res) => {
   try {
-   
     const emailUser = req.user.email;
 
     const claims = await Claim.findAll({
@@ -30,7 +29,6 @@ exports.getMyClaims = async (req, res) => {
 
 exports.getMyClaimsAdmin = async (req, res) => {
   try {
-   
     const emailUser = req.user.email;
 
     const claims = await Claim.findAll({
@@ -70,7 +68,7 @@ exports.cancelClaim = async (req, res) => {
       { where: { id_laporan: idLaporan } }
     );
 
-    res.redirect("/claim/my-claim");
+    res.redirect("/mahasiswa/my-claim");
   } catch (err) {
     console.error("Error cancelClaim:", err);
     res.status(500).send("Gagal batal klaim");

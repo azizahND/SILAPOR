@@ -20,6 +20,23 @@
       .gradient-bg {
         background-image: linear-gradient(to right, #22c55e, #16a34a);
       }
+
+      /* CSS untuk Animasi Modal */
+      .modal-content {
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      .modal-content.open {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .modal-content.close {
+        transform: scale(0.95);
+        opacity: 0;
+      }
     </style>
   </head>
   <body class="bg-gray-100">
@@ -95,214 +112,314 @@
 
     <div
       id="cancelModal"
-      class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+      class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4"
       role="dialog"
       tabindex="-1"
     >
-      <div class="bg-white rounded-xl shadow-md w-full max-w-md">
-        <div class="py-3 px-4 border-b border-gray-200">
-          <h3 class="font-bold text-gray-800">Konfirmasi Batal Klaim</h3>
-        </div>
-        <div class="p-4">
-          <p class="text-gray-800 mb-4">
-            Apakah kamu yakin ingin membatalkan klaim laporan
-            <span id="modalItemName" class="font-semibold"></span>?
-          </p>
-
-          <div class="space-y-2">
-            <label class="flex items-center gap-2 text-sm text-gray-700">
-              <input
-                type="radio"
-                name="alasan"
-                value="Barang sudah ditemukan"
-                class="alasan-radio"
-              />
-              Barang sudah ditemukan
-            </label>
-            <label class="flex items-center gap-2 text-sm text-gray-700">
-              <input
-                type="radio"
-                name="alasan"
-                value="Ingin klaim laporan lain"
-                class="alasan-radio"
-              />
-              Ingin klaim laporan lain
-            </label>
-            <label class="flex items-center gap-2 text-sm text-gray-700">
-              <input
-                type="radio"
-                name="alasan"
-                value="Tidak jadi klaim"
-                class="alasan-radio"
-              />
-              Tidak jadi klaim
-            </label>
-            <label class="flex items-start gap-2 text-sm text-gray-700">
-              <input
-                type="radio"
-                name="alasan"
-                value="lainnya"
-                class="alasan-radio"
-                id="radioLainnya"
-              />
-              <span>Lainnya</span>
-            </label>
-            <textarea
-              id="alasanLainnya"
-              name="alasanLainnya"
-              placeholder="Tulis alasan lainnya..."
-              class="w-full mt-2 hidden p-2 border rounded-lg text-sm"
-            ></textarea>
+      <div class="modal-content bg-white rounded-xl shadow-md w-full max-w-sm">
+        <form id="cancelForm" method="POST">
+          <div class="p-6 space-y-4">
+            <p class="text-gray-700">
+              Apakah kamu yakin ingin membatalkan klaim untuk laporan
+              <span id="modalItemName" class="font-bold text-red-600"></span>?
+            </p>
           </div>
-        </div>
-        <div class="flex justify-end gap-2 py-3 px-4 border-t border-gray-200">
-          <button
-            type="button"
-            class="py-2 px-3 text-sm font-medium rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300"
-            data-hs-overlay="#cancelModal"
+
+          <div
+            class="flex justify-end items-center p-5 border-t border-gray-200 space-x-3"
           >
-            Tidak
-          </button>
-          <form id="cancelForm" method="POST">
-            <input type="hidden" name="alasan_final" id="alasanFinal" />
+            <button
+              type="button"
+              onclick="closeCancelModal()"
+              class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+            >
+              Tidak
+            </button>
             <button
               type="submit"
               id="btnSubmitCancel"
-              class="py-2 px-3 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled
+              class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
             >
-              Ya
+              Ya, Batalkan Klaim
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
 
-    <!-- Modal Detail -->
     <div
       id="detailModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
+      class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4"
     >
-      <div class="bg-white p-6 rounded-xl w-full max-w-lg shadow-lg relative">
-        <button
-          onclick="closeDetailModal()"
-          class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+      <div
+        class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
+      >
+        <div
+          class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0"
         >
-          &times;
-        </button>
-
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Detail Laporan</h2>
-
-        <div class="space-y-2 text-sm text-gray-700">
-          <div class="text-center">
-            <strong>Foto Barang:</strong><br />
-            <img
-              id="detailFoto"
-              src=""
-              alt="Foto Barang"
-              class="mt-2 rounded-lg max-h-48 object-cover mx-auto"
-            />
-          </div>
-          <p>
-            <strong>Nama Barang:</strong> <span id="detailNamaBarang"></span>
-          </p>
-          <p><strong>Jenis Laporan:</strong> <span id="detailJenis"></span></p>
-          <p><strong>Lokasi:</strong> <span id="detailLokasi"></span></p>
-          <p><strong>Deskripsi:</strong> <span id="detailDeskripsi"></span></p>
-          <p>
-            <strong>Nama Penemu:</strong> <span id="detailNamaPenemu"></span>
-          </p>
-          <p><strong>No HP Penemu:</strong> <span id="detailNoHp"></span></p>
-          <p><strong>Email Penemu:</strong> <span id="detailEmail"></span></p>
+          <h3 class="text-xl font-semibold text-gray-800">Detail Laporan</h3>
+          <button
+            type="button"
+            onclick="closeDetailModal()"
+            class="text-gray-400 hover:text-gray-600 transition"
+          >
+            <i class="fas fa-times fa-lg"></i>
+          </button>
         </div>
 
-        <a
-          id="waButton"
-          target="_blank"
-          class="mt-4 block text-center bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-xl font-semibold text-base transition-colors duration-200"
+        <div class="p-6 overflow-y-auto">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+            <div
+              class="md:col-span-2 bg-slate-100 rounded-xl flex items-center justify-center p-4"
+            >
+              <img
+                id="detail-foto"
+                src=""
+                alt="Foto Barang"
+                class="max-h-[70vh] w-auto object-contain rounded-md"
+              />
+            </div>
+
+            <div class="md:col-span-3 flex flex-col">
+              <div class="mb-3">
+                <span
+                  id="detail-status-badge"
+                  class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                ></span>
+              </div>
+
+              <h2
+                id="detail-nama-barang"
+                class="text-3xl font-bold text-gray-900 mb-5"
+              ></h2>
+
+              <div class="space-y-4 border-y border-gray-200 py-5">
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-map-marker-alt text-red-500 mt-1 w-5 text-center"
+                  ></i>
+                  <div class="ml-4">
+                    <p class="text-sm text-gray-500">Lokasi Ditemukan</p>
+                    <p
+                      id="detail-lokasi"
+                      class="font-semibold text-gray-800"
+                    ></p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-calendar-alt text-blue-500 mt-1 w-5 text-center"
+                  ></i>
+                  <div class="ml-4">
+                    <p class="text-sm text-gray-500">Tanggal Dilaporkan</p>
+                    <p
+                      id="detail-tanggal"
+                      class="font-semibold text-gray-800"
+                    ></p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-tag text-purple-500 mt-1 w-5 text-center"
+                  ></i>
+                  <div class="ml-4">
+                    <p class="text-sm text-gray-500">Jenis Laporan</p>
+                    <p
+                      id="detail-jenis"
+                      class="font-semibold text-gray-800"
+                    ></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <h4 class="text-base font-semibold text-gray-800 mb-2">
+                  Deskripsi Barang
+                </h4>
+                <p
+                  id="detail-deskripsi"
+                  class="text-gray-600 leading-relaxed"
+                ></p>
+              </div>
+
+              <div
+                class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-xl"
+              >
+                <h4
+                  class="text-base font-bold text-yellow-800 mb-3 flex items-center"
+                >
+                  <i class="fas fa-user-circle mr-2"></i>
+                  Informasi Penemu
+                </h4>
+                <div class="space-y-2 text-sm text-gray-700">
+                  <p>
+                    <strong>Nama:</strong> <span id="detail-nama-penemu"></span>
+                  </p>
+                  <p><strong>No HP:</strong> <span id="detail-no-hp"></span></p>
+                  <p><strong>Email:</strong> <span id="detail-email"></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="flex justify-end items-center p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl flex-shrink-0"
         >
-          Hubungi via WhatsApp
-        </a>
+          <a
+            id="waButton"
+            target="_blank"
+            class="mr-4 text-center bg-green-500 hover:bg-green-600 text-white py-2.5 px-6 rounded-xl font-semibold text-sm transition-colors duration-200"
+          >
+            <i class="fab fa-whatsapp mr-2"></i>Hubungi Penemu
+          </a>
+          <button
+            type="button"
+            onclick="closeDetailModal()"
+            class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-xl font-semibold hover:bg-gray-300 transition"
+          >
+            Tutup
+          </button>
+        </div>
       </div>
     </div>
 
     <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
     <script>
+      // --- Logika Modal Batal Klaim (Disederhanakan) ---
       function openCancelModal(button) {
         const id = button.dataset.id;
         const nama = button.dataset.nama;
+        const modal = document.getElementById("cancelModal");
+        const modalContent = modal.querySelector(".modal-content");
+
         document.getElementById("modalItemName").textContent = nama;
-        document.getElementById("cancelForm").action = "/claim/cancel/" + id;
+        // INI SUDAH BENAR UNTUK PEMBATALAN KLAIM OLEH PENGKLAIM
+        document.getElementById("cancelForm").action =
+          "/mahasiswa/cancel/" + id;
 
-        document
-          .querySelectorAll(".alasan-radio")
-          .forEach((r) => (r.checked = false));
-        document.getElementById("alasanLainnya").classList.add("hidden");
-        document.getElementById("alasanLainnya").value = "";
-        document.getElementById("btnSubmitCancel").disabled = true;
-
-        HSOverlay.open(document.getElementById("cancelModal"));
+        // Tampilkan modal dengan animasi
+        modal.classList.remove("hidden");
+        modalContent.classList.remove("close");
+        modalContent.classList.add("open");
       }
 
-      document.querySelectorAll(".alasan-radio").forEach((radio) => {
-        radio.addEventListener("change", () => {
-          const btnSubmit = document.getElementById("btnSubmitCancel");
-          const alasanLainnya = document.getElementById("alasanLainnya");
-          const alasanFinal = document.getElementById("alasanFinal");
+      function closeCancelModal() {
+        const modal = document.getElementById("cancelModal");
+        const modalContent = modal.querySelector(".modal-content");
 
-          if (radio.value === "lainnya") {
-            alasanLainnya.classList.remove("hidden");
-            btnSubmit.disabled = !alasanLainnya.value.trim();
-          } else {
-            alasanLainnya.classList.add("hidden");
-            alasanFinal.value = radio.value;
-            btnSubmit.disabled = false;
-          }
-        });
-      });
+        // Mulai animasi tutup
+        modalContent.classList.remove("open");
+        modalContent.classList.add("close");
 
-      document
-        .getElementById("alasanLainnya")
-        .addEventListener("input", (e) => {
-          const btnSubmit = document.getElementById("btnSubmitCancel");
-          const alasanFinal = document.getElementById("alasanFinal");
+        // Sembunyikan setelah animasi selesai
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modalContent.classList.remove("close"); // Bersihkan class
+        }, 300);
+      }
 
-          if (e.target.value.trim()) {
-            alasanFinal.value = e.target.value.trim();
-            btnSubmit.disabled = false;
-          } else {
-            btnSubmit.disabled = true;
-          }
-        });
+      // Catatan: Logika alasan (radio/textarea) telah dihapus karena tidak diperlukan lagi.
 
+      // --- Fungsi Pembantu untuk Modal Detail ---
+
+      // Fungsi untuk membuat badge status
+      function getStatusBadge(status) {
+        let colorClass = "";
+        if (status.includes("Menunggu")) {
+          colorClass = "bg-yellow-100 text-yellow-800";
+        } else if (status.includes("Diterima")) {
+          colorClass = "bg-green-100 text-green-800";
+        } else if (
+          status.includes("Dibatalkan") ||
+          status.includes("Ditolak")
+        ) {
+          colorClass = "bg-red-100 text-red-800";
+        } else {
+          colorClass = "bg-gray-100 text-gray-800";
+        }
+        return { text: status, class: colorClass };
+      }
+
+      // Fungsi untuk format tanggal
+      function formatDate(dateString) {
+        if (!dateString) return "-";
+        try {
+          const options = { year: "numeric", month: "long", day: "numeric" };
+          const date = new Date(dateString);
+          return date.toLocaleDateString("id-ID", options);
+        } catch (e) {
+          return dateString;
+        }
+      }
+
+      // Fungsi openDetailModal
       function openDetailModal(reportData) {
         const report = JSON.parse(decodeURIComponent(reportData));
+        const modal = document.getElementById("detailModal");
+        const modalContent = modal.querySelector(".modal-content");
 
-        document.getElementById("detailNamaBarang").innerText =
+        const statusBadge = getStatusBadge(report.Claim.status);
+        const tanggalLaporan = report.tanggal_laporan
+          ? formatDate(report.tanggal_laporan)
+          : "-";
+
+        document.getElementById("detail-nama-barang").innerText =
           report.nama_barang;
-        document.getElementById("detailJenis").innerText = report.jenis_laporan;
-        document.getElementById("detailLokasi").innerText = report.lokasi;
-        document.getElementById("detailDeskripsi").innerText = report.deskripsi;
-        document.getElementById("detailNamaPenemu").innerText =
+        document.getElementById("detail-jenis").innerText =
+          report.jenis_laporan || "Barang Ditemukan";
+        document.getElementById("detail-lokasi").innerText = report.lokasi;
+        document.getElementById("detail-deskripsi").innerText =
+          report.deskripsi;
+        document.getElementById("detail-tanggal").innerText = tanggalLaporan;
+
+        const statusEl = document.getElementById("detail-status-badge");
+        statusEl.innerText = statusBadge.text;
+        statusEl.className = `px-3 py-1.5 rounded-full text-sm font-semibold ${statusBadge.class}`;
+
+        document.getElementById("detail-nama-penemu").innerText =
           report.User?.nama || "-";
-        document.getElementById("detailNoHp").innerText =
+        document.getElementById("detail-no-hp").innerText =
           report.User?.no_telepon || "-";
-        document.getElementById("detailEmail").innerText =
+        document.getElementById("detail-email").innerText =
           report.User?.email || "-";
-        document.getElementById("detailFoto").src = report.foto_barang
+
+        document.getElementById("detail-foto").src = report.foto_barang
           ? `/uploads/${report.foto_barang}`
-          : "https://via.placeholder.com/200";
+          : "https://via.placeholder.com/400x300?text=Tidak+Ada+Foto";
 
         const phone = report.User?.no_telepon?.replace(/^0/, "+62") || "";
         document.getElementById("waButton").href = phone
-          ? `https://wa.me/${phone}?text=Halo, saya ingin menanyakan tentang barang ${report.nama_barang}`
+          ? `https://wa.me/${phone}?text=Halo, saya ingin menanyakan tentang barang ${report.nama_barang} yang saya klaim.`
           : "#";
+        if (!phone) {
+          document
+            .getElementById("waButton")
+            .classList.add("opacity-50", "pointer-events-none");
+        } else {
+          document
+            .getElementById("waButton")
+            .classList.remove("opacity-50", "pointer-events-none");
+        }
 
-        document.getElementById("detailModal").classList.remove("hidden");
+        // Tampilkan modal Detail dengan animasi
+        modal.classList.remove("hidden");
+        modalContent.classList.remove("close");
+        modalContent.classList.add("open");
       }
 
       function closeDetailModal() {
-        document.getElementById("detailModal").classList.add("hidden");
+        const modal = document.getElementById("detailModal");
+        const modalContent = modal.querySelector(".modal-content");
+
+        modalContent.classList.remove("open");
+        modalContent.classList.add("close");
+
+        // Timeout 300ms untuk menutup setelah animasi selesai
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modalContent.classList.remove("close");
+        }, 300);
       }
     </script>
   </body>

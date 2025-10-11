@@ -171,7 +171,8 @@
                 </button>
                 <button
                   class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg" 
-                >
+                 onclick="openRejectClaimModal('<%= report.id_laporan %>')"
+                  >
                   <i class="fas fa-trash-alt mr-2"></i>Tolak Claim
                 </button>
                 <button 
@@ -401,6 +402,44 @@
   </div>
 </div>
 
+<div id="rejectClaimModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
+    <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-sm transform scale-95 opacity-0 transition-all duration-300">
+        <form id="rejectClaimForm">
+            <div class="flex justify-between items-center p-5 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">Tolak Klaim</h3>
+                <button type="button" onclick="closeRejectClaimModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <p class="text-gray-700">Pilih alasan penolakan klaim untuk laporan ini:</p>
+                
+                <div>
+                    <label for="alasan" class="block text-sm font-medium text-gray-700 mb-1">Alasan Penolakan</label>
+                    <select id="alasan" name="alasan" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition">
+                        <option value="" disabled selected>Pilih salah satu alasan</option>
+                        <option value="Bukti klaim tidak valid">Bukti klaim tidak valid</option>
+                        <option value="Informasi klaim tidak cocok">Informasi klaim tidak cocok</option>
+                        <option value="Pelapor tidak dapat dihubungi">Pelapor tidak dapat dihubungkan</option>
+                        <option value="Alasan lainnya">Alasan lainnya</option>
+                    </select>
+                </div>
+
+                <div id="alasanLainnyaContainer" class="hidden">
+                    <label for="alasanLain" class="block text-sm font-medium text-gray-700 mb-1">Alasan Lainnya (Detail)</label>
+                    <textarea id="alasanLain" name="alasanLain" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 transition" placeholder="Jelaskan alasan penolakan secara rinci"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end items-center p-5 border-t border-gray-200 space-x-3">
+                <button type="button" onclick="closeRejectClaimModal()" class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Batal</button>
+                <button type="submit" id="submitRejectClaim" disabled class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed">Tolak Klaim</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <script>
     function confirmDelete(id_laporan) {
@@ -552,6 +591,100 @@ function closeContactModal() {
 
 contactModal.addEventListener("click", (e) => {
   if (e.target === contactModal) closeContactModal();
+});
+
+
+// ... (Kode JavaScript sebelumnya)
+
+const rejectClaimModal = document.getElementById('rejectClaimModal');
+const rejectClaimContent = rejectClaimModal.querySelector('.modal-content');
+const rejectClaimForm = document.getElementById('rejectClaimForm');
+const alasanSelect = document.getElementById('alasan');
+const alasanLainnyaContainer = document.getElementById('alasanLainnyaContainer');
+const submitRejectClaimButton = document.getElementById('submitRejectClaim');
+
+// Function untuk membuka modal Tolak Claim (Tambahkan transisi)
+function openRejectClaimModal(id_laporan) {
+  rejectClaimForm.dataset.idLaporan = id_laporan;
+  // Reset form state
+  alasanSelect.value = "";
+  document.getElementById('alasanLain').value = "";
+  alasanLainnyaContainer.classList.add('hidden');
+  submitRejectClaimButton.disabled = true;
+
+  rejectClaimModal.classList.remove('hidden');
+  setTimeout(() => {
+    rejectClaimContent.classList.remove('scale-95', 'opacity-0');
+  }, 50);
+}
+
+// Function untuk menutup modal Tolak Claim (Tambahkan transisi)
+function closeRejectClaimModal() {
+  rejectClaimContent.classList.add('scale-95', 'opacity-0');
+  setTimeout(() => {
+    rejectClaimModal.classList.add('hidden');
+  }, 300);
+}
+
+rejectClaimModal.addEventListener('click', (e) => {
+  if (e.target === rejectClaimModal) closeRejectClaimModal();
+});
+
+// Detect when user selects "Alasan lainnya" in the dropdown
+alasanSelect.addEventListener('change', function () {
+  // Show the "Alasan lainnya" field if selected
+  if (this.value === 'Alasan lainnya') {
+    alasanLainnyaContainer.classList.remove('hidden');
+  } else {
+    alasanLainnyaContainer.classList.add('hidden');
+    document.getElementById('alasanLain').value = ''; // Reset the field
+  }
+
+  // Enable the submit button if an alasan is selected
+  if (this.value) {
+    submitRejectClaimButton.disabled = false;
+  } else {
+    submitRejectClaimButton.disabled = true;
+  }
+});
+
+// Handle the form submission to update the claim and report status
+rejectClaimForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const id_laporan = this.dataset.idLaporan;
+  const alasan = document.getElementById('alasan').value;
+  const alasanLain = document.getElementById('alasanLain').value;
+  
+  // Disable button saat proses
+  submitRejectClaimButton.textContent = 'Memproses...';
+  submitRejectClaimButton.disabled = true;
+
+  try {
+    const response = await fetch(`/mahasiswa/my-reports/reject-claim/${id_laporan}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        alasan: alasan === 'Alasan lainnya' ? alasanLain : alasan
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      Swal.fire('Berhasil', data.message || 'Klaim berhasil ditolak.', 'success').then(() => {
+        window.location.reload(); // Reload the page after success
+      });
+    } else {
+      Swal.fire('Error', data.message || 'Terjadi kesalahan saat menolak klaim.', 'error');
+    }
+  } catch (error) {
+    Swal.fire('Error', 'Terjadi kesalahan jaringan atau server.', 'error');
+  } finally {
+    submitRejectClaimButton.textContent = 'Tolak Klaim';
+    submitRejectClaimButton.disabled = false;
+    closeRejectClaimModal();
+  }
 });
 
 </script>

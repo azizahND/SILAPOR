@@ -644,3 +644,36 @@ exports.reapplyReportAdmin = async (req, res) => {
   }
 };
 
+// Tolak Claim
+exports.rejectClaim = async (req, res) => {
+  try {
+    const { id_laporan } = req.params;
+    const { alasan } = req.body;
+
+    // Cari claim yang statusnya "Waiting for approval"
+    const claim = await Claim.findOne({
+      where: { id_laporan: id_laporan, status: "Waiting for approval" }
+    });
+
+    if (!claim) {
+      return res.status(404).json({ success: false, message: 'Claim tidak ditemukan atau sudah diproses' });
+    }
+
+    // Update status claim menjadi "Rejected" dan alasan penolakan
+    claim.status = "Rejected";
+    claim.alasan = alasan;
+    await claim.save();
+
+    // Update status laporan menjadi "On Progress"
+    const laporan = await Laporan.findByPk(id_laporan);
+    if (laporan) {
+      laporan.status = "On progress";
+      await laporan.save();
+    }
+
+    return res.json({ success: true, message: 'Claim berhasil ditolak' });
+  } catch (error) {
+    console.error("Error rejecting claim:", error);
+    return res.status(500).json({ success: false, message: 'Terjadi kesalahan saat menolak klaim' });
+  }
+};

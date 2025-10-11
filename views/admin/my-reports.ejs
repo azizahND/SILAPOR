@@ -1,166 +1,201 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laporan Saya - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-      <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Mengubah gradient ke warna hijau agar sesuai dengan mahasiswa */
-        .gradient-bg {
-            background-image: linear-gradient(to right, #22c55e, #16a34a);
-        }
-        .modal-content {
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
+      /* Mengubah gradient ke warna hijau agar sesuai dengan mahasiswa */
+      .gradient-bg {
+        background-image: linear-gradient(to right, #22c55e, #16a34a);
+      }
+      .modal-content {
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <%- include('../components/sidebar') %>
-    
+
     <div class="ml-64 p-6">
-                <h1 class="text-2xl font-semibold text-gray-800 mb-6">
-                    Laporan Saya
-                </h1>
+      <h1 class="text-2xl font-semibold text-gray-800 mb-6">Laporan Saya</h1>
 
-            <% if (typeof success !== 'undefined' && success) { %>
-            <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center">
-                <i class="fas fa-check-circle mr-2"></i>
-                <%= success %>
+      <% if (typeof success !== 'undefined' && success) { %>
+      <div
+        class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center"
+      >
+        <i class="fas fa-check-circle mr-2"></i>
+        <%= success %>
+      </div>
+      <% } %> <% if (reports.length === 0) { %>
+      <div class="text-center py-16">
+        <div class="bg-white rounded-3xl shadow-xl p-12 max-w-md mx-auto">
+          <div
+            class="w-24 h-24 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6"
+          >
+            <i class="fas fa-search text-3xl text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">
+            Belum Ada Laporan
+          </h3>
+          <p class="text-gray-600 mb-6">
+            Anda belum membuat laporan apapun. Mulai buat laporan pertama Anda!
+          </p>
+          <button
+            onclick="window.location.href='/admin/reports'"
+            class="gradient-bg hover:brightness-90 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+          >
+            <i class="fas fa-plus mr-2"></i>Buat Laporan Baru
+          </button>
+        </div>
+      </div>
+      <% } else { %>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4"
+            >
+              <i class="fas fa-check text-green-600"></i>
             </div>
-            <% } %>
-
-            <% if (reports.length === 0) { %>
-            <div class="text-center py-16">
-                <div class="bg-white rounded-3xl shadow-xl p-12 max-w-md mx-auto">
-                    <div class="w-24 h-24 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-search text-3xl text-white"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">
-                        Belum Ada Laporan
-                    </h3>
-                    <p class="text-gray-600 mb-6">
-                        Anda belum membuat laporan apapun. Mulai buat laporan pertama Anda!
-                    </p>
-                    <button onclick="window.location.href='/admin/reports'" class="gradient-bg hover:brightness-90 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-plus mr-2"></i>Buat Laporan Baru
-                    </button>
-                </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">
+                <%= reports.filter(r => r.status === 'Claimed').length %>
+              </h3>
+              <p class="text-gray-600">Ditemukan</p>
             </div>
-            <% } else { %>
-            
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fas fa-check text-green-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                <%= reports.filter(r => r.status === 'Claimed').length %>
-                            </h3>
-                            <p class="text-gray-600">Ditemukan</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fas fa-clock text-yellow-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                <%= reports.filter(r => r.status === 'On progress' || r.status === 'Pending').length %>
-                            </h3>
-                            <p class="text-gray-600">Dalam Proses</p>
-                        </div>
-                    </div>
-                </div>
-
-                 <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4">
-                        <i class="fas fa-times text-red-600"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-900">
-                            <%= reports.filter(r => r.status === 'Upload verification rejected').length %>
-                        </h3>
-                        <p class="text-gray-600">Ditolak</p>
-                    </div>
-                 </div>
-                </div>
-
-                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
-                            <i class="fas fa-list text-blue-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                <%= reports.length %>
-                            </h3>
-                            <p class="text-gray-600">Total Laporan</p>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center mr-4"
+            >
+              <i class="fas fa-clock text-yellow-600"></i>
             </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">
+                <%= reports.filter(r => r.status === 'On progress' || r.status
+                === 'Pending').length %>
+              </h3>
+              <p class="text-gray-600">Dalam Proses</p>
+            </div>
+          </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                <% reports.forEach(report => { %>
-                <div class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-                    <div class="relative overflow-hidden group">
-                        <img src="/uploads/<%= report.foto_barang %>" alt="<%= report.nama_barang %>" class="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105">
-                    </div>
-                    <div class="p-6">
-                        <div class="mb-4">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
-                                <%= report.nama_barang %>
-                            </h3>
-                            <div class="flex items-center text-sm text-gray-500 mb-2">
-                                <i class="fas fa-map-marker-alt w-4 h-4 mr-2 text-red-500"></i>
-                                <span class="line-clamp-1"><%= report.lokasi %></span>
-                            </div>
-                            <div class="flex items-center text-sm text-gray-500">
-                                <i class="fas fa-calendar-alt w-4 h-4 mr-2 text-blue-500"></i>
-                                <span>Status: <span class="font-medium"><%= report.status %></span></span>
-                            </div>
-                        </div>
-                        <div class="mb-6">
-                            <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
-                                <%= report.deskripsi %>
-                            </p>
-                        </div>
-                        <div class="flex gap-3">
-                            <button data-user='<%= JSON.stringify(report) %>' onclick='openDetailModal(this.dataset.user)' class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
-                                <i class="fas fa-eye mr-2"></i>Detail
-                            </button>
-<% if (report.status === 'Claimed' && report.Claims && report.Claims.length > 0  ) { %>
-                <button
-                  onclick="openContactModal('<%= report.Claims[0].User.nama %>', '<%= report.Claims[0].User.no_telepon %>', '<%= report.Claims[0].User.email %>')"
-                  class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4"
+            >
+              <i class="fas fa-times text-red-600"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">
+                <%= reports.filter(r => r.status === 'Upload verification
+                rejected').length %>
+              </h3>
+              <p class="text-gray-600">Ditolak</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
+          <div class="flex items-center">
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4"
+            >
+              <i class="fas fa-list text-blue-600"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">
+                <%= reports.length %>
+              </h3>
+              <p class="text-gray-600">Total Laporan</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <% reports.forEach(report => { %>
+        <div
+          class="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+        >
+          <div class="relative overflow-hidden group">
+            <img
+              src="/uploads/<%= report.foto_barang %>"
+              alt="<%= report.nama_barang %>"
+              class="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+          <div class="p-6">
+            <div class="mb-4">
+              <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                <%= report.nama_barang %>
+              </h3>
+              <div class="flex items-center text-sm text-gray-500 mb-2">
+                <i class="fas fa-map-marker-alt w-4 h-4 mr-2 text-red-500"></i>
+                <span class="line-clamp-1"><%= report.lokasi %></span>
+              </div>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-calendar-alt w-4 h-4 mr-2 text-blue-500"></i>
+                <span
+                  >Status:
+                  <span class="font-medium"><%= report.status %></span></span
                 >
-                  <i class="fas fa-address-card mr-2"></i> Hubungi
-                </button>
-                <button
-                  class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg" 
-                >
-                  <i class="fas fa-trash-alt mr-2"></i>Tolak Claim
-                </button>
-                <button 
-                  type="button"
-                  class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
-                  data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
-                >
-                  <i class="fas fa-check mr-2"></i>Terima Claim
-                </button>
+              </div>
+            </div>
+            <div class="mb-6">
+              <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
+                <%= report.deskripsi %>
+              </p>
+            </div>
+            <div class="flex gap-3">
+              <button
+                data-user="<%= JSON.stringify(report) %>"
+                onclick="openDetailModal(this.dataset.user)"
+                class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <i class="fas fa-eye mr-2"></i>Detail
+              </button>
+              <% if (report.status === 'Claimed' && report.Claims &&
+              report.Claims.length > 0 ) { %>
+              <button
+                onclick="openContactModal('<%= report.Claims[0].User.nama %>', '<%= report.Claims[0].User.no_telepon %>', '<%= report.Claims[0].User.email %>')"
+                class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <i class="fas fa-address-card mr-2"></i> Hubungi
+              </button>
+              <button
+                onclick="openRejectClaimModal('<%= report.id_laporan %>')"
+                class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              >
+                <i class="fas fa-trash-alt mr-2"></i>Tolak Claim
+              </button>
+              <button
+                type="button"
+                class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+              >
+                <i class="fas fa-check mr-2"></i>Terima Claim
+              </button>
               <% } else { %>
               <button
-               data-user='<%= JSON.stringify(report) %>' onclick='openEditModal(this.dataset.user)'
+                data-user="<%= JSON.stringify(report) %>"
+                onclick="openEditModal(this.dataset.user)"
                 class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <i class="fas fa-edit mr-2"></i>Edit
@@ -168,371 +203,669 @@
               <button
                 onclick="confirmDelete('<%= report.id_laporan %>')"
                 class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
-                >
+              >
                 <i class="fas fa-trash-alt mr-2"></i>Hapus
               </button>
               <% if (report.status === 'Upload verification rejected') { %>
-                <form action="/admin/my-reports/reapply-report/<%= report.id_laporan %>" method="POST" class="flex-1">
-              <button
-                class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+              <form
+                action="/admin/my-reports/reapply-report/<%= report.id_laporan %>"
+                method="POST"
+                class="flex-1"
               >
-                <i class="fas fa-upload mr-2"></i>Ajukan Ulang
-              </button>
+                <button
+                  class="bg-blue-100 hover:bg-blue-200 text-blue-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  <i class="fas fa-upload mr-2"></i>Ajukan Ulang
+                </button>
               </form>
-              <% } %>
-              <% } %>
-                        </div>
-                    </div>
-                </div>
-                <div
-  id="acceptModal-<%= report.id_laporan %>"
-  class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
-  role="dialog"
-  tabindex="-1"
->
-  <div class="bg-white rounded-xl shadow-md w-full max-w-md">
-    <!-- Header -->
-    <div class="py-3 px-4 border-b border-gray-200">
-      <h3 class="font-bold text-gray-800">
-        Terima Klaim & Bukti Penyerahan
-      </h3>
-    </div>
-    <!-- Body -->
-    <div class="p-6">
-      <p class="text-gray-700 mb-4">
-        Apakah Anda yakin ingin menerima klaim ini? Silakan unggah bukti penyerahan agar tercatat dengan benar.
-      </p>
+              <% } %> <% } %>
+            </div>
+          </div>
+        </div>
+        <div
+          id="acceptModal-<%= report.id_laporan %>"
+          class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+          role="dialog"
+          tabindex="-1"
+        >
+          <div class="bg-white rounded-xl shadow-md w-full max-w-md">
+            <!-- Header -->
+            <div class="py-3 px-4 border-b border-gray-200">
+              <h3 class="font-bold text-gray-800">
+                Terima Klaim & Bukti Penyerahan
+              </h3>
+            </div>
+            <!-- Body -->
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                Apakah Anda yakin ingin menerima klaim ini? Silakan unggah bukti
+                penyerahan agar tercatat dengan benar.
+              </p>
 
-      <!-- Form untuk bukti -->
-      <form action="/admin/my-reports/accept-claim/<%= report.id_laporan %>" method="POST" enctype="multipart/form-data">
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2" for="keterangan">Nama Pengklaim</label>
-          <input type="text" name="nama_pengklaim" id="nama_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.nama : '' %>" readonly
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+              <!-- Form untuk bukti -->
+              <form
+                action="/admin/my-reports/accept-claim/<%= report.id_laporan %>"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2" for="keterangan"
+                    >Nama Pengklaim</label
+                  >
+                  <input
+                    type="text"
+                    name="nama_pengklaim"
+                    id="nama_pengklaim-<%= report.id_laporan %>"
+                    value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.nama : '' %>"
+                    readonly
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2" for="keterangan"
+                    >No. HP Pengklaim</label
+                  >
+                  <input
+                    type="text"
+                    name="no_telepon_pengklaim"
+                    id="no_telepon_pengklaim-<%= report.id_laporan %>"
+                    value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.no_telepon : '' %>"
+                    readonly
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2" for="keterangan"
+                    >Email Pengklaim</label
+                  >
+                  <input
+                    type="email"
+                    name="email_pengklaim"
+                    id="email_pengklaim-<%= report.id_laporan %>"
+                    value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.email : '' %>"
+                    readonly
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2" for="keterangan"
+                    >Lokasi Penyerahan</label
+                  >
+                  <input
+                    type="text"
+                    name="lokasi_penyerahan"
+                    id="lokasi_penyerahan-<%= report.id_laporan %>"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                    placeholder="Masukkan lokasi penyerahan"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2" for="keterangan"
+                    >Tanggal Penyerahan</label
+                  >
+                  <input
+                    type="date"
+                    name="tanggal_penyerahan"
+                    id="tanggal_penyerahan-<%= report.id_laporan %>"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label class="block text-gray-700 mb-2" for="bukti"
+                    >Upload Bukti Penyerahan</label
+                  >
+                  <input
+                    type="file"
+                    name="bukti"
+                    id="bukti-<%= report.id_laporan %>"
+                    accept="image"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+                <div class="flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                    data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Terima Klaim
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2" for="keterangan">No. HP Pengklaim</label>
-          <input type="text" name="no_telepon_pengklaim" id="no_telepon_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.no_telepon : '' %>" readonly
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2" for="keterangan">Email Pengklaim</label>
-          <input type="email" name="email_pengklaim" id="email_pengklaim-<%= report.id_laporan %>" value="<%= report.Claims && report.Claims.length > 0 ? report.Claims[0].User.email : '' %>" readonly
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2" for="keterangan">Lokasi Penyerahan</label>
-          <input type="text" name="lokasi_penyerahan" id="lokasi_penyerahan-<%= report.id_laporan %>" required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Masukkan lokasi penyerahan"/>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2" for="keterangan">Tanggal Penyerahan</label>
-          <input type="date" name="tanggal_penyerahan" id="tanggal_penyerahan-<%= report.id_laporan %>" required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2" for="bukti">Upload Bukti Penyerahan</label>
-          <input type="file" name="bukti" id="bukti-<%= report.id_laporan %>" accept="image" required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg"/>
-        </div>
-        <div class="flex justify-end space-x-3">
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+
+    <div
+      id="editReportModal"
+      class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4"
+    >
+      <div
+        class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 opacity-0"
+      >
+        <form id="editReportForm" method="POST" enctype="multipart/form-data">
+          <div
+            class="flex justify-between items-center p-5 border-b border-gray-200"
+          >
+            <h3 class="text-xl font-bold text-gray-800">Edit Laporan</h3>
+            <button
+              type="button"
+              onclick="closeEditModal()"
+              class="text-gray-400 hover:text-gray-600 transition"
+            >
+              <i class="fas fa-times fa-lg"></i>
+            </button>
+          </div>
+          <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+            <div>
+              <label
+                for="edit-nama-barang"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Nama Barang</label
+              >
+              <input
+                type="text"
+                id="edit-nama-barang"
+                name="nama_barang"
+                class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition"
+              />
+            </div>
+            <div>
+              <label
+                for="edit-lokasi"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Lokasi Terakhir</label
+              >
+              <input
+                type="text"
+                id="edit-lokasi"
+                name="lokasi_kejadian"
+                class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition"
+              />
+            </div>
+            <div>
+              <label
+                for="edit-deskripsi"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Deskripsi</label
+              >
+              <textarea
+                id="edit-deskripsi"
+                name="deskripsi"
+                rows="4"
+                class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition"
+              ></textarea>
+            </div>
+            <div>
+              <label
+                for="edit-foto"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Ganti Foto (Opsional)</label
+              >
+              <input
+                type="file"
+                id="edit-foto"
+                name="foto_barang"
+                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+              />
+              <p class="text-xs text-gray-500 mt-1">Foto saat ini:</p>
+              <img
+                id="current-foto"
+                src=""
+                alt="Foto Barang Saat Ini"
+                class="mt-2 rounded-lg max-h-40"
+              />
+            </div>
+          </div>
+          <div
+            class="flex justify-end items-center p-5 border-t border-gray-200 space-x-3"
+          >
+            <button
+              type="button"
+              onclick="closeEditModal()"
+              class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="px-5 py-2.5 gradient-bg text-white font-semibold rounded-lg hover:brightness-90 transition"
+            >
+              Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="detailReportModal"
+      class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4"
+    >
+      <div
+        class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-4xl transform scale-95 opacity-0 max-h-[90vh] flex flex-col"
+      >
+        <div
+          class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0"
+        >
+          <h3 class="text-xl font-semibold text-gray-800">Detail Laporan</h3>
           <button
             type="button"
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
-            data-hs-overlay="#acceptModal-<%= report.id_laporan %>"
+            onclick="closeDetailModal()"
+            class="text-gray-400 hover:text-gray-600 transition"
           >
-            Batal
+            <i class="fas fa-times fa-lg"></i>
           </button>
-          <button type="submit"
-            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Terima Klaim
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-                <% }) %>
-            </div>
-            <% } %>
-       
-    </div>
-
-    <div id="editReportModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 opacity-0">
-            <form id="editReportForm" method="POST" enctype="multipart/form-data">
-                <div class="flex justify-between items-center p-5 border-b border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800">Edit Laporan</h3>
-                    <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 transition">
-                        <i class="fas fa-times fa-lg"></i>
-                    </button>
-                </div>
-                <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-                    <div>
-                        <label for="edit-nama-barang" class="block text-sm font-medium text-gray-700 mb-1">Nama Barang</label>
-                        <input type="text" id="edit-nama-barang" name="nama_barang" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition">
-                    </div>
-                    <div>
-                        <label for="edit-lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Terakhir</label>
-                        <input type="text" id="edit-lokasi" name="lokasi_kejadian" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition">
-                    </div>
-                    <div>
-                        <label for="edit-deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <textarea id="edit-deskripsi" name="deskripsi" rows="4" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition"></textarea>
-                    </div>
-                    <div>
-                        <label for="edit-foto" class="block text-sm font-medium text-gray-700 mb-1">Ganti Foto (Opsional)</label>
-                        <input type="file" id="edit-foto" name="foto_barang" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
-                        <p class="text-xs text-gray-500 mt-1">Foto saat ini:</p>
-                        <img id="current-foto" src="" alt="Foto Barang Saat Ini" class="mt-2 rounded-lg max-h-40">
-                    </div>
-                </div>
-                <div class="flex justify-end items-center p-5 border-t border-gray-200 space-x-3">
-                    <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 gradient-bg text-white font-semibold rounded-lg hover:brightness-90 transition">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="detailReportModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-    <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-4xl transform scale-95 opacity-0 max-h-[90vh] flex flex-col">
-        <div class="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
-            <h3 class="text-xl font-semibold text-gray-800">Detail Laporan</h3>
-            <button type="button" onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition">
-                <i class="fas fa-times fa-lg"></i>
-            </button>
         </div>
 
         <div class="p-6 overflow-y-auto">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-
-                <div class="md:col-span-2 bg-slate-100 rounded-xl flex items-center justify-center p-4">
-                    <img id="detail-foto" src="" alt="Foto Barang" class="max-h-[70vh] w-auto object-contain rounded-md">
-                </div>
-
-                <div class="md:col-span-3 flex flex-col">
-                    <div class="mb-3">
-                         <span id="detail-status-badge" class="px-3 py-1.5 rounded-full text-sm font-semibold"></span>
-                    </div>
-
-                    <h2 id="detail-nama-barang" class="text-3xl font-bold text-gray-900 mb-5"></h2>
-                    
-                    <div class="space-y-4 border-t border-gray-200 pt-5">
-                        <div class="flex items-start">
-                            <i class="fas fa-user text-slate-400 mt-1 w-5 text-center"></i>
-                            <div class="ml-4">
-                                <p class="text-sm text-gray-500">Pelapor</p>
-                                <p id="detail-pelapor" class="font-semibold text-gray-800"></p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-map-marker-alt text-slate-400 mt-1 w-5 text-center"></i>
-                            <div class="ml-4">
-                                <p class="text-sm text-gray-500">Lokasi</p>
-                                <p id="detail-lokasi" class="font-semibold text-gray-800"></p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-calendar-alt text-slate-400 mt-1 w-5 text-center"></i>
-                            <div class="ml-4">
-                                <p class="text-sm text-gray-500">Tanggal Dilaporkan</p>
-                                <p id="detail-tanggal" class="font-semibold text-gray-800"></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6 border-t border-gray-200 pt-5">
-                         <h4 class="text-base font-semibold text-gray-800 mb-2">Deskripsi</h4>
-                         <p id="detail-deskripsi" class="text-gray-600 leading-relaxed"></p>
-                    </div>
-                </div>
-
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+            <div
+              class="md:col-span-2 bg-slate-100 rounded-xl flex items-center justify-center p-4"
+            >
+              <img
+                id="detail-foto"
+                src=""
+                alt="Foto Barang"
+                class="max-h-[70vh] w-auto object-contain rounded-md"
+              />
             </div>
+
+            <div class="md:col-span-3 flex flex-col">
+              <div class="mb-3">
+                <span
+                  id="detail-status-badge"
+                  class="px-3 py-1.5 rounded-full text-sm font-semibold"
+                ></span>
+              </div>
+
+              <h2
+                id="detail-nama-barang"
+                class="text-3xl font-bold text-gray-900 mb-5"
+              ></h2>
+
+              <div class="space-y-4 border-t border-gray-200 pt-5">
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-user text-slate-400 mt-1 w-5 text-center"
+                  ></i>
+                  <div class="ml-4">
+                    <p class="text-sm text-gray-500">Pelapor</p>
+                    <p
+                      id="detail-pelapor"
+                      class="font-semibold text-gray-800"
+                    ></p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-map-marker-alt text-slate-400 mt-1 w-5 text-center"
+                  ></i>
+                  <div class="ml-4">
+                    <p class="text-sm text-gray-500">Lokasi</p>
+                    <p
+                      id="detail-lokasi"
+                      class="font-semibold text-gray-800"
+                    ></p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <i
+                    class="fas fa-calendar-alt text-slate-400 mt-1 w-5 text-center"
+                  ></i>
+                  <div class="ml-4">
+                    <p class="text-sm text-gray-500">Tanggal Dilaporkan</p>
+                    <p
+                      id="detail-tanggal"
+                      class="font-semibold text-gray-800"
+                    ></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 border-t border-gray-200 pt-5">
+                <h4 class="text-base font-semibold text-gray-800 mb-2">
+                  Deskripsi
+                </h4>
+                <p
+                  id="detail-deskripsi"
+                  class="text-gray-600 leading-relaxed"
+                ></p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="flex justify-end items-center p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl flex-shrink-0">
-            <button type="button" onclick="closeDetailModal()" class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Tutup</button>
+        <div
+          class="flex justify-end items-center p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl flex-shrink-0"
+        >
+          <button
+            type="button"
+            onclick="closeDetailModal()"
+            class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+          >
+            Tutup
+          </button>
         </div>
+      </div>
     </div>
+
+    <div
+      id="contactModal"
+      class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+    >
+      <div
+        class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 opacity-0 p-6"
+      >
+        <h2 class="text-lg font-bold mb-4">Kontak Pengklaim</h2>
+        <p><strong>Nama:</strong> <span id="ownerName"></span></p>
+        <p><strong>No. HP:</strong> <span id="ownerPhone"></span></p>
+        <p><strong>Email:</strong> <span id="ownerEmail"></span></p>
+        <div class="mt-6 flex justify-between gap-3">
+          <a
+            id="waLink"
+            target="_blank"
+            class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center"
+          >
+            <i class="fab fa-whatsapp mr-2"></i>WhatsApp
+          </a>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button
+            onclick="closeContactModal()"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+<!-- Modal Tolak Claim -->
+<div id="rejectClaimModal" class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50" role="dialog" tabindex="-1">
+  <div class="bg-white rounded-xl shadow-md w-full max-w-md p-6">
+    <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+      <h3 class="font-bold text-gray-800">Tolak Klaim</h3>
+      <button type="button" onclick="closeRejectClaimModal()" class="text-gray-400 hover:text-gray-600 transition">
+        <i class="fas fa-times fa-lg"></i>
+      </button>
+    </div>
+    <form id="rejectClaimForm" action="/mahasiswa/my-reports/reject-claim" method="POST">
+      <div class="mt-4">
+        <label for="alasan" class="block text-sm font-medium text-gray-700">Pilih Alasan Penolakan</label>
+        <select name="alasan" id="alasan" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 mt-2">
+          <option value="" disabled selected>Pilih alasan...</option>
+          <option value="Laporan tidak sesuai dengan kenyataan">Laporan tidak sesuai dengan kenyataan</option>
+          <option value="Informasi tidak lengkap">Informasi tidak lengkap</option>
+          <option value="Foto tidak jelas">Foto tidak jelas</option>
+          <option value="Alasan lainnya">Alasan lainnya</option>
+        </select>
+      </div>
+      <div id="alasanLainnyaContainer" class="mt-4 hidden">
+        <label for="alasanLain" class="block text-sm font-medium text-gray-700">Alasan Lainnya</label>
+        <textarea name="alasanLain" id="alasanLain" rows="3" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 mt-2" placeholder="Masukkan alasan..."></textarea>
+      </div>
+      <div class="flex justify-end space-x-3 mt-6">
+        <button type="button" onclick="closeRejectClaimModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Tidak</button>
+        <button type="submit" id="submitRejectClaim" class="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50" disabled>Ya, Tolak Klaim</button>
+      </div>
+    </form>
+  </div>
 </div>
 
-    <div id="contactModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 opacity-0 p-6">
-            <h2 class="text-lg font-bold mb-4">Kontak Pengklaim</h2>
-            <p><strong>Nama:</strong> <span id="ownerName"></span></p>
-            <p><strong>No. HP:</strong> <span id="ownerPhone"></span></p>
-            <p><strong>Email:</strong> <span id="ownerEmail"></span></p>
-            <div class="mt-6 flex justify-between gap-3">
-                <a id="waLink" target="_blank" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center">
-                    <i class="fab fa-whatsapp mr-2"></i>WhatsApp
-                </a>
-            </div>
-            <div class="mt-4 flex justify-end">
-                <button onclick="closeContactModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
+
+
 
     <script>
-        function confirmDelete(id_laporan) {
-            Swal.fire({
-                title: "Apakah Anda yakin?",
-                text: "Laporan ini akan dihapus secara permanen!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#ef4444",
-                cancelButtonColor: "#6b7280",
-                confirmButtonText: "Ya, hapus!",
-                cancelButtonText: "Batal",
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mr-3",
-                    cancelButton: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg",
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`/admin/reports/delete/${id_laporan}`, {
-                        method: "DELETE",
-                    })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.success) {
-                            Swal.fire({
-                                title: "Berhasil!",
-                                text: data.message,
-                                icon: "success",
-                                confirmButtonText: "OK",
-                                customClass: {
-                                    confirmButton: "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg",
-                                },
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire("Error", data.message, "error");
-                        }
-                    })
-                    .catch(() => {
-                        Swal.fire("Error", "Terjadi kesalahan server", "error");
-                    });
+      function confirmDelete(id_laporan) {
+        Swal.fire({
+          title: "Apakah Anda yakin?",
+          text: "Laporan ini akan dihapus secara permanen!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#ef4444",
+          cancelButtonColor: "#6b7280",
+          confirmButtonText: "Ya, hapus!",
+          cancelButtonText: "Batal",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton:
+              "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mr-3",
+            cancelButton:
+              "bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`/admin/reports/delete/${id_laporan}`, {
+              method: "DELETE",
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  Swal.fire({
+                    title: "Berhasil!",
+                    text: data.message,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    customClass: {
+                      confirmButton:
+                        "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg",
+                    },
+                  }).then(() => {
+                    window.location.reload();
+                  });
+                } else {
+                  Swal.fire("Error", data.message, "error");
                 }
-            });
-        }
+              })
+              .catch(() => {
+                Swal.fire("Error", "Terjadi kesalahan server", "error");
+              });
+          }
+        });
+      }
 
-        const editModal = document.getElementById('editReportModal');
-        const editForm = document.getElementById('editReportForm');
-        const modalContent = editModal.querySelector('.modal-content');
+      const editModal = document.getElementById("editReportModal");
+      const editForm = document.getElementById("editReportForm");
+      const modalContent = editModal.querySelector(".modal-content");
 
-        function openEditModal(reportData) {
-            const report = JSON.parse(reportData);
-            document.getElementById('edit-nama-barang').value = report.nama_barang;
-            document.getElementById('edit-lokasi').value = report.lokasi;
-            document.getElementById('edit-deskripsi').value = report.deskripsi;
-            document.getElementById('current-foto').src = `/uploads/${report.foto_barang}`;
-            editForm.action = `/admin/reports/update/${report.id_laporan}`;
-            editModal.classList.remove('hidden');
-            setTimeout(() => {
-                modalContent.classList.remove('scale-95', 'opacity-0');
-            }, 50);
-        }
+      function openEditModal(reportData) {
+        const report = JSON.parse(reportData);
+        document.getElementById("edit-nama-barang").value = report.nama_barang;
+        document.getElementById("edit-lokasi").value = report.lokasi;
+        document.getElementById("edit-deskripsi").value = report.deskripsi;
+        document.getElementById(
+          "current-foto"
+        ).src = `/uploads/${report.foto_barang}`;
+        editForm.action = `/admin/reports/update/${report.id_laporan}`;
+        editModal.classList.remove("hidden");
+        setTimeout(() => {
+          modalContent.classList.remove("scale-95", "opacity-0");
+        }, 50);
+      }
 
-        function closeEditModal() {
-            modalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                editModal.classList.add('hidden');
-                document.getElementById('edit-foto').value = '';
-            }, 300);
+      function closeEditModal() {
+        modalContent.classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          editModal.classList.add("hidden");
+          document.getElementById("edit-foto").value = "";
+        }, 300);
+      }
+
+      editModal.addEventListener("click", (event) => {
+        if (event.target === editModal) {
+          closeEditModal();
         }
-        
-        editModal.addEventListener('click', (event) => {
-            if (event.target === editModal) {
-                closeEditModal();
-            }
+      });
+
+      const detailModal = document.getElementById("detailReportModal");
+      const detailModalContent = detailModal.querySelector(".modal-content");
+
+      // GANTI FUNGSI openDetailModal LAMA DENGAN FUNGSI BARU INI
+      function openDetailModal(reportData) {
+        const report = JSON.parse(reportData);
+
+        document.getElementById(
+          "detail-foto"
+        ).src = `/uploads/${report.foto_barang}`;
+        document.getElementById("detail-nama-barang").textContent =
+          report.nama_barang;
+
+        // Mengisi informasi Pelapor (penting untuk admin)
+        document.getElementById("detail-pelapor").textContent = report.User
+          ? report.User.nama
+          : "Tidak diketahui";
+
+        document.getElementById("detail-lokasi").textContent = report.lokasi;
+        document.getElementById("detail-deskripsi").textContent =
+          report.deskripsi;
+
+        document.getElementById("detail-tanggal").textContent = new Date(
+          report.createdAt || Date.now()
+        ).toLocaleDateString("id-ID", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
         });
 
-        const detailModal = document.getElementById('detailReportModal');
-        const detailModalContent = detailModal.querySelector('.modal-content');
+        const statusBadge = document.getElementById("detail-status-badge");
+        statusBadge.textContent = report.status;
+        statusBadge.className =
+          "px-3 py-1.5 rounded-full text-sm font-semibold text-white"; // Reset class
+        if (report.status === "Ditemukan" || report.status === "Claimed") {
+          statusBadge.classList.add("bg-green-500");
+        } else if (
+          report.status === "On progress" ||
+          report.status === "Pending"
+        ) {
+          statusBadge.classList.add("bg-yellow-500");
+        } else {
+          statusBadge.classList.add("bg-red-500");
+        }
 
-       // GANTI FUNGSI openDetailModal LAMA DENGAN FUNGSI BARU INI
-function openDetailModal(reportData) {
-    const report = JSON.parse(reportData);
-    
-    document.getElementById('detail-foto').src = `/uploads/${report.foto_barang}`;
-    document.getElementById('detail-nama-barang').textContent = report.nama_barang;
-    
-    // Mengisi informasi Pelapor (penting untuk admin)
-    document.getElementById('detail-pelapor').textContent = report.User ? report.User.nama : 'Tidak diketahui';
-    
-    document.getElementById('detail-lokasi').textContent = report.lokasi;
-    document.getElementById('detail-deskripsi').textContent = report.deskripsi;
-    
-    document.getElementById('detail-tanggal').textContent = new Date(report.createdAt || Date.now()).toLocaleDateString('id-ID', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
+        const detailModal = document.getElementById("detailReportModal");
+        const detailModalContent = detailModal.querySelector(".modal-content");
 
-    const statusBadge = document.getElementById('detail-status-badge');
-    statusBadge.textContent = report.status;
-    statusBadge.className = 'px-3 py-1.5 rounded-full text-sm font-semibold text-white'; // Reset class
-    if (report.status === 'Ditemukan' || report.status === 'Claimed') {
-        statusBadge.classList.add('bg-green-500');
-    } else if (report.status === 'On progress' || report.status === 'Pending') {
-        statusBadge.classList.add('bg-yellow-500');
-    } else {
-        statusBadge.classList.add('bg-red-500');
-    }
+        detailModal.classList.remove("hidden");
+        setTimeout(() => {
+          detailModalContent.classList.remove("scale-95", "opacity-0");
+        }, 50);
+      }
 
-    const detailModal = document.getElementById('detailReportModal');
-    const detailModalContent = detailModal.querySelector('.modal-content');
+      function closeDetailModal() {
+        detailModalContent.classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          detailModal.classList.add("hidden");
+        }, 300);
+      }
 
-    detailModal.classList.remove('hidden');
-    setTimeout(() => {
-        detailModalContent.classList.remove('scale-95', 'opacity-0');
-    }, 50);
+      detailModal.addEventListener("click", (event) => {
+        if (event.target === detailModal) closeDetailModal();
+      });
+
+      // Script untuk Contact Modal ditambahkan
+      const contactModal = document.getElementById("contactModal");
+      const contactContent = contactModal.querySelector(".modal-content");
+
+      function openContactModal(nama, noHp, email) {
+        document.getElementById("ownerName").innerText = nama || "-";
+        document.getElementById("ownerPhone").innerText = noHp || "-";
+        document.getElementById("ownerEmail").innerText = email || "-";
+        document.getElementById("waLink").href = noHp
+          ? `https://wa.me/${noHp.replace(/\D/g, "")}`
+          : "#";
+
+        contactModal.classList.remove("hidden");
+        setTimeout(() => {
+          contactContent.classList.remove("scale-95", "opacity-0");
+        }, 50);
+      }
+
+      function closeContactModal() {
+        contactContent.classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          contactModal.classList.add("hidden");
+        }, 300);
+      }
+
+      contactModal.addEventListener("click", (e) => {
+        if (e.target === contactModal) closeContactModal();
+      });
+
+      // Function untuk membuka modal Tolak Claim
+function openRejectClaimModal(id_laporan) {
+  document.getElementById('rejectClaimModal').classList.remove('hidden');
+  document.getElementById('rejectClaimForm').dataset.idLaporan = id_laporan;
 }
 
-        function closeDetailModal() {
-            detailModalContent.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                detailModal.classList.add('hidden');
-            }, 300);
-        }
-        
-        detailModal.addEventListener('click', (event) => {
-            if (event.target === detailModal) closeDetailModal();
-        });
+// Function untuk menutup modal Tolak Claim
+function closeRejectClaimModal() {
+  document.getElementById('rejectClaimModal').classList.add('hidden');
+}
 
-        // Script untuk Contact Modal ditambahkan
-        const contactModal = document.getElementById("contactModal");
-        const contactContent = contactModal.querySelector(".modal-content");
+// Detect when user selects "Alasan lainnya" in the dropdown
+document.getElementById('alasan').addEventListener('change', function () {
+  const alasanLainnyaContainer = document.getElementById('alasanLainnyaContainer');
+  const submitButton = document.getElementById('submitRejectClaim');
 
-        function openContactModal(nama, noHp, email) {
-            document.getElementById("ownerName").innerText = nama || "-";
-            document.getElementById("ownerPhone").innerText = noHp || "-";
-            document.getElementById("ownerEmail").innerText = email || "-";
-            document.getElementById("waLink").href = noHp ? `https://wa.me/${noHp.replace(/\D/g, '')}` : "#";
+  // Show the "Alasan lainnya" field if selected
+  if (this.value === 'Alasan lainnya') {
+    alasanLainnyaContainer.classList.remove('hidden');
+  } else {
+    alasanLainnyaContainer.classList.add('hidden');
+    document.getElementById('alasanLain').value = ''; // Reset the field
+  }
 
-            contactModal.classList.remove("hidden");
-            setTimeout(() => {
-                contactContent.classList.remove("scale-95", "opacity-0");
-            }, 50);
-        }
+  // Enable the submit button if an alasan is selected
+  if (this.value) {
+    submitButton.disabled = false;
+  } else {
+    submitButton.disabled = true;
+  }
+});
 
-        function closeContactModal() {
-            contactContent.classList.add("scale-95", "opacity-0");
-            setTimeout(() => {
-                contactModal.classList.add("hidden");
-            }, 300);
-        }
+// Handle the form submission to update the claim and report status
+document.getElementById('rejectClaimForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
 
-        contactModal.addEventListener("click", (e) => {
-            if (e.target === contactModal) closeContactModal();
-        });
+  const id_laporan = this.dataset.idLaporan;
+  const alasan = document.getElementById('alasan').value;
+  const alasanLain = document.getElementById('alasanLain').value;
+
+  const response = await fetch(`/mahasiswa/my-reports/reject-claim/${id_laporan}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      alasan: alasan === 'Alasan lainnya' ? alasanLain : alasan
+    })
+  });
+
+  const data = await response.json();
+
+  if (data.success) {
+    // Update the status on the page
+    Swal.fire('Success', 'Claim has been rejected successfully.', 'success').then(() => {
+      window.location.reload(); // Reload the page after success
+    });
+  } else {
+    Swal.fire('Error', 'There was an error rejecting the claim.', 'error');
+  }
+});
+
     </script>
-</body>
+  </body>
 </html>
