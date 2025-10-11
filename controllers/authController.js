@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
   try {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ msg: "Email sudah terdaftar." });
+      return res.status(401).render("register", { error: "Email sudah terdaftar." });
     }
 
     const salt = await bcrypt.genSalt(10);

@@ -535,6 +535,7 @@
 
 
             <button
+              id="registerBtn"
               type="submit"
               class="w-full text-white py-4 px-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:ring-4 focus:ring-[#f0fdf4] focus:outline-none bg-gradient-to-r from-[#16a34a] to-[#15803d] hover:from-[#15803d] hover:to-[#166534]"
             >
@@ -610,6 +611,46 @@
         </div>
       </div>
     </div>
+    <script>
+      // add loading state to register button on submit
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('registerForm');
+        const btn = document.getElementById('registerBtn');
+        if (!form || !btn) return;
+
+        form.addEventListener('submit', function (e) {
+          // let browser handle invalid fields
+          if (!form.checkValidity()) return;
+
+          // prevent double submit
+          if (btn.disabled) {
+            e.preventDefault();
+            return;
+          }
+
+          // set loading
+          btn.disabled = true;
+          btn.setAttribute('aria-busy', 'true');
+          btn.dataset.original = btn.innerHTML;
+          btn.innerHTML = `
+            <span class="flex items-center justify-center gap-2">
+              <svg class="animate-spin w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              Memproses...
+            </span>`;
+        });
+
+        // optional: restore function if needed from client-side (AJAX)
+        window.restoreRegisterButton = function () {
+          if (!btn) return;
+          btn.disabled = false;
+          btn.removeAttribute('aria-busy');
+          if (btn.dataset.original) btn.innerHTML = btn.dataset.original;
+        };
+      });
+    </script>
 
     <script>
       // Dark mode functionality

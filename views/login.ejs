@@ -88,7 +88,8 @@
               Silakan masuk ke akun Anda untuk melanjutkan
             </p>
           </div>
-          <!-- Pop up notification (sukses / error) -->
+
+          <!-- pop up notifications: server-side messages -->
           <% if (typeof error !== 'undefined') { %>
             <div id="popup-error" class="mb-4 px-4 py-3 rounded-xl bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 font-semibold shadow">
               <%= error %>
@@ -100,9 +101,10 @@
               }, 3500);
             </script>
           <% } %>
-          <% if (typeof msg !== 'undefined') { %>
+
+          <% if (typeof success !== 'undefined') { %>
             <div id="popup-success" class="mb-4 px-4 py-3 rounded-xl bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 font-semibold shadow">
-              <%= msg %>
+              <%= success %>
             </div>
             <script>
               setTimeout(() => {
@@ -111,6 +113,7 @@
               }, 3500);
             </script>
           <% } %>
+
           <form action="/login" method="POST" class="space-y-6">
             <div class="space-y-2">
               <label
@@ -258,7 +261,6 @@
             </div>
 
             <button
-              id="loginBtn"
               type="submit"
               class="w-full bg-gradient-to-r from-[#16a34a] to-[#15803d] hover:from-[#15803d] hover:to-[#166534] text-white py-4 px-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:ring-4 focus:ring-[#f0fdf4] focus:outline-none"
             >
@@ -371,47 +373,6 @@
         showIcon.style.display = "inline";
         hideIcon.style.display = "none";
       });
-
-      // Loading state for login button
-      (function () {
-        const form = document.querySelector('form[action="/login"]');
-        const btn = document.getElementById('loginBtn');
-        if (!form || !btn) return;
-
-        form.addEventListener('submit', function (e) {
-          // If form invalid, let browser show validation UI and do not set loading
-          if (!form.checkValidity()) {
-            return;
-          }
-          // prevent double handling
-          if (btn.disabled) {
-            e.preventDefault();
-            return;
-          }
-
-          // set loading
-          btn.disabled = true;
-          btn.setAttribute('aria-busy', 'true');
-          btn.dataset.original = btn.innerHTML;
-          btn.innerHTML = `
-            <span class="flex items-center justify-center gap-2">
-              <svg class="animate-spin w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-              </svg>
-              Memproses...
-            </span>`;
-        });
-
-        // Optional: if you later want to re-enable button from client (e.g. after AJAX failure),
-        // call restoreLoginButton()
-        window.restoreLoginButton = function () {
-          if (!btn) return;
-          btn.disabled = false;
-          btn.removeAttribute('aria-busy');
-          if (btn.dataset.original) btn.innerHTML = btn.dataset.original;
-        };
-      })();
     </script>
     <script src="http://localhost:35730/livereload.js?snipver=1"></script>
 
