@@ -94,6 +94,30 @@
             </p>
           </div>
 
+          <!-- Pop up notification (sukses / error) -->
+          <% if (typeof error !== 'undefined') { %>
+            <div id="popup-error" class="mb-4 px-4 py-3 rounded-xl bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300 font-semibold shadow">
+              <%= error %>
+            </div>
+            <script>
+              setTimeout(() => {
+                const el = document.getElementById('popup-error');
+                if (el) el.style.display = 'none';
+              }, 3500);
+            </script>
+          <% } %>
+          <% if (typeof success !== 'undefined') { %>
+            <div id="popup-success" class="mb-4 px-4 py-3 rounded-xl bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 font-semibold shadow">
+              <%= success %>
+            </div>
+            <script>
+              setTimeout(() => {
+                const el = document.getElementById('popup-success');
+                if (el) el.style.display = 'none';
+              }, 3500);
+            </script>
+          <% } %>
+
           <form id="registerForm" action="/register" method="POST" class="space-y-6">
             <div class="space-y-2">
               <label
