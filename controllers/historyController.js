@@ -7,6 +7,7 @@ const { Op } = require("sequelize");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const libre = require("libreoffice-convert");
+const { exec } = require("child_process");
 
 
 exports.getDoneReports = async (req, res) => {
@@ -92,127 +93,131 @@ exports.getReportHistoryById = async (req, res) => {
 
 exports.downloadReportPdf = async (req, res) => {
   try {
-    const { id } = req.params;
-    const userEmail = req.user?.email;
- const laporan = await Laporan.findOne({
+    const id = req.params.id;
+
+    // 🔍 Ambil data laporan
+    const laporan = await Laporan.findOne({
       where: { id_laporan: id, status: "Done" },
-      include: [
-        {
-          model: User,
-          attributes: ["nama", "email", "no_telepon", "alamat"],
-          where: userEmail ? { email: userEmail } : undefined,
-          required: false,
-        },
-      ],
+      include: [{ model: User, attributes: ["nama", "email", "no_telepon", "alamat"] }],
     });
 
+    if (!laporan) return res.status(404).send("Data laporan tidak ditemukan.");
 
-    if (!laporan) {
-      return res.status(404).json({ message: "Laporan tidak ditemukan" });
-    }
-
-
-    // 2. Load template docx
-    const templatePath = path.join(__dirname, ".../templates/templateya_fixed.docx");
+    // 📄 Path template
+    const templatePath = path.join(__dirname, "../src/templates/LaporanKehilangan.docx");
     if (!fs.existsSync(templatePath)) {
-      console.error("Template file not found:", templatePath);
-      return res.status(500).json({ message: "Template file tidak ditemukan" });
+      console.error("❌ Template tidak ditemukan:", templatePath);
+      return res.status(500).send("Template file tidak ditemukan.");
     }
 
+    console.log("✅ Template ditemukan:", templatePath);
 
-    const content = fs.readFileSync(templatePath, "binary");
-    const zip = new PizZip(content);
+    // 📂 Siapkan folder temp
+    const tempDir = path.join(process.cwd(), "temp");
+    if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
 
+    const outputDocx = path.join(tempDir, `laporan_${id}.docx`);
+    const outputPdf = path.join(tempDir, `laporan_${id}.pdf`);
 
-    // 3. Init docxtemplater
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-      nullGetter: () => "",
-    });
-
-
-    // 4. Data untuk template
-    const templateData = {
-      id_laporan: laporan.id_laporan || "",
-      nama_barang: laporan.nama_barang || "",
-      jenis_laporan: laporan.jenis_laporan || "",
-      status: laporan.status || "",
-      tanggal_kejadian: laporan.tanggal_kejadian
-        ? new Date(laporan.tanggal_kejadian).toLocaleDateString("id-ID")
-        : "",
-      lokasi: laporan.lokasi || "",
-      tanggal_laporan: laporan.tanggal_laporan
-        ? new Date(laporan.tanggal_laporan).toLocaleDateString("id-ID")
-        : "",
-      deskripsi: laporan.deskripsi || "",
-      tanggal_penyerahan: laporan.tanggal_penyerahan
-        ? new Date(laporan.tanggal_penyerahan).toLocaleDateString("id-ID")
-        : "",
-      lokasi_penyerahan: laporan.lokasi_penyerahan || "",
-      pengklaim: laporan.pengklaim || "",
-      no_hp_pengklaim: laporan.no_hp_pengklaim || "",
-      user_nama: laporan.User?.nama || "",
-      user_email: laporan.User?.email || "",
-      user_alamat: laporan.User?.alamat || "",
-      user_telp: laporan.User?.no_telepon || "",
+    // 🧾 Data untuk diisi ke template
+    const data = {
+      id_laporan: laporan.id_laporan || "-",
+      jenis_laporan: laporan.jenis_laporan || "-",
+      nama_barang: laporan.nama_barang || "-",
+      status: laporan.status || "-",
+      tanggal_kejadian: laporan.tanggal_kejadian 
+        ? new Date(laporan.tanggal_kejadian).toLocaleDateString("id-ID") 
+        : "-",
+      lokasi: laporan.lokasi || "-",
+      tanggal_laporan: laporan.tanggal_laporan 
+        ? new Date(laporan.tanggal_laporan).toLocaleDateString("id-ID") 
+        : "-",
+      deskripsi: laporan.deskripsi || "-",
+      tanggal_penyerahan: laporan.tanggal_penyerahan 
+        ? new Date(laporan.tanggal_penyerahan).toLocaleDateString("id-ID") 
+        : "-",
+      lokasi_penyerahan: laporan.lokasi_penyerahan || "-",
+      pengklaim: laporan.pengklaim || "-",
+      no_hp_pengklaim: laporan.no_hp_pengklaim || "-",
+      user_nama: laporan.User?.nama || "-",
+      user_email: laporan.User?.email || "-",
+      user_alamat: laporan.User?.alamat || "-",
+      user_telp: laporan.User?.no_telepon || "-",
     };
 
+    console.log("🧾 Data untuk template:", data);
 
-    console.log("Template data:", templateData);
-
-
-    // 5. Render docx
-    try {
-      doc.render(templateData);
-    } catch (err) {
-      console.error("Docxtemplater render error:", err);
-      return res.status(500).json({
-        message: "Template bermasalah, cek tag {{ }} di file docx",
-        details: err.message,
-      });
-    }
-
-
-    // 6. Generate DOCX buffer
-    let buf;
-    try {
-      buf = doc.getZip().generate({ type: "nodebuffer" });
-    } catch (err) {
-      console.error("Document generation error:", err);
- return res.status(500).json({ message: "Gagal generate dokumen" });
-    }
-
-
-    // 7. Convert DOCX → PDF pakai LibreOffice
-    let pdfBuf;
-    try {
-      pdfBuf = await new Promise((resolve, reject) => {
-        libre.convert(buf, ".pdf", undefined, (err, done) => {
-          if (err) reject(err);
-          else resolve(done);
-        });
-      });
-    } catch (err) {
-      console.error("LibreOffice conversion error:", err);
-      return res.status(500).json({
-        message: "Gagal convert ke PDF. Pastikan LibreOffice terinstall dan dapat diakses",
-      });
-    }
-
-
-    // 8. Kirim PDF ke client
-    const filename = `laporan-${laporan.id_laporan}.pdf`;
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    res.setHeader("Content-Length", pdfBuf.length);
-    res.end(pdfBuf);
-  } catch (error) {
-    console.error("PDF generation error:", error);
-    res.status(500).json({
-      message: "Error generating PDF",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    // 🧠 Isi template DOCX pakai Docxtemplater
+    const content = fs.readFileSync(templatePath, "binary");
+    const zip = new PizZip(content);
+    
+    // 🔥 KUNCI PENTING: Ubah delimiter jadi double braces
+    const doc = new Docxtemplater(zip, { 
+      paragraphLoop: true, 
+      linebreaks: true,
+      delimiters: {
+        start: '{{',  // Pakai double curly braces
+        end: '}}'
+      },
+      nullGetter: () => "-"
     });
+
+    try {
+      doc.render(data);
+    } catch (renderError) {
+      console.error("❌ Error saat render template:", renderError);
+      
+      if (renderError.properties && renderError.properties.errors) {
+        console.error("Detail errors:", renderError.properties.errors);
+      }
+      
+      return res.status(500).send("Gagal mengisi template. Periksa placeholder di template Word.");
+    }
+
+    const buf = doc.getZip().generate({ type: "nodebuffer" });
+    fs.writeFileSync(outputDocx, buf);
+
+    console.log("✅ File DOCX selesai diisi:", outputDocx);
+
+    // 🔄 Konversi DOCX ke PDF pakai LibreOffice
+    const command = `soffice --headless --convert-to pdf --outdir "${tempDir}" "${outputDocx}"`;
+    console.log("⚙️ Menjalankan perintah:", command);
+
+    exec(command, (err, stdout, stderr) => {
+      console.log("📤 LibreOffice stdout:", stdout);
+      console.log("📥 LibreOffice stderr:", stderr);
+
+      if (err) {
+        console.error("❌ Gagal konversi PDF:", err);
+        return res.status(500).send("Gagal mengonversi file ke PDF.");
+      }
+
+      if (!fs.existsSync(outputPdf)) {
+        console.error("❌ File PDF tidak ditemukan:", outputPdf);
+        return res.status(500).send("File PDF gagal dibuat.");
+      }
+
+      console.log("✅ File PDF berhasil dibuat:", outputPdf);
+
+      // 📎 Kirim file PDF ke client
+      res.download(outputPdf, `laporan_${id}.pdf`, (downloadErr) => {
+        if (downloadErr) {
+          console.error("⚠️ Gagal kirim file:", downloadErr);
+        }
+
+        // 🧹 Bersihkan file sementara
+        try {
+          if (fs.existsSync(outputDocx)) fs.unlinkSync(outputDocx);
+          if (fs.existsSync(outputPdf)) fs.unlinkSync(outputPdf);
+          console.log("🧹 File sementara dihapus.");
+        } catch (cleanupErr) {
+          console.warn("⚠️ Tidak bisa hapus file temp:", cleanupErr.message);
+        }
+      });
+    });
+  } catch (error) {
+    console.error("❌ Terjadi kesalahan:", error);
+    res.status(500).send("Terjadi kesalahan internal server.");
   }
 };
 
@@ -327,126 +332,130 @@ exports.getReportHistoryByIdAdmin = async (req, res) => {
 
 exports.downloadReportPdfAdmin = async (req, res) => {
   try {
-    const { id } = req.params;
-    const userEmail = req.user?.email;
- const laporan = await Laporan.findOne({
+    const id = req.params.id;
+
+    // 🔍 Ambil data laporan
+    const laporan = await Laporan.findOne({
       where: { id_laporan: id, status: "Done" },
-      include: [
-        {
-          model: User,
-          attributes: ["nama", "email", "no_telepon", "alamat"],
-          where: userEmail ? { email: userEmail } : undefined,
-          required: false,
-        },
-      ],
+      include: [{ model: User, attributes: ["nama", "email", "no_telepon", "alamat"] }],
     });
 
+    if (!laporan) return res.status(404).send("Data laporan tidak ditemukan.");
 
-    if (!laporan) {
-      return res.status(404).json({ message: "Laporan tidak ditemukan" });
-    }
-
-
-    // 2. Load template docx
-    const templatePath = path.join(__dirname, "../templates/templateya_fixed.docx");
+    // 📄 Path template
+    const templatePath = path.join(__dirname, "../src/templates/LaporanKehilangan.docx");
     if (!fs.existsSync(templatePath)) {
-      console.error("Template file not found:", templatePath);
-      return res.status(500).json({ message: "Template file tidak ditemukan" });
+      console.error("❌ Template tidak ditemukan:", templatePath);
+      return res.status(500).send("Template file tidak ditemukan.");
     }
 
+    console.log("✅ Template ditemukan:", templatePath);
 
-    const content = fs.readFileSync(templatePath, "binary");
-    const zip = new PizZip(content);
+    // 📂 Siapkan folder temp
+    const tempDir = path.join(process.cwd(), "temp");
+    if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
 
+    const outputDocx = path.join(tempDir, `laporan_${id}.docx`);
+    const outputPdf = path.join(tempDir, `laporan_${id}.pdf`);
 
-    // 3. Init docxtemplater
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-      nullGetter: () => "",
-    });
-
-
-    // 4. Data untuk template
-    const templateData = {
-      id_laporan: laporan.id_laporan || "",
-      nama_barang: laporan.nama_barang || "",
-      jenis_laporan: laporan.jenis_laporan || "",
-      status: laporan.status || "",
-      tanggal_kejadian: laporan.tanggal_kejadian
-        ? new Date(laporan.tanggal_kejadian).toLocaleDateString("id-ID")
-        : "",
-      lokasi: laporan.lokasi || "",
-      tanggal_laporan: laporan.tanggal_laporan
-        ? new Date(laporan.tanggal_laporan).toLocaleDateString("id-ID")
-        : "",
-      deskripsi: laporan.deskripsi || "",
-      tanggal_penyerahan: laporan.tanggal_penyerahan
-        ? new Date(laporan.tanggal_penyerahan).toLocaleDateString("id-ID")
-        : "",
-      lokasi_penyerahan: laporan.lokasi_penyerahan || "",
-      pengklaim: laporan.pengklaim || "",
-      no_hp_pengklaim: laporan.no_hp_pengklaim || "",
-      user_nama: laporan.User?.nama || "",
-      user_email: laporan.User?.email || "",
-      user_alamat: laporan.User?.alamat || "",
-      user_telp: laporan.User?.no_telepon || "",
+    // 🧾 Data untuk diisi ke template
+    const data = {
+      id_laporan: laporan.id_laporan || "-",
+      jenis_laporan: laporan.jenis_laporan || "-",
+      nama_barang: laporan.nama_barang || "-",
+      status: laporan.status || "-",
+      tanggal_kejadian: laporan.tanggal_kejadian 
+        ? new Date(laporan.tanggal_kejadian).toLocaleDateString("id-ID") 
+        : "-",
+      lokasi: laporan.lokasi || "-",
+      tanggal_laporan: laporan.tanggal_laporan 
+        ? new Date(laporan.tanggal_laporan).toLocaleDateString("id-ID") 
+        : "-",
+      deskripsi: laporan.deskripsi || "-",
+      tanggal_penyerahan: laporan.tanggal_penyerahan 
+        ? new Date(laporan.tanggal_penyerahan).toLocaleDateString("id-ID") 
+        : "-",
+      lokasi_penyerahan: laporan.lokasi_penyerahan || "-",
+      pengklaim: laporan.pengklaim || "-",
+      no_hp_pengklaim: laporan.no_hp_pengklaim || "-",
+      user_nama: laporan.User?.nama || "-",
+      user_email: laporan.User?.email || "-",
+      user_alamat: laporan.User?.alamat || "-",
+      user_telp: laporan.User?.no_telepon || "-",
     };
 
+    console.log("🧾 Data untuk template:", data);
 
-    console.log("Template data:", templateData);
-
-
-    // 5. Render docx
-    try {
-      doc.render(templateData);
-    } catch (err) {
-      console.error("Docxtemplater render error:", err);
-      return res.status(500).json({
-        message: "Template bermasalah, cek tag {{ }} di file docx",
-        details: err.message,
-      });
-    }
-
-
-    // 6. Generate DOCX buffer
-    let buf;
-    try {
-      buf = doc.getZip().generate({ type: "nodebuffer" });
-    } catch (err) {
-      console.error("Document generation error:", err);
- return res.status(500).json({ message: "Gagal generate dokumen" });
-    }
-
-
-    // 7. Convert DOCX → PDF pakai LibreOffice
-    let pdfBuf;
-    try {
-      pdfBuf = await new Promise((resolve, reject) => {
-        libre.convert(buf, ".pdf", undefined, (err, done) => {
-          if (err) reject(err);
-          else resolve(done);
-        });
-      });
-    } catch (err) {
-      console.error("LibreOffice conversion error:", err);
-      return res.status(500).json({
-        message: "Gagal convert ke PDF. Pastikan LibreOffice terinstall dan dapat diakses",
-      });
-    }
-
-
-    // 8. Kirim PDF ke client
-    const filename = `laporan-${laporan.id_laporan}.pdf`;
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    res.setHeader("Content-Length", pdfBuf.length);
-    res.end(pdfBuf);
-  } catch (error) {
-    console.error("PDF generation error:", error);
-    res.status(500).json({
-      message: "Error generating PDF",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    // 🧠 Isi template DOCX pakai Docxtemplater
+    const content = fs.readFileSync(templatePath, "binary");
+    const zip = new PizZip(content);
+    
+    // 🔥 KUNCI PENTING: Ubah delimiter jadi double braces
+    const doc = new Docxtemplater(zip, { 
+      paragraphLoop: true, 
+      linebreaks: true,
+      delimiters: {
+        start: '{{',  // Pakai double curly braces
+        end: '}}'
+      },
+      nullGetter: () => "-"
     });
+
+    try {
+      doc.render(data);
+    } catch (renderError) {
+      console.error("❌ Error saat render template:", renderError);
+      
+      if (renderError.properties && renderError.properties.errors) {
+        console.error("Detail errors:", renderError.properties.errors);
+      }
+      
+      return res.status(500).send("Gagal mengisi template. Periksa placeholder di template Word.");
+    }
+
+    const buf = doc.getZip().generate({ type: "nodebuffer" });
+    fs.writeFileSync(outputDocx, buf);
+
+    console.log("✅ File DOCX selesai diisi:", outputDocx);
+
+    // 🔄 Konversi DOCX ke PDF pakai LibreOffice
+    const command = `soffice --headless --convert-to pdf --outdir "${tempDir}" "${outputDocx}"`;
+    console.log("⚙️ Menjalankan perintah:", command);
+
+    exec(command, (err, stdout, stderr) => {
+      console.log("📤 LibreOffice stdout:", stdout);
+      console.log("📥 LibreOffice stderr:", stderr);
+
+      if (err) {
+        console.error("❌ Gagal konversi PDF:", err);
+        return res.status(500).send("Gagal mengonversi file ke PDF.");
+      }
+
+      if (!fs.existsSync(outputPdf)) {
+        console.error("❌ File PDF tidak ditemukan:", outputPdf);
+        return res.status(500).send("File PDF gagal dibuat.");
+      }
+
+      console.log("✅ File PDF berhasil dibuat:", outputPdf);
+
+      // 📎 Kirim file PDF ke client
+      res.download(outputPdf, `laporan_${id}.pdf`, (downloadErr) => {
+        if (downloadErr) {
+          console.error("⚠️ Gagal kirim file:", downloadErr);
+        }
+
+        // 🧹 Bersihkan file sementara
+        try {
+          if (fs.existsSync(outputDocx)) fs.unlinkSync(outputDocx);
+          if (fs.existsSync(outputPdf)) fs.unlinkSync(outputPdf);
+          console.log("🧹 File sementara dihapus.");
+        } catch (cleanupErr) {
+          console.warn("⚠️ Tidak bisa hapus file temp:", cleanupErr.message);
+        }
+      });
+    });
+  } catch (error) {
+    console.error("❌ Terjadi kesalahan:", error);
+    res.status(500).send("Terjadi kesalahan internal server.");
   }
 };
