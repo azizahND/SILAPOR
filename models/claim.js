@@ -35,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
+      status: {
+        type: DataTypes.ENUM("waiting for approval", "rejected"),
+        allowNull: false,
+        defaultValue: "waiting for approval",
+      },
+      alasan: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+      },
     },
     {
       sequelize,

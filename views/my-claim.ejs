@@ -26,9 +26,7 @@
     <%- include('components/navbar') %>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h2 class="text-3xl font-semibold text-gray-800 mb-6">
-        Laporan Diklaim
-      </h2>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-6">Laporan Diklaim</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <% reports.forEach(report => { %>
@@ -49,45 +47,44 @@
                 <%= report.nama_barang %>
               </h3>
             </div>
-            <p
-              class="text-gray-600 text-sm mb-4 line-clamp-3"
-            >
-              <%= report.deskripsi %>
-            </p>
 
             <div class="space-y-3 mb-5">
-              <div
-                class="flex items-center text-sm text-gray-500"
-              >
-                <i class="fas fa-map-marker-alt w-4 h-4 mr-2"></i>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-check-circle w-4 h-4 mr-2 text-green-500"></i>
+                <%= report.Claim.status %>
+              </div>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-map-marker-alt w-4 h-4 mr-2 text-red-500"></i>
                 <%= report.lokasi %>
               </div>
-              <div
-                class="flex items-center text-sm text-gray-500"
-              >
-                <i class="fas fa-user-circle w-4 h-4 mr-2"></i>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-user-circle w-4 h-4 mr-2 text-blue-500"></i>
                 Ditemukan oleh: <%= report.User.nama %>
               </div>
             </div>
 
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+              <%= report.deskripsi %>
+            </p>
+
             <div class="flex gap-4">
               <button
                 type="button"
-                class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
-                data-id="<%= report.id_laporan %>"
-                data-nama="<%= report.nama_barang %>"
-                onclick="openCancelModal(this)"
+                class="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                data-report="<%- encodeURIComponent(JSON.stringify(report)) %>"
+                onclick="openDetailModal(this.dataset.report)"
               >
-                Batal Klaim
+                <i class="fas fa-eye mr-2"></i>Detail
               </button>
 
               <button
                 type="button"
-                class="flex-1 bg-white hover:bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-semibold text-base transition-colors duration-200 shadow-sm"
-                data-report="<%- encodeURIComponent(JSON.stringify(report)) %>"
-                onclick="openDetailModal(this.dataset.report)"
+                class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                data-id="<%= report.id_laporan %>"
+                data-nama="<%= report.nama_barang %>"
+                onclick="openCancelModal(this)"
               >
-                Detail
+                <i class="fas fa-trash-alt mr-2"></i>Batal Klaim
               </button>
             </div>
           </div>
@@ -102,13 +99,9 @@
       role="dialog"
       tabindex="-1"
     >
-      <div
-        class="bg-white rounded-xl shadow-md w-full max-w-md"
-      >
+      <div class="bg-white rounded-xl shadow-md w-full max-w-md">
         <div class="py-3 px-4 border-b border-gray-200">
-          <h3 class="font-bold text-gray-800">
-            Konfirmasi Batal Klaim
-          </h3>
+          <h3 class="font-bold text-gray-800">Konfirmasi Batal Klaim</h3>
         </div>
         <div class="p-4">
           <p class="text-gray-800 mb-4">
@@ -117,9 +110,7 @@
           </p>
 
           <div class="space-y-2">
-            <label
-              class="flex items-center gap-2 text-sm text-gray-700"
-            >
+            <label class="flex items-center gap-2 text-sm text-gray-700">
               <input
                 type="radio"
                 name="alasan"
@@ -128,9 +119,7 @@
               />
               Barang sudah ditemukan
             </label>
-            <label
-              class="flex items-center gap-2 text-sm text-gray-700"
-            >
+            <label class="flex items-center gap-2 text-sm text-gray-700">
               <input
                 type="radio"
                 name="alasan"
@@ -139,9 +128,7 @@
               />
               Ingin klaim laporan lain
             </label>
-            <label
-              class="flex items-center gap-2 text-sm text-gray-700"
-            >
+            <label class="flex items-center gap-2 text-sm text-gray-700">
               <input
                 type="radio"
                 name="alasan"
@@ -150,9 +137,7 @@
               />
               Tidak jadi klaim
             </label>
-            <label
-              class="flex items-start gap-2 text-sm text-gray-700"
-            >
+            <label class="flex items-start gap-2 text-sm text-gray-700">
               <input
                 type="radio"
                 name="alasan"
@@ -170,9 +155,7 @@
             ></textarea>
           </div>
         </div>
-        <div
-          class="flex justify-end gap-2 py-3 px-4 border-t border-gray-200"
-        >
+        <div class="flex justify-end gap-2 py-3 px-4 border-t border-gray-200">
           <button
             type="button"
             class="py-2 px-3 text-sm font-medium rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -200,9 +183,7 @@
       id="detailModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
     >
-      <div
-        class="bg-white p-6 rounded-xl w-full max-w-lg shadow-lg relative"
-      >
+      <div class="bg-white p-6 rounded-xl w-full max-w-lg shadow-lg relative">
         <button
           onclick="closeDetailModal()"
           class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
@@ -210,9 +191,7 @@
           &times;
         </button>
 
-        <h2 class="text-xl font-bold text-gray-800 mb-4">
-          Detail Laporan
-        </h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Detail Laporan</h2>
 
         <div class="space-y-2 text-sm text-gray-700">
           <div class="text-center">
@@ -295,11 +274,8 @@
             btnSubmit.disabled = true;
           }
         });
-    </script>
 
-    <script>
       function openDetailModal(reportData) {
-        
         const report = JSON.parse(decodeURIComponent(reportData));
 
         document.getElementById("detailNamaBarang").innerText =
