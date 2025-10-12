@@ -24,9 +24,10 @@ exports.getDoneReports = async (req, res) => {
       where: whereClause,
       include: [{ model: User }],
     });
+     const user = await User.findOne({ where: { email: req.user.email } });
 
 
-    res.render("user/history", { reports, filterJenis, searchNama });
+    res.render("user/history", { reports, user,filterJenis, searchNama });
   } catch (err) {
     console.error("Error getDoneReports:", err);
     res.status(500).send("Terjadi kesalahan saat mengambil laporan");
@@ -34,20 +35,15 @@ exports.getDoneReports = async (req, res) => {
 };
 
 
-
-
-
-
-
-
 exports.getReportHistoryById = async (req, res) => {
   try {
     const { id } = req.params;
 
-
+     const user = await User.findOne({ where: { email: req.user.email } });
     const report = await Laporan.findOne({
       where: {
         id: id,
+        email: req.user.email,
         status: "Done",
       },
       include: [
@@ -69,6 +65,7 @@ exports.getReportHistoryById = async (req, res) => {
 
     res.render("user/history", {
       title: "Riwayat Laporan",
+      user,
       report,
     });
   } catch (error) {
@@ -79,16 +76,6 @@ exports.getReportHistoryById = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
 
 
 exports.downloadReportPdf = async (req, res) => {
