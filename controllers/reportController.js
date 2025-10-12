@@ -169,15 +169,18 @@ exports.getUserReports = async (req, res) => {
 
 exports.getDashboard = async (req, res) => {
   try {
-    const report = await Laporan.findAll();
-    const reports = await Laporan.findAll({
+    const allReports = await Laporan.findAll();
+    const pendingReports = await Laporan.findAll({
       where: { status: "Waiting for upload verification" },
       include: [{ model: User }],
       order: [["createdAt", "DESC"]],
     });
+    const user = await User.findOne({ where: { email: req.user.email } });
+
     res.render("admin/dashboard", {
-      reports,
-      report,
+      report: allReports,
+      reports: pendingReports,
+      user: user,
     });
   } catch (error) {
     console.error("Error getting all reports:", error);
