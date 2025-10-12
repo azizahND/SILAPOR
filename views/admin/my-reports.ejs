@@ -31,7 +31,7 @@
     <div class="ml-64 p-6">
       <h1 class="text-2xl font-semibold text-gray-800 mb-6">Laporan Saya</h1>
 
-      <% if (typeof success !== 'undefined' && success) { %>
+        <% if (typeof success !== 'undefined' && success) { %>
       <div
         class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center"
       >
@@ -104,8 +104,7 @@
             </div>
             <div>
               <h3 class="text-2xl font-bold text-gray-900">
-                <%= reports.filter(r => r.status === 'Upload verification
-                rejected').length %>
+                <%= reports.filter(r => r.status === 'Upload verification rejected').length %>
               </h3>
               <p class="text-gray-600">Ditolak</p>
             </div>
@@ -171,8 +170,7 @@
               >
                 <i class="fas fa-eye mr-2"></i>Detail
               </button>
-              <% if (report.status === 'Claimed' && report.Claims &&
-              report.Claims.length > 0 ) { %>
+              <% if (report.status === 'Claimed' && report.Claims && report.Claims.length > 0 ) { %>
               <button
                 onclick="openContactModal('<%= report.Claims[0].User.nama %>', '<%= report.Claims[0].User.no_telepon %>', '<%= report.Claims[0].User.email %>')"
                 class="flex-1 bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
@@ -594,43 +592,172 @@
       </div>
     </div>
 
-
-<!-- Modal Tolak Claim -->
-<div id="rejectClaimModal" class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50" role="dialog" tabindex="-1">
-  <div class="bg-white rounded-xl shadow-md w-full max-w-md p-6">
-    <div class="flex justify-between items-center border-b border-gray-200 pb-4">
-      <h3 class="font-bold text-gray-800">Tolak Klaim</h3>
-      <button type="button" onclick="closeRejectClaimModal()" class="text-gray-400 hover:text-gray-600 transition">
-        <i class="fas fa-times fa-lg"></i>
-      </button>
+    <!-- Modal Tolak Claim -->
+    <div
+      id="rejectClaimModal"
+      class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div class="bg-white rounded-xl shadow-md w-full max-w-md p-6">
+        <div
+          class="flex justify-between items-center border-b border-gray-200 pb-4"
+        >
+          <h3 class="font-bold text-gray-800">Tolak Klaim</h3>
+          <button
+            type="button"
+            onclick="closeRejectClaimModal()"
+            class="text-gray-400 hover:text-gray-600 transition"
+          >
+            <i class="fas fa-times fa-lg"></i>
+          </button>
+        </div>
+        <form
+          id="rejectClaimForm"
+          action="/mahasiswa/my-reports/reject-claim"
+          method="POST"
+        >
+          <div class="mt-4">
+            <label for="alasan" class="block text-sm font-medium text-gray-700"
+              >Pilih Alasan Penolakan</label
+            >
+            <select
+              name="alasan"
+              id="alasan"
+              class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 mt-2"
+            >
+              <option value="" disabled selected>Pilih alasan...</option>
+              <option value="Laporan tidak sesuai dengan kenyataan">
+                Laporan tidak sesuai dengan kenyataan
+              </option>
+              <option value="Informasi tidak lengkap">
+                Informasi tidak lengkap
+              </option>
+              <option value="Foto tidak jelas">Foto tidak jelas</option>
+              <option value="Alasan lainnya">Alasan lainnya</option>
+            </select>
+          </div>
+          <div id="alasanLainnyaContainer" class="mt-4 hidden">
+            <label
+              for="alasanLain"
+              class="block text-sm font-medium text-gray-700"
+              >Alasan Lainnya</label
+            >
+            <textarea
+              name="alasanLain"
+              id="alasanLain"
+              rows="3"
+              class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 mt-2"
+              placeholder="Masukkan alasan..."
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              type="button"
+              onclick="closeRejectClaimModal()"
+              class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+            >
+              Tidak
+            </button>
+            <button
+              type="submit"
+              id="submitRejectClaim"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50"
+              disabled
+            >
+              Ya, Tolak Klaim
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    <form id="rejectClaimForm" action="/mahasiswa/my-reports/reject-claim" method="POST">
-      <div class="mt-4">
-        <label for="alasan" class="block text-sm font-medium text-gray-700">Pilih Alasan Penolakan</label>
-        <select name="alasan" id="alasan" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 mt-2">
-          <option value="" disabled selected>Pilih alasan...</option>
-          <option value="Laporan tidak sesuai dengan kenyataan">Laporan tidak sesuai dengan kenyataan</option>
-          <option value="Informasi tidak lengkap">Informasi tidak lengkap</option>
-          <option value="Foto tidak jelas">Foto tidak jelas</option>
-          <option value="Alasan lainnya">Alasan lainnya</option>
-        </select>
-      </div>
-      <div id="alasanLainnyaContainer" class="mt-4 hidden">
-        <label for="alasanLain" class="block text-sm font-medium text-gray-700">Alasan Lainnya</label>
-        <textarea name="alasanLain" id="alasanLain" rows="3" class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 mt-2" placeholder="Masukkan alasan..."></textarea>
-      </div>
-      <div class="flex justify-end space-x-3 mt-6">
-        <button type="button" onclick="closeRejectClaimModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition">Tidak</button>
-        <button type="submit" id="submitRejectClaim" class="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50" disabled>Ya, Tolak Klaim</button>
-      </div>
-    </form>
-  </div>
-</div>
 
-
-
+    <div
+      id="rejectClaimModal"
+      class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
+      role="dialog"
+      tabindex="-1"
+    >
+      <div
+        class="modal-content bg-white rounded-xl shadow-md w-full max-w-md p-6 transform scale-95 opacity-0 transition-all duration-300"
+      >
+        <div
+          class="flex justify-between items-center border-b border-gray-200 pb-4"
+        >
+          <h3 class="font-bold text-gray-800">Tolak Klaim</h3>
+          <button
+            type="button"
+            onclick="closeRejectClaimModal()"
+            class="text-gray-400 hover:text-gray-600 transition"
+          >
+            <i class="fas fa-times fa-lg"></i>
+          </button>
+        </div>
+        <form
+          id="rejectClaimForm"
+          action="/admin/my-reports/reject-claim"
+          method="POST"
+        >
+          <div class="mt-4">
+            <label for="alasan" class="block text-sm font-medium text-gray-700"
+              >Pilih Alasan Penolakan</label
+            >
+            <select
+              name="alasan"
+              id="alasan"
+              class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 mt-2"
+            >
+              <option value="" disabled selected>Pilih alasan...</option>
+              <option value="Laporan tidak sesuai dengan kenyataan">
+                Laporan tidak sesuai dengan kenyataan
+              </option>
+              <option value="Informasi tidak lengkap">
+                Informasi tidak lengkap
+              </option>
+              <option value="Foto tidak jelas">Foto tidak jelas</option>
+              <option value="Alasan lainnya">Alasan lainnya</option>
+            </select>
+          </div>
+          <div id="alasanLainnyaContainer" class="mt-4 hidden">
+            <label
+              for="alasanLain"
+              class="block text-sm font-medium text-gray-700"
+              >Alasan Lainnya</label
+            >
+            <textarea
+              name="alasanLain"
+              id="alasanLain"
+              rows="3"
+              class="w-full px-3 py-2 bg-gray-50 border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 mt-2"
+              placeholder="Masukkan alasan..."
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              type="button"
+              onclick="closeRejectClaimModal()"
+              class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              id="submitRejectClaim"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              Ya, Tolak Klaim
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <script>
+      // Pastikan SweetAlert2 sudah dimuat (misalnya dari CDN)
+
+      // --- UTILITIES & MODAL EDIT/DELETE (TIDAK BERUBAH) ---
+
       function confirmDelete(id_laporan) {
         Swal.fire({
           title: "Apakah Anda yakin?",
@@ -681,7 +808,10 @@
 
       const editModal = document.getElementById("editReportModal");
       const editForm = document.getElementById("editReportForm");
-      const modalContent = editModal.querySelector(".modal-content");
+      // Perhatikan: modalContent di sini mungkin undefined jika Anda tidak menyertakan elemen HTML modal Edit
+      const editModalContent = editModal
+        ? editModal.querySelector(".modal-content")
+        : null;
 
       function openEditModal(reportData) {
         const report = JSON.parse(reportData);
@@ -692,30 +822,42 @@
           "current-foto"
         ).src = `/uploads/${report.foto_barang}`;
         editForm.action = `/admin/reports/update/${report.id_laporan}`;
-        editModal.classList.remove("hidden");
-        setTimeout(() => {
-          modalContent.classList.remove("scale-95", "opacity-0");
-        }, 50);
+
+        if (editModal) {
+          editModal.classList.remove("hidden");
+          setTimeout(() => {
+            if (editModalContent)
+              editModalContent.classList.remove("scale-95", "opacity-0");
+          }, 50);
+        }
       }
 
       function closeEditModal() {
-        modalContent.classList.add("scale-95", "opacity-0");
-        setTimeout(() => {
-          editModal.classList.add("hidden");
-          document.getElementById("edit-foto").value = "";
-        }, 300);
+        if (editModalContent) {
+          editModalContent.classList.add("scale-95", "opacity-0");
+          setTimeout(() => {
+            editModal.classList.add("hidden");
+            document.getElementById("edit-foto").value = "";
+          }, 300);
+        }
       }
 
-      editModal.addEventListener("click", (event) => {
-        if (event.target === editModal) {
-          closeEditModal();
-        }
-      });
+      if (editModal) {
+        editModal.addEventListener("click", (event) => {
+          if (event.target === editModal) {
+            closeEditModal();
+          }
+        });
+      }
+
+      // --- MODAL DETAIL (TIDAK BERUBAH) ---
 
       const detailModal = document.getElementById("detailReportModal");
-      const detailModalContent = detailModal.querySelector(".modal-content");
+      // Perhatikan: detailModalContent di sini mungkin undefined jika Anda tidak menyertakan elemen HTML modal Detail
+      const detailModalContent = detailModal
+        ? detailModal.querySelector(".modal-content")
+        : null;
 
-      // GANTI FUNGSI openDetailModal LAMA DENGAN FUNGSI BARU INI
       function openDetailModal(reportData) {
         const report = JSON.parse(reportData);
 
@@ -724,12 +866,9 @@
         ).src = `/uploads/${report.foto_barang}`;
         document.getElementById("detail-nama-barang").textContent =
           report.nama_barang;
-
-        // Mengisi informasi Pelapor (penting untuk admin)
         document.getElementById("detail-pelapor").textContent = report.User
           ? report.User.nama
           : "Tidak diketahui";
-
         document.getElementById("detail-lokasi").textContent = report.lokasi;
         document.getElementById("detail-deskripsi").textContent =
           report.deskripsi;
@@ -745,7 +884,7 @@
         const statusBadge = document.getElementById("detail-status-badge");
         statusBadge.textContent = report.status;
         statusBadge.className =
-          "px-3 py-1.5 rounded-full text-sm font-semibold text-white"; // Reset class
+          "px-3 py-1.5 rounded-full text-sm font-semibold text-white";
         if (report.status === "Ditemukan" || report.status === "Claimed") {
           statusBadge.classList.add("bg-green-500");
         } else if (
@@ -757,29 +896,36 @@
           statusBadge.classList.add("bg-red-500");
         }
 
-        const detailModal = document.getElementById("detailReportModal");
-        const detailModalContent = detailModal.querySelector(".modal-content");
-
-        detailModal.classList.remove("hidden");
-        setTimeout(() => {
-          detailModalContent.classList.remove("scale-95", "opacity-0");
-        }, 50);
+        if (detailModal) {
+          detailModal.classList.remove("hidden");
+          setTimeout(() => {
+            if (detailModalContent)
+              detailModalContent.classList.remove("scale-95", "opacity-0");
+          }, 50);
+        }
       }
 
       function closeDetailModal() {
-        detailModalContent.classList.add("scale-95", "opacity-0");
-        setTimeout(() => {
-          detailModal.classList.add("hidden");
-        }, 300);
+        if (detailModalContent) {
+          detailModalContent.classList.add("scale-95", "opacity-0");
+          setTimeout(() => {
+            detailModal.classList.add("hidden");
+          }, 300);
+        }
       }
 
-      detailModal.addEventListener("click", (event) => {
-        if (event.target === detailModal) closeDetailModal();
-      });
+      if (detailModal) {
+        detailModal.addEventListener("click", (event) => {
+          if (event.target === detailModal) closeDetailModal();
+        });
+      }
 
-      // Script untuk Contact Modal ditambahkan
+      // --- MODAL CONTACT (TIDAK BERUBAH) ---
+
       const contactModal = document.getElementById("contactModal");
-      const contactContent = contactModal.querySelector(".modal-content");
+      const contactContent = contactModal
+        ? contactModal.querySelector(".modal-content")
+        : null;
 
       function openContactModal(nama, noHp, email) {
         document.getElementById("ownerName").innerText = nama || "-";
@@ -789,83 +935,178 @@
           ? `https://wa.me/${noHp.replace(/\D/g, "")}`
           : "#";
 
-        contactModal.classList.remove("hidden");
-        setTimeout(() => {
-          contactContent.classList.remove("scale-95", "opacity-0");
-        }, 50);
+        if (contactModal) {
+          contactModal.classList.remove("hidden");
+          setTimeout(() => {
+            if (contactContent)
+              contactContent.classList.remove("scale-95", "opacity-0");
+          }, 50);
+        }
       }
 
       function closeContactModal() {
-        contactContent.classList.add("scale-95", "opacity-0");
+        if (contactContent) {
+          contactContent.classList.add("scale-95", "opacity-0");
+          setTimeout(() => {
+            contactModal.classList.add("hidden");
+          }, 300);
+        }
+      }
+
+      if (contactModal) {
+        contactModal.addEventListener("click", (e) => {
+          if (e.target === contactModal) closeContactModal();
+        });
+      }
+
+      // --- MODAL TOLAK KLAIM (PERBAIKAN FUNGSI) ---
+
+      const rejectClaimModal = document.getElementById("rejectClaimModal");
+      const rejectClaimContent = rejectClaimModal
+        ? rejectClaimModal.querySelector(".modal-content")
+        : null;
+      const rejectClaimForm = document.getElementById("rejectClaimForm");
+
+      // Function untuk membuka modal Tolak Claim (menambahkan transisi)
+      function openRejectClaimModal(id_laporan) {
+        if (!rejectClaimModal || !rejectClaimForm) return;
+
+        rejectClaimForm.dataset.idLaporan = id_laporan;
+        // Reset form state dan pastikan tombol submit non-aktif saat dibuka
+        rejectClaimForm.reset();
+        document
+          .getElementById("alasanLainnyaContainer")
+          .classList.add("hidden");
+        document.getElementById("submitRejectClaim").disabled = true;
+
+        rejectClaimModal.classList.remove("hidden");
         setTimeout(() => {
-          contactModal.classList.add("hidden");
+          if (rejectClaimContent)
+            rejectClaimContent.classList.remove("scale-95", "opacity-0");
+        }, 50);
+      }
+
+      // Function untuk menutup modal Tolak Claim (menambahkan transisi)
+      function closeRejectClaimModal() {
+        if (!rejectClaimModal || !rejectClaimContent) return;
+
+        rejectClaimContent.classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+          rejectClaimModal.classList.add("hidden");
+          // Reset form setelah ditutup
+          if (rejectClaimForm) rejectClaimForm.reset();
         }, 300);
       }
 
-      contactModal.addEventListener("click", (e) => {
-        if (e.target === contactModal) closeContactModal();
-      });
+      if (rejectClaimModal) {
+        rejectClaimModal.addEventListener("click", (e) => {
+          if (e.target === rejectClaimModal) closeRejectClaimModal();
+        });
+      }
 
-      // Function untuk membuka modal Tolak Claim
-function openRejectClaimModal(id_laporan) {
-  document.getElementById('rejectClaimModal').classList.remove('hidden');
-  document.getElementById('rejectClaimForm').dataset.idLaporan = id_laporan;
-}
+      // Detect when user selects "Alasan lainnya" in the dropdown
+      const alasanSelect = document.getElementById("alasan");
+      if (alasanSelect) {
+        alasanSelect.addEventListener("change", function () {
+          const alasanLainnyaContainer = document.getElementById(
+            "alasanLainnyaContainer"
+          );
+          const submitButton = document.getElementById("submitRejectClaim");
 
-// Function untuk menutup modal Tolak Claim
-function closeRejectClaimModal() {
-  document.getElementById('rejectClaimModal').classList.add('hidden');
-}
+          const isLainnya = this.value === "Alasan lainnya";
 
-// Detect when user selects "Alasan lainnya" in the dropdown
-document.getElementById('alasan').addEventListener('change', function () {
-  const alasanLainnyaContainer = document.getElementById('alasanLainnyaContainer');
-  const submitButton = document.getElementById('submitRejectClaim');
+          // Tampilkan/sembunyikan kolom alasan lainnya
+          alasanLainnyaContainer.classList.toggle("hidden", !isLainnya);
+          document.getElementById("alasanLain").value = isLainnya
+            ? document.getElementById("alasanLain").value
+            : "";
 
-  // Show the "Alasan lainnya" field if selected
-  if (this.value === 'Alasan lainnya') {
-    alasanLainnyaContainer.classList.remove('hidden');
-  } else {
-    alasanLainnyaContainer.classList.add('hidden');
-    document.getElementById('alasanLain').value = ''; // Reset the field
-  }
+          // Aktifkan tombol submit
+          submitButton.disabled = !this.value;
 
-  // Enable the submit button if an alasan is selected
-  if (this.value) {
-    submitButton.disabled = false;
-  } else {
-    submitButton.disabled = true;
-  }
-});
+          // Jika 'Alasan lainnya' dipilih, tombol hanya aktif jika teksnya terisi
+          if (isLainnya) {
+            const alasanLainTextarea = document.getElementById("alasanLain");
+            const checkLainnya = () => {
+              submitButton.disabled = !alasanLainTextarea.value.trim();
+            };
+            alasanLainTextarea.oninput = checkLainnya;
+            checkLainnya(); // Cek status awal
+          } else {
+            document.getElementById("alasanLain").oninput = null;
+          }
+        });
+      }
 
-// Handle the form submission to update the claim and report status
-document.getElementById('rejectClaimForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
+      // Handle the form submission to update the claim and report status
+      if (rejectClaimForm) {
+        rejectClaimForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-  const id_laporan = this.dataset.idLaporan;
-  const alasan = document.getElementById('alasan').value;
-  const alasanLain = document.getElementById('alasanLain').value;
+          const id_laporan = this.dataset.idLaporan;
+          const alasan = document.getElementById("alasan").value;
+          const alasanLain = document.getElementById("alasanLain").value;
 
-  const response = await fetch(`/mahasiswa/my-reports/reject-claim/${id_laporan}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      alasan: alasan === 'Alasan lainnya' ? alasanLain : alasan
-    })
-  });
+          const submitButton = document.getElementById("submitRejectClaim");
+          const originalText = submitButton.textContent;
 
-  const data = await response.json();
+          // Feedback Loading
+          submitButton.textContent = "Memproses...";
+          submitButton.disabled = true;
 
-  if (data.success) {
-    // Update the status on the page
-    Swal.fire('Success', 'Claim has been rejected successfully.', 'success').then(() => {
-      window.location.reload(); // Reload the page after success
-    });
-  } else {
-    Swal.fire('Error', 'There was an error rejecting the claim.', 'error');
-  }
-});
+          let success = false;
 
+          try {
+            // *** PERBAIKAN UTAMA: Ganti URL dari /mahasiswa menjadi /admin ***
+            const response = await fetch(
+              `/admin/my-reports/reject-claim/${id_laporan}`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  alasan: alasan === "Alasan lainnya" ? alasanLain : alasan,
+                }),
+              }
+            );
+
+            const data = await response.json();
+            success = data.success;
+
+            if (success) {
+              Swal.fire(
+                "Berhasil!",
+                data.message || "Klaim berhasil ditolak.",
+                "success"
+              ).then(() => {
+                window.location.reload();
+              });
+            } else {
+              Swal.fire(
+                "Error",
+                data.message || "Terjadi kesalahan saat menolak klaim.",
+                "error"
+              );
+              closeRejectClaimModal(); // Tutup modal saat error
+            }
+          } catch (error) {
+            console.error("Fetch Error:", error);
+            Swal.fire(
+              "Error",
+              "Terjadi kesalahan jaringan atau server.",
+              "error"
+            );
+            closeRejectClaimModal(); // Tutup modal saat error jaringan
+          } finally {
+            // Kembalikan tombol ke keadaan semula hanya jika tidak terjadi reload (yaitu, jika ada error)
+            if (!success) {
+              submitButton.textContent = originalText;
+              // Aktifkan kembali tombol berdasarkan status form yang di-reset (biasanya disabled)
+              const alasanSelected = document.getElementById("alasan").value;
+              submitButton.disabled = !alasanSelected;
+            }
+          }
+        });
+      }
     </script>
   </body>
 </html>

@@ -66,10 +66,27 @@
             </div>
 
             <div class="space-y-3 mb-5">
-              <div class="flex items-center text-sm text-gray-500">
-                <i class="fas fa-check-circle w-4 h-4 mr-2 text-green-500"></i>
-                <%= report.Claim.status %>
-              </div>
+                <% 
+
+    let statusClass = 'text-gray-500';
+    let iconColorClass = 'text-gray-500'; 
+
+    if (report.Claim.status === 'Waiting for approval') {
+        statusClass = 'text-yellow-600 font-medium';
+        iconColorClass = 'text-yellow-500';
+    } else if (report.Claim.status === 'Rejected') {
+        statusClass = 'text-red-600 font-medium';
+        iconColorClass = 'text-red-500';
+    } else if (report.Claim.status === 'Done') {
+        statusClass = 'text-green-600 font-medium';
+        iconColorClass = 'text-green-500';
+    }
+%>
+
+<div class="flex items-center text-sm <%= statusClass %>">
+    <i class="fas fa-check-circle w-4 h-4 mr-2 <%= iconColorClass %>"></i>
+    <%= report.Claim.status %>
+</div>
               <div class="flex items-center text-sm text-gray-500">
                 <i class="fas fa-map-marker-alt w-4 h-4 mr-2 text-red-500"></i>
                 <%= report.lokasi %>
@@ -78,6 +95,12 @@
                 <i class="fas fa-user-circle w-4 h-4 mr-2 text-blue-500"></i>
                 Ditemukan oleh: <%= report.User.nama %>
               </div>
+              <% if (report.Claim.alasan) { %>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-info-circle w-4 h-4 mr-2 text-red-500"></i>
+                Alasan Penolakan: <%= report.Claim.alasan %>
+              </div>
+              <% } %>
             </div>
 
             <p class="text-gray-600 text-sm mb-4 line-clamp-3">
@@ -131,14 +154,14 @@
             <button
               type="button"
               onclick="closeCancelModal()"
-              class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+              class="flex-1 bg-grey-300 hover:bg-grey-400 text-grey-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
             >
               Tidak
             </button>
             <button
               type="submit"
               id="btnSubmitCancel"
-              class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
+              class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
             >
               Ya, Batalkan Klaim
             </button>
@@ -269,14 +292,15 @@
           <a
             id="waButton"
             target="_blank"
-            class="mr-4 text-center bg-green-500 hover:bg-green-600 text-white py-2.5 px-6 rounded-xl font-semibold text-sm transition-colors duration-200"
+            type="button"
+            class="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-2.5 px-4 rounded-xl font-semibold text-center text-sm transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <i class="fab fa-whatsapp mr-2"></i>Hubungi Penemu
           </a>
           <button
             type="button"
             onclick="closeDetailModal()"
-            class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-xl font-semibold hover:bg-gray-300 transition"
+            class="flex-1 bg-grey-100 hover:bg-grey-200 text-grey-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Tutup
           </button>
@@ -326,13 +350,12 @@
       // Fungsi untuk membuat badge status
       function getStatusBadge(status) {
         let colorClass = "";
-        if (status.includes("Menunggu")) {
+        if (status.includes("Waiting for approval")) {
           colorClass = "bg-yellow-100 text-yellow-800";
-        } else if (status.includes("Diterima")) {
+        } else if (status.includes("Done")) {
           colorClass = "bg-green-100 text-green-800";
         } else if (
-          status.includes("Dibatalkan") ||
-          status.includes("Ditolak")
+          status.includes("Rejected")
         ) {
           colorClass = "bg-red-100 text-red-800";
         } else {

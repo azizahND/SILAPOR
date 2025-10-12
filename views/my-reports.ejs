@@ -443,53 +443,53 @@
 
 
 <script>
-    function confirmDelete(id_laporan) {
-  Swal.fire({
-    title: "Apakah Anda yakin?",
-    text: "Laporan ini akan dihapus secara permanen!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#ef4444",
-    cancelButtonColor: "#6b7280",
-    confirmButtonText: "Ya, hapus!",
-    cancelButtonText: "Batal",
-    buttonsStyling: false,
-    customClass: {
-      confirmButton:
-        "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mr-3",
-      cancelButton:
-        "bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg",
-    },
-  }).then((result) => {
-    if (result.isConfirmed) {
-      fetch(`/mahasiswa/reports/delete/${id_laporan}`, {
-        method: "DELETE",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            Swal.fire({
-              title: "Berhasil!",
-              text: data.message,
-              icon: "success",
-              confirmButtonText: "OK",
-              customClass: {
+     function confirmDelete(id_laporan) {
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Laporan ini akan dihapus secara permanen!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal",
+            buttonsStyling: false,
+            customClass: {
                 confirmButton:
-                  "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg",
-              },
-            }).then(() => {
-              window.location.reload(); // reload halaman setelah OK
-            });
-          } else {
-            Swal.fire("Error", data.message, "error");
-          }
-        })
-        .catch(() => {
-          Swal.fire("Error", "Terjadi kesalahan server", "error");
+                    "bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mr-3",
+                cancelButton:
+                    "bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg",
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/mahasiswa/reports/delete/${id_laporan}`, {
+                    method: "DELETE",
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: "Berhasil!",
+                                text: data.message,
+                                icon: "success",
+                                confirmButtonText: "OK",
+                                customClass: {
+                                    confirmButton:
+                                        "bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg",
+                                },
+                            }).then(() => {
+                                window.location.reload(); // reload halaman setelah OK
+                            });
+                        } else {
+                            Swal.fire("Error", data.message, "error");
+                        }
+                    })
+                    .catch(() => {
+                        Swal.fire("Error", "Terjadi kesalahan server", "error");
+                    });
+            }
         });
     }
-  });
-}
 
 
     const editModal = document.getElementById('editReportModal');
@@ -501,11 +501,11 @@
 
         document.getElementById('edit-nama-barang').value = report.nama_barang;
         document.getElementById('edit-lokasi').value = report.lokasi;
-        document.getElementById('edit-deskripsi').value = report.deskripsi; 
+        document.getElementById('edit-deskripsi').value = report.deskripsi;
         document.getElementById('current-foto').src = `/uploads/${report.foto_barang}`;
-        
+
         editForm.action = `/mahasiswa/reports/update/${report.id_laporan}`;
-        
+
         editModal.classList.remove('hidden');
         setTimeout(() => {
             modalContent.classList.remove('scale-95', 'opacity-0');
@@ -519,7 +519,7 @@
             document.getElementById('edit-foto').value = '';
         }, 300);
     }
-    
+
     editModal.addEventListener('click', (event) => {
         if (event.target === editModal) {
             closeEditModal();
@@ -535,7 +535,7 @@
         document.getElementById('detail-nama-barang').textContent = report.nama_barang;
         document.getElementById('detail-lokasi').textContent = report.lokasi;
         document.getElementById('detail-keterangan').textContent = report.deskripsi;
-        
+
         document.getElementById('detail-tanggal').textContent = new Date(report.createdAt || Date.now()).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
 
         const statusBadge = document.getElementById('detail-status-badge');
@@ -561,132 +561,141 @@
             detailModal.classList.add('hidden');
         }, 300);
     }
-    
+
     detailModal.addEventListener('click', (event) => {
         if (event.target === detailModal) closeDetailModal();
     });
 
-const contactModal = document.getElementById("contactModal");
-const contactContent = contactModal.querySelector(".modal-content");
+    const contactModal = document.getElementById("contactModal");
+    const contactContent = contactModal.querySelector(".modal-content");
 
-function openContactModal(nama, noHp, email) {
-  document.getElementById("ownerName").innerText = nama || "-";
-  document.getElementById("ownerPhone").innerText = noHp || "-";
-  document.getElementById("ownerEmail").innerText = email || "-";
+    function openContactModal(nama, noHp, email) {
+        document.getElementById("ownerName").innerText = nama || "-";
+        document.getElementById("ownerPhone").innerText = noHp || "-";
+        document.getElementById("ownerEmail").innerText = email || "-";
 
-  // update link action
-  document.getElementById("waLink").href = noHp ? `https://wa.me/${noHp}` : "#";
+        // update link action
+        document.getElementById("waLink").href = noHp ? `https://wa.me/${noHp}` : "#";
 
-  contactModal.classList.remove("hidden");
-  setTimeout(() => {
-    contactContent.classList.remove("scale-95", "opacity-0");
-  }, 50);
-}
+        contactModal.classList.remove("hidden");
+        setTimeout(() => {
+            contactContent.classList.remove("scale-95", "opacity-0");
+        }, 50);
+    }
 
-function closeContactModal() {
-  contactContent.classList.add("scale-95", "opacity-0");
-  setTimeout(() => {
-    contactModal.classList.add("hidden");
-  }, 300);
-}
+    function closeContactModal() {
+        contactContent.classList.add("scale-95", "opacity-0");
+        setTimeout(() => {
+            contactModal.classList.add("hidden");
+        }, 300);
+    }
 
-contactModal.addEventListener("click", (e) => {
-  if (e.target === contactModal) closeContactModal();
-});
-
-
-// ... (Kode JavaScript sebelumnya)
-
-const rejectClaimModal = document.getElementById('rejectClaimModal');
-const rejectClaimContent = rejectClaimModal.querySelector('.modal-content');
-const rejectClaimForm = document.getElementById('rejectClaimForm');
-const alasanSelect = document.getElementById('alasan');
-const alasanLainnyaContainer = document.getElementById('alasanLainnyaContainer');
-const submitRejectClaimButton = document.getElementById('submitRejectClaim');
-
-// Function untuk membuka modal Tolak Claim (Tambahkan transisi)
-function openRejectClaimModal(id_laporan) {
-  rejectClaimForm.dataset.idLaporan = id_laporan;
-  // Reset form state
-  alasanSelect.value = "";
-  document.getElementById('alasanLain').value = "";
-  alasanLainnyaContainer.classList.add('hidden');
-  submitRejectClaimButton.disabled = true;
-
-  rejectClaimModal.classList.remove('hidden');
-  setTimeout(() => {
-    rejectClaimContent.classList.remove('scale-95', 'opacity-0');
-  }, 50);
-}
-
-// Function untuk menutup modal Tolak Claim (Tambahkan transisi)
-function closeRejectClaimModal() {
-  rejectClaimContent.classList.add('scale-95', 'opacity-0');
-  setTimeout(() => {
-    rejectClaimModal.classList.add('hidden');
-  }, 300);
-}
-
-rejectClaimModal.addEventListener('click', (e) => {
-  if (e.target === rejectClaimModal) closeRejectClaimModal();
-});
-
-// Detect when user selects "Alasan lainnya" in the dropdown
-alasanSelect.addEventListener('change', function () {
-  // Show the "Alasan lainnya" field if selected
-  if (this.value === 'Alasan lainnya') {
-    alasanLainnyaContainer.classList.remove('hidden');
-  } else {
-    alasanLainnyaContainer.classList.add('hidden');
-    document.getElementById('alasanLain').value = ''; // Reset the field
-  }
-
-  // Enable the submit button if an alasan is selected
-  if (this.value) {
-    submitRejectClaimButton.disabled = false;
-  } else {
-    submitRejectClaimButton.disabled = true;
-  }
-});
-
-// Handle the form submission to update the claim and report status
-rejectClaimForm.addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const id_laporan = this.dataset.idLaporan;
-  const alasan = document.getElementById('alasan').value;
-  const alasanLain = document.getElementById('alasanLain').value;
-  
-  // Disable button saat proses
-  submitRejectClaimButton.textContent = 'Memproses...';
-  submitRejectClaimButton.disabled = true;
-
-  try {
-    const response = await fetch(`/mahasiswa/my-reports/reject-claim/${id_laporan}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        alasan: alasan === 'Alasan lainnya' ? alasanLain : alasan
-      })
+    contactModal.addEventListener("click", (e) => {
+        if (e.target === contactModal) closeContactModal();
     });
 
-    const data = await response.json();
 
-    if (data.success) {
-      Swal.fire('Berhasil', data.message || 'Klaim berhasil ditolak.', 'success').then(() => {
-        window.location.reload(); // Reload the page after success
-      });
-    } else {
-      Swal.fire('Error', data.message || 'Terjadi kesalahan saat menolak klaim.', 'error');
+    // ... (Kode JavaScript sebelumnya)
+
+    const rejectClaimModal = document.getElementById('rejectClaimModal');
+    const rejectClaimContent = rejectClaimModal.querySelector('.modal-content');
+    const rejectClaimForm = document.getElementById('rejectClaimForm');
+    const alasanSelect = document.getElementById('alasan');
+    const alasanLainnyaContainer = document.getElementById('alasanLainnyaContainer');
+    const submitRejectClaimButton = document.getElementById('submitRejectClaim');
+
+    // Function untuk membuka modal Tolak Claim (Tambahkan transisi)
+    function openRejectClaimModal(id_laporan) {
+        rejectClaimForm.dataset.idLaporan = id_laporan;
+        // Reset form state
+        alasanSelect.value = "";
+        document.getElementById('alasanLain').value = "";
+        alasanLainnyaContainer.classList.add('hidden');
+        submitRejectClaimButton.disabled = true;
+
+        rejectClaimModal.classList.remove('hidden');
+        setTimeout(() => {
+            rejectClaimContent.classList.remove('scale-95', 'opacity-0');
+        }, 50);
     }
-  } catch (error) {
-    Swal.fire('Error', 'Terjadi kesalahan jaringan atau server.', 'error');
-  } finally {
-    submitRejectClaimButton.textContent = 'Tolak Klaim';
-    submitRejectClaimButton.disabled = false;
-    closeRejectClaimModal();
-  }
-});
+
+    // Function untuk menutup modal Tolak Claim (Tambahkan transisi)
+    function closeRejectClaimModal() {
+        rejectClaimContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            rejectClaimModal.classList.add('hidden');
+        }, 300);
+    }
+
+    rejectClaimModal.addEventListener('click', (e) => {
+        if (e.target === rejectClaimModal) closeRejectClaimModal();
+    });
+
+    // Detect when user selects "Alasan lainnya" in the dropdown
+    alasanSelect.addEventListener('change', function () {
+        // Show the "Alasan lainnya" field if selected
+        if (this.value === 'Alasan lainnya') {
+            alasanLainnyaContainer.classList.remove('hidden');
+        } else {
+            alasanLainnyaContainer.classList.add('hidden');
+            document.getElementById('alasanLain').value = ''; // Reset the field
+        }
+
+        // Enable the submit button if an alasan is selected
+        if (this.value) {
+            submitRejectClaimButton.disabled = false;
+        } else {
+            submitRejectClaimButton.disabled = true;
+        }
+    });
+
+    // Handle the form submission to update the claim and report status
+    rejectClaimForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const id_laporan = this.dataset.idLaporan;
+        const alasan = document.getElementById('alasan').value;
+        const alasanLain = document.getElementById('alasanLain').value;
+        
+        // Disable button saat proses
+        submitRejectClaimButton.textContent = 'Memproses...';
+        submitRejectClaimButton.disabled = true;
+
+        try {
+            const response = await fetch(`/mahasiswa/my-reports/reject-claim/${id_laporan}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    alasan: alasan === 'Alasan lainnya' ? alasanLain : alasan
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Saat BERHASIL, SweetAlert akan muncul dan memanggil window.location.reload()
+                Swal.fire('Berhasil', data.message || 'Klaim berhasil ditolak.', 'success').then(() => {
+                    window.location.reload(); // Reload the page after success
+                });
+                // TIDAK perlu closeRejectClaimModal() di sini karena halaman akan di-reload
+                
+            } else {
+                // Jika GAGAL, tampilkan error dan kembalikan tombol
+                Swal.fire('Error', data.message || 'Terjadi kesalahan saat menolak klaim.', 'error');
+                closeRejectClaimModal(); // Tutup modal hanya jika ada error
+            }
+        } catch (error) {
+            // Jika terjadi kesalahan jaringan
+            Swal.fire('Error', 'Terjadi kesalahan jaringan atau server.', 'error');
+            closeRejectClaimModal(); // Tutup modal saat error jaringan
+        } finally {
+            // Kembalikan tombol ke keadaan semula jika TIDAK BERHASIL (karena yang berhasil akan reload)
+            if (!response || !response.ok || (response && response.ok && !data.success)) {
+                submitRejectClaimButton.textContent = 'Tolak Klaim';
+                submitRejectClaimButton.disabled = false;
+            }
+        }
+    });
 
 </script>
   </body>

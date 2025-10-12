@@ -16,9 +16,10 @@
     <style>
       body {
         font-family: "Inter", sans-serif;
-      }
-      .gradient-bg {
-        background-image: linear-gradient(to right, #22c55e, #16a34a);
+        background-color: #f3f4f6; /* bg-gray-100 */
+        /* 💡 Perbaikan Utama: Tambahkan padding-left global untuk mengimbangi sidebar w-64 (16rem) yang FIXED */
+        padding-left: 16rem; 
+        min-height: 100vh; /* Pastikan body minimal setinggi viewport */
       }
 
       /* CSS untuk Animasi Modal */
@@ -39,77 +40,103 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100">
-    <%- include('components/navbar') %>
+  <body>
+    
+    <%- include('../components/sidebar') %>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h2 class="text-3xl font-semibold text-gray-800 mb-6">Laporan Diklaim</h2>
+    <main> 
+      <div class="max-w-7xl mx-auto p-8"> 
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6">Laporan Diklaim</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <% reports.forEach(report => { %>
-        <div
-          class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
-        >
-          <div class="relative">
-            <img
-              src="/uploads/<%= report.foto_barang %>"
-              alt="<%= report.nama_barang %>"
-              class="w-full h-48 object-cover"
-            />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <% reports.forEach(report => { %>
+          <div
+            class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
+          >
+            <div class="relative">
+              <img
+                src="/uploads/<%= report.foto_barang %>"
+                alt="<%= report.nama_barang %>"
+                class="w-full h-48 object-cover"
+              />
+            </div>
+
+            <div class="p-6">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="text-xl font-bold text-gray-900">
+                  <%= report.nama_barang %>
+                </h3>
+              </div>
+
+              <div class="space-y-3 mb-5">
+                <% 
+
+    let statusClass = 'text-gray-500';
+    let iconColorClass = 'text-gray-500'; 
+
+    if (report.Claim.status === 'Waiting for approval') {
+        statusClass = 'text-yellow-600 font-medium';
+        iconColorClass = 'text-yellow-500';
+    } else if (report.Claim.status === 'Rejected') {
+        statusClass = 'text-red-600 font-medium';
+        iconColorClass = 'text-red-500';
+    } else if (report.Claim.status === 'Done') {
+        statusClass = 'text-green-600 font-medium';
+        iconColorClass = 'text-green-500';
+    }
+%>
+
+<div class="flex items-center text-sm <%= statusClass %>">
+    <i class="fas fa-check-circle w-4 h-4 mr-2 <%= iconColorClass %>"></i>
+    <%= report.Claim.status %>
+</div>
+                <div class="flex items-center text-sm text-gray-500">
+                  <i class="fas fa-map-marker-alt w-4 h-4 mr-2 text-red-500"></i>
+                  <%= report.lokasi %>
+                </div>
+                <div class="flex items-center text-sm text-gray-500">
+                  <i class="fas fa-user-circle w-4 h-4 mr-2 text-blue-500"></i>
+                  Ditemukan oleh: <%= report.User.nama %>
+                </div>
+                <% if (report.Claim.alasan) { %>
+                <div class="flex items-center text-sm text-gray-500">
+                  <i class="fas fa-info-circle w-4 h-4 mr-2 text-red-500"></i>
+                  Alasan Penolakan: <%= report.Claim.alasan %>
+                </div>
+                <% } %>
+              </div>
+
+              <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                <%= report.deskripsi %>
+              </p>
+
+              <div class="flex gap-4">
+                <button
+                  type="button"
+                  class="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                  data-report="<%- encodeURIComponent(JSON.stringify(report)) %>"
+                  onclick="openDetailModal(this.dataset.report)"
+                >
+                  <i class="fas fa-eye mr-2"></i>Detail
+                </button>
+
+                <button
+                  type="button"
+                  class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                  data-id="<%= report.id_laporan %>"
+                  data-nama="<%= report.nama_barang %>"
+                  onclick="openCancelModal(this)"
+                >
+                  <i class="fas fa-trash-alt mr-2"></i>Batal Klaim
+                </button>
+              </div>
+            </div>
           </div>
-
-          <div class="p-6">
-            <div class="flex items-start justify-between mb-3">
-              <h3 class="text-xl font-bold text-gray-900">
-                <%= report.nama_barang %>
-              </h3>
-            </div>
-
-            <div class="space-y-3 mb-5">
-              <div class="flex items-center text-sm text-gray-500">
-                <i class="fas fa-check-circle w-4 h-4 mr-2 text-green-500"></i>
-                <%= report.Claim.status %>
-              </div>
-              <div class="flex items-center text-sm text-gray-500">
-                <i class="fas fa-map-marker-alt w-4 h-4 mr-2 text-red-500"></i>
-                <%= report.lokasi %>
-              </div>
-              <div class="flex items-center text-sm text-gray-500">
-                <i class="fas fa-user-circle w-4 h-4 mr-2 text-blue-500"></i>
-                Ditemukan oleh: <%= report.User.nama %>
-              </div>
-            </div>
-
-            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-              <%= report.deskripsi %>
-            </p>
-
-            <div class="flex gap-4">
-              <button
-                type="button"
-                class="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
-                data-report="<%- encodeURIComponent(JSON.stringify(report)) %>"
-                onclick="openDetailModal(this.dataset.report)"
-              >
-                <i class="fas fa-eye mr-2"></i>Detail
-              </button>
-
-              <button
-                type="button"
-                class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
-                data-id="<%= report.id_laporan %>"
-                data-nama="<%= report.nama_barang %>"
-                onclick="openCancelModal(this)"
-              >
-                <i class="fas fa-trash-alt mr-2"></i>Batal Klaim
-              </button>
-            </div>
-          </div>
+          <% }) %>
         </div>
-        <% }) %>
       </div>
-    </div>
-
+    </main>
+    
     <div
       id="cancelModal"
       class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4"
@@ -131,14 +158,14 @@
             <button
               type="button"
               onclick="closeCancelModal()"
-              class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition"
+              class="flex-1 bg-grey-300 hover:bg-grey-400 text-grey-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
             >
               Tidak
             </button>
             <button
               type="submit"
               id="btnSubmitCancel"
-              class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
+              class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
             >
               Ya, Batalkan Klaim
             </button>
@@ -269,14 +296,14 @@
           <a
             id="waButton"
             target="_blank"
-            class="mr-4 text-center bg-green-500 hover:bg-green-600 text-white py-2.5 px-6 rounded-xl font-semibold text-sm transition-colors duration-200"
+            class="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-2.5 px-4 rounded-xl font-semibold text-center text-sm transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <i class="fab fa-whatsapp mr-2"></i>Hubungi Penemu
           </a>
           <button
             type="button"
             onclick="closeDetailModal()"
-            class="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-xl font-semibold hover:bg-gray-300 transition"
+            class="flex-1 bg-grey-100 hover:bg-grey-200 text-grey-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Tutup
           </button>
@@ -294,7 +321,6 @@
         const modalContent = modal.querySelector(".modal-content");
 
         document.getElementById("modalItemName").textContent = nama;
-        // INI SUDAH BENAR UNTUK PEMBATALAN KLAIM OLEH PENGKLAIM
         document.getElementById("cancelForm").action = "/admin/cancel/" + id;
 
         // Tampilkan modal dengan animasi
@@ -318,20 +344,17 @@
         }, 300);
       }
 
-      // Catatan: Logika alasan (radio/textarea) telah dihapus karena tidak diperlukan lagi.
-
       // --- Fungsi Pembantu untuk Modal Detail ---
 
       // Fungsi untuk membuat badge status
       function getStatusBadge(status) {
         let colorClass = "";
-        if (status.includes("Menunggu")) {
+        if (status.includes("Waiting for approval")) {
           colorClass = "bg-yellow-100 text-yellow-800";
-        } else if (status.includes("Diterima")) {
+        } else if (status.includes("Done")) {
           colorClass = "bg-green-100 text-green-800";
         } else if (
-          status.includes("Dibatalkan") ||
-          status.includes("Ditolak")
+          status.includes("Rejected") 
         ) {
           colorClass = "bg-red-100 text-red-800";
         } else {
@@ -358,7 +381,8 @@
         const modal = document.getElementById("detailModal");
         const modalContent = modal.querySelector(".modal-content");
 
-        const statusBadge = getStatusBadge(report.Claim.status);
+        const statusText = report.Claim.status || "Status Tidak Diketahui";
+        const statusBadge = getStatusBadge(statusText);
         const tanggalLaporan = report.tanggal_laporan
           ? formatDate(report.tanggal_laporan)
           : "-";
