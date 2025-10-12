@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn("Claim", "status", {
-      type: Sequelize.ENUM("waiting for approval", "rejected"),
+      type: Sequelize.ENUM("Waiting for approval", "Rejected", "Done"),
       allowNull: false,
       defaultValue: "waiting for approval",
     });

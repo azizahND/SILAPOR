@@ -20,7 +20,7 @@ exports.getMyClaims = async (req, res) => {
       return laporan;
     });
 
-    res.render("my-claim", { reports });
+    res.render("my-claim", { reports, user: req.user });
   } catch (err) {
     console.error("Error getMyClaims:", err);
     res.status(500).send("Terjadi kesalahan");
@@ -47,7 +47,7 @@ exports.getMyClaimsAdmin = async (req, res) => {
       return laporan;
     });
 
-    res.render("admin/my-claim", { reports });
+    res.render("admin/my-claim", { reports, user: req.user });
   } catch (err) {
     console.error("Error getMyClaims:", err);
     res.status(500).send("Terjadi kesalahan");

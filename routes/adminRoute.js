@@ -52,8 +52,19 @@ router.delete(
   reportController.deleteReportAdmin
 );
 
-router.post('/my-reports/reapply-report/:id_laporan', verifyToken, role('admin'),reportController.reapplyReportAdmin);
-router.post('/my-reports/accept-claim/:id_laporan', verifyToken, role('admin'),upload.single('bukti'), reportController.acceptClaimAdmin);
+router.post(
+  "/my-reports/reapply-report/:id_laporan",
+  verifyToken,
+  role("admin"),
+  reportController.reapplyReportAdmin
+);
+router.post(
+  "/my-reports/accept-claim/:id_laporan",
+  verifyToken,
+  role("admin"),
+  upload.single("bukti"),
+  reportController.acceptClaimAdmin
+);
 
 router.get(
   "/verifikasi",
@@ -97,18 +108,63 @@ router.get(
 );
 
 // Admin profile routes
-router.get("/profile", verifyToken, role("admin"), userController.showAdminProfile);
-router.get("/edit-profile", verifyToken, role("admin"), userController.showAdminEditProfile);
-router.post("/update-profile", verifyToken, role("admin"), upload.single("foto"), userController.updateAdminProfile);
+router.get(
+  "/profile",
+  verifyToken,
+  role("admin"),
+  userController.showAdminProfile
+);
+router.get(
+  "/edit-profile",
+  verifyToken,
+  role("admin"),
+  userController.showAdminEditProfile
+);
+router.post(
+  "/update-profile",
+  verifyToken,
+  role("admin"),
+  upload.single("foto"),
+  userController.updateAdminProfile
+);
 
+router.get(
+  "/history",
+  verifyToken,
+  role("admin"),
+  historyController.getDoneReportsAdmin
+);
+router.get(
+  "/history/:id",
+  verifyToken,
+  role("admin"),
+  historyController.getReportHistoryByIdAdmin
+);
+router.get(
+  "/history/download/:id",
+  verifyToken,
+  role("admin"),
+  historyController.downloadReportPdfAdmin
+);
 
-
-router.get("/history", verifyToken, role('admin'), historyController.getDoneReportsAdmin);
-router.get("/history/:id", verifyToken, role('admin'), historyController.getReportHistoryByIdAdmin);
-router.get("/history/download/:id", verifyToken, role('admin'), historyController.downloadReportPdfAdmin);
-
-router.post('/claim', verifyToken, role('admin'), reportController.claimReport);
-router.get("/my-claim", verifyToken, role('admin'), claimController.getMyClaimsAdmin);
-router.post("/my-claim/cancel/:id_laporan", verifyToken, role('admin'), claimController.cancelClaimAdmin);
+router.post("/claim", verifyToken, role("admin"), reportController.claimReport);
+router.get(
+  "/my-claim",
+  verifyToken,
+  role("admin"),
+  claimController.getMyClaimsAdmin
+);
+router.post(
+  "/my-claim/cancel/:id_laporan",
+  verifyToken,
+  role("admin"),
+  claimController.cancelClaimAdmin
+);
+router.post(
+  "/my-reports/reject-claim/:id_laporan",
+  verifyToken,
+  role("admin"),
+  reportController.rejectClaim
+);
 
 module.exports = router;
