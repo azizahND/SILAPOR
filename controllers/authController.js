@@ -245,7 +245,9 @@ exports.showChangePasswordForm = async (req, res) => {
 };
 
 exports.showChangePasswordAdminForm = async (req, res) => {
-  res.render("admin/changePasswordadmin");
+    const user = await User.findOne({ where: { email: req.user.email } });
+
+  res.render("admin/changePasswordadmin", {user} );
 };
 
 const processPasswordChange = async (req, res, viewName) => {
@@ -276,7 +278,10 @@ const processPasswordChange = async (req, res, viewName) => {
     user.password = await bcrypt.hash(password, salt);
     await user.save();
 
-    return res.render(viewName, { success: "Password berhasil diganti." });
+    const userProfil = await User.findOne({ where: { email: req.user.email } });
+
+
+    return res.render(viewName, { success: "Password berhasil diganti." }, userProfil);
   } catch (err) {
     console.error("Change Password Error:", err);
     return res.status(500).send("Server Error");

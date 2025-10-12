@@ -48,47 +48,84 @@
     </button>
 
     <!-- 🏫 Hero Section -->
-    <header
-      class="flex flex-col items-center justify-center text-center px-6 py-24 relative overflow-hidden"
-    >
-      <img
-        src="/images/logo.png"
-        alt="Logo"
-        class="w-28 h-28 mb-6 animate-[float_6s_ease-in-out_infinite]"
-      />
-      <h1
-        class="text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-green-700 to-green-500 dark:from-green-300 dark:to-green-400 bg-clip-text text-transparent mb-4"
-      >
-        Sistem Informasi Laporan Penemuan & Kehilangan
+    <header class="relative bg-white dark:bg-gray-900 py-20 px-6 overflow-hidden">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <!-- Kiri: Teks -->
+    <div class="space-y-6">
+      <p class="text-green-600 dark:text-green-400 font-medium uppercase tracking-wide">
+        Sistem Pelaporan Universitas Andalas
+      </p>
+      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+        <span class="text-gray-900 dark:text-white">Temukan Barang Hilang,</span><br />
+        <span class="text-green-600 dark:text-green-400">Laporkan Penemuan </span>Anda
       </h1>
-      <p
-        class="text-gray-700 dark:text-gray-300 text-lg max-w-2xl leading-relaxed mb-8"
-      >
-        Layanan resmi Universitas Andalas untuk membantu mahasiswa, dosen, dan
-        staf menemukan serta melaporkan barang yang hilang di lingkungan kampus.
+      <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-xl">
+        Platform resmi Universitas Andalas untuk membantu mahasiswa, dosen, dan staf
+        dalam melaporkan dan menemukan barang yang hilang di lingkungan kampus.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-4">
+      <!-- Tombol -->
+      <div class="flex flex-wrap gap-4 mt-6">
         <a
           href="/login"
-          class="bg-gradient-to-r from-[#16a34a] to-[#15803d] hover:from-[#15803d] hover:to-[#166534] text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+          class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
         >
           Masuk Sekarang
         </a>
         <a
           href="/register"
-          class="px-8 py-4 rounded-xl border-2 border-green-600 text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/30 transition-all font-semibold"
+          class="px-8 py-3 rounded-xl border-2 border-green-600 text-green-700 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/30 font-semibold transition"
         >
           Daftar Akun
         </a>
       </div>
 
-      <img
-        src="/images/unand.jpg"
-        alt="Gedung Universitas"
-        class="absolute top-0 left-0 w-full h-full object-cover opacity-10 dark:opacity-20 -z-10"
-      />
-    </header>
+      <!-- Statistik -->
+      <div class="flex flex-wrap gap-8 mt-10">
+      <div>
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">
+          <%= jumlahLaporanSelesai %>+
+        </p>
+        <p class="text-gray-700 dark:text-gray-300">Laporan Selesai</p>
+      </div>
+      <!-- <div>
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">
+          <%= jumlahUnitTerhubung %>+
+        </p>
+        <p class="text-gray-700 dark:text-gray-300">Unit Terhubung</p>
+      </div> -->
+      <div>
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">
+          <%= jumlahMahasiswa %>+
+        </p>
+        <p class="text-gray-700 dark:text-gray-300">Mahasiswa Terbantu</p>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- Kanan: Gambar -->
+    <div class="relative contetn-center">
+      <div class="relative rounded-2xl overflow-hidden shadow-lg">
+        <img
+          src="/images/unand.jpg"
+          alt="Kegiatan Pelaporan"
+          class="w-full h-[400px] object-cover"
+        />
+        <!-- Tombol Play di atas gambar -->
+        
+      </div>
+
+      <!-- Badge melingkar -->
+      <div
+        class="absolute -top-6 -right-6 bg-green-600 text-white rounded-full w-28 h-28 flex items-center justify-center font-semibold text-center leading-tight p-4 shadow-lg rotate-12"
+      >
+        Get it<br />Reported!
+      </div>
+    </div>
+  </div>
+</header>
+
 
     <!-- 💡 Fitur -->
     <section class="px-6 py-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md">
@@ -102,7 +139,7 @@
           class="grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-700 dark:text-gray-300"
         >
           <div
-            class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition"
+            class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition border-2 border-green-600/20"
           >
             <svg
               class="w-10 h-10 mb-4 text-green-600 dark:text-green-400 mx-auto"
@@ -122,7 +159,7 @@
           </div>
 
           <div
-            class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition"
+            class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition border-2 border-green-600/20"
           >
             <svg
               class="w-10 h-10 mb-4 text-green-600 dark:text-green-400 mx-auto"
@@ -142,7 +179,7 @@
           </div>
 
           <div
-            class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition"
+            class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition border-2 border-green-600/20"
           >
             <svg
               class="w-10 h-10 mb-4 text-green-600 dark:text-green-400 mx-auto"
@@ -164,10 +201,12 @@
       </div>
     </section>
 
-   <section class="px-6 py-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md">
-  <div class="max-w-6xl mx-auto text-start">
+   
+
+<section class="px-6 py-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md">
+  <div class="max-w-6xl mx-auto text-center">
     <h2
-      class="text-3xl text-center font-bold text-gray-900 dark:text-white mb-8 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent"
+      class="text-3xl font-bold text-gray-900 mb-10"
     >
       Laporan Penemuan Barang
     </h2>
@@ -175,134 +214,127 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <% laporanPenemuan.forEach(item => { %>
         <div
-          class="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition-all duration-300"
+          class="p-6 bg-white text-start shadow-xl dark:bg-gray-900 rounded-2xl shadow hover:shadow-2xl transition-all duration-300"
         >
           <img
             src="/uploads/<%= item.foto_barang %>"
             alt="<%= item.nama_barang %>"
             class="w-full h-48 object-cover rounded-xl mb-3"
+            onerror="this.src='/img/no-image.png'"
           />
           <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-1">
             <%= item.nama_barang %>
           </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
             Lokasi: <%= item.lokasi %>
           </p>
           <p class="text-sm text-gray-500 dark:text-gray-500 mb-3">
-            Dilaporkan oleh: <%= item.User?.nama || 'Anonim' %>
+            Ditemukan oleh: <%= item.User?.nama || 'Anonim' %>
           </p>
 
-          <!-- Tombol Lihat Detail -->
           <button
-            onclick="openModal('<%= item.id_laporan %>')"
-            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition"
-          >
-            Lihat Detail
-          </button>
+  class="detail-btn px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition"
+  data-nama="<%= item.nama_barang %>"
+  data-lokasi="<%= item.lokasi %>"
+  data-tanggal="<%= item.tanggal_kejadian ? item.tanggal_kejadian.toLocaleDateString('id-ID') : '-' %>"
+  data-deskripsi="<%= item.deskripsi || 'Tidak ada deskripsi' %>"
+  data-foto="/uploads/<%= item.foto_barang %>"
+>
+  Lihat Detail
+</button>
 
-          <!-- Modal -->
-          <div
-            id="modal-<%= item.id_laporan %>"
-            class="fixed inset-0 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
-          >
-            <div
-              class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg w-11/12 md:w-1/2 p-6 relative"
-            >
-              <button
-                onclick="closeModal('<%= item.id_laporan %>')"
-                class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-              >
-                ✖
-              </button>
-
-              <img
-                src="/uploads/<%= item.foto_barang %>"
-                alt="<%= item.nama_barang %>"
-                class="w-full h-64 object-cover rounded-xl mb-4"
-              />
-              <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                <%= item.nama_barang %>
-              </h3>
-              <p class="text-gray-700 dark:text-gray-300 mb-1">
-                <strong>Lokasi:</strong> <%= item.lokasi %>
-              </p>
-              <p class="text-gray-700 dark:text-gray-300 mb-1">
-                <strong>Tanggal Penemuan:</strong>
-                <%= item.tanggal_kejadian?.toLocaleDateString('id-ID') || '-' %>
-              </p>
-              <p class="text-gray-700 dark:text-gray-300 mb-3">
-                <strong>Deskripsi:</strong> <%= item.deskripsi || 'Tidak ada deskripsi' %>
-              </p>
-
-              <!-- Tombol Klaim -->
-              <a
-                href="/login"
-                class="inline-block mt-3 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition"
-              >
-                Klaim Barang
-              </a>
-            </div>
-          </div>
         </div>
       <% }) %>
     </div>
   </div>
 </section>
 
-<script>
-  function openModal(id) {
-    document.getElementById("modal-" + id).classList.remove("hidden");
-  }
-  function closeModal(id) {
-    document.getElementById("modal-" + id).classList.add("hidden");
-  }
-</script>
-
-
-<!-- 🔍 Laporan Kehilangan Barang -->
+<!-- 🏷️ Laporan Kehilangan Barang -->
 <section class="px-6 py-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md">
   <div class="max-w-6xl mx-auto text-center">
     <h2
-      class="text-3xl font-bold text-gray-900 mb-10"
+      class="text-3xl font-bold text-gray-800 mb-10"
     >
       Laporan Kehilangan Barang
     </h2>
 
-    <% if (laporanKehilangan && laporanKehilangan.length > 0) { %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <% laporanKehilangan.forEach(item => { %>
-          <div
-            class="group bg-white dark:bg-gray-900 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
-          >
-            <div class="overflow-hidden">
-              <img
-                src="/uploads/<%= item.foto_barang %>"
-                alt="<%= item.nama_barang %>"
-                class="w-full h-52 object-cover rounded-t-2xl group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% laporanKehilangan.forEach(item => { %>
+        <div
+          class="p-6 bg-white text-start shadow-xl dark:bg-gray-900 rounded-2xl shadow hover:shadow-2xl transition-all duration-300"
+        >
+          <img
+            src="/uploads/<%= item.foto_barang %>"
+            alt="<%= item.nama_barang %>"
+            class="w-full h-48 object-cover rounded-xl mb-3"
+            onerror="this.src='/img/no-image.png'"
+          />
+          <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-1">
+            <%= item.nama_barang %>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Lokasi: <%= item.lokasi %>
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-500 mb-3">
+            Dilaporkan oleh: <%= item.User?.nama || 'Anonim' %>
+          </p>
 
-            <div class="p-5 text-left">
-              <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-1">
-                <%= item.nama_barang %>
-              </h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Lokasi: <span class="font-medium"><%= item.lokasi %></span>
-              </p>
-              <p class="text-sm text-gray-500 dark:text-gray-500">
-                Dilaporkan oleh: <%= item.User?.nama || 'Anonim' %>
-              </p>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    <% } else { %>
-      <p class="text-gray-500 dark:text-gray-400 text-center">
-        Belum ada laporan kehilangan yang tersedia.
-      </p>
-    <% } %>
+          <button
+  class="detail-btn px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition"
+  data-nama="<%= item.nama_barang %>"
+  data-lokasi="<%= item.lokasi %>"
+  data-tanggal="<%= item.tanggal_kejadian ? item.tanggal_kejadian.toLocaleDateString('id-ID') : '-' %>"
+  data-deskripsi="<%= item.deskripsi || 'Tidak ada deskripsi' %>"
+  data-foto="/uploads/<%= item.foto_barang %>"
+>
+  Lihat Detail
+</button>
+
+        </div>
+      <% }) %>
+    </div>
   </div>
 </section>
+
+
+<!-- 🌟 Modal Global -->
+<div
+  id="global-modal"
+  class="fixed inset-0 hidden z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+>
+  <!-- Klik luar buat tutup -->
+  <div
+    class="absolute inset-0"
+    onclick="closeModal()"
+  ></div>
+
+  <!-- Konten Modal -->
+  <div
+    id="modal-content"
+    class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-11/12 md:w-1/2 max-h-[80vh] overflow-y-auto p-6 z-10"
+  >
+    <button
+      onclick="closeModal()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-xl"
+    >
+      ✖
+    </button>
+
+    <img
+      id="modal-image"
+      src=""
+      alt=""
+      class="w-full h-64 object-cover rounded-xl mb-4"
+    />
+    <h3 id="modal-title" class="text-2xl font-semibold text-gray-900 dark:text-white mb-2"></h3>
+    <p class="text-gray-700 dark:text-gray-300 mb-1"><strong>Lokasi:</strong> <span id="modal-lokasi"></span></p>
+    <p class="text-gray-700 dark:text-gray-300 mb-1"><strong>Tanggal:</strong> <span id="modal-tanggal"></span></p>
+    <p class="text-gray-700 dark:text-gray-300 mb-3"><strong>Deskripsi:</strong> <span id="modal-deskripsi"></span></p>
+  </div>
+</div>
+
+
+
 
 
 
@@ -320,28 +352,21 @@
     </footer>
 
     <script>
-        function openModal(id) {
-            document.getElementById("modal-" + id).classList.remove("hidden");
-        }
-        function closeModal(id) {
-            document.getElementById("modal-" + id).classList.add("hidden");
-        }
+        function openModal(nama, lokasi, tanggal, deskripsi, foto) {
+    document.getElementById("modal-title").innerText = nama;
+    document.getElementById("modal-lokasi").innerText = lokasi;
+    document.getElementById("modal-tanggal").innerText = tanggal;
+    document.getElementById("modal-deskripsi").innerText = deskripsi;
+    document.getElementById("modal-image").src = foto;
 
+    document.getElementById("global-modal").classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const themeToggle = document.getElementById("theme-toggle");
-        const htmlElement = document.documentElement;
-        const savedTheme = localStorage.getItem("theme") || "light";
-        htmlElement.classList.toggle("dark", savedTheme === "dark");
-
-        themeToggle.addEventListener("click", function () {
-          htmlElement.classList.toggle("dark");
-          const currentTheme = htmlElement.classList.contains("dark")
-            ? "dark"
-            : "light";
-          localStorage.setItem("theme", currentTheme);
-        });
-      });
+  function closeModal() {
+    document.getElementById("global-modal").classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
     </script>
   </body>
 </html>
