@@ -244,33 +244,48 @@ exports.showChangePasswordForm = async (req, res) => {
   res.render("changePassword");
 };
 
-exports.changePassword = async (req, res) => {
+exports.showChangePasswordAdminForm = async (req, res) => {
+  res.render("admin/changePasswordadmin");
+};
+
+const processPasswordChange = async (req, res, viewName) => {
   const { old_password, password, confirm_password } = req.body;
   const userEmail = req.user.email;
+
   try {
     const user = await User.findOne({ where: { email: userEmail } });
-    if (!user) return res.status(404).send("User tidak ditemukan");
+    if (!user) {
+      return res.status(404).send("User tidak ditemukan");
+    }
 
     const isValidOld = await bcrypt.compare(old_password, user.password);
     if (!isValidOld) {
-      return res.render("changePassword", { error: "Password lama salah." });
+      return res.render(viewName, { error: "Password lama salah." });
     }
+
     const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!strongPassword.test(password)) {
-      return res.render("changePassword", { error: "Password harus minimal 8 karakter dan kombinasi huruf, angka, simbol." });
+      return res.render(viewName, { error: "Password harus minimal 8 karakter dan kombinasi huruf, angka, simbol." });
     }
+
     if (password !== confirm_password) {
-      return res.render("changePassword", { error: "Konfirmasi password tidak cocok." });
+      return res.render(viewName, { error: "Konfirmasi password tidak cocok." });
     }
+
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     await user.save();
-    return res.render("changePassword", { success: "Password berhasil diganti." });
+
+    return res.render(viewName, { success: "Password berhasil diganti." });
   } catch (err) {
     console.error("Change Password Error:", err);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 };
+
+exports.changePassword = async (req, res) => processPasswordChange(req, res, "changePassword");
+
+exports.changePasswordAdmin = async (req, res) => processPasswordChange(req, res, "admin/changePasswordadmin");
 
 exports.logout = async (req, res) => {
   try {

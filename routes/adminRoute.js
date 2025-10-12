@@ -8,6 +8,7 @@ const userController = require("../controllers/userController");
 const verificationController = require("../controllers/verificationController");
 const historyController = require("../controllers/historyController");
 const claimController = require("../controllers/claimController");
+const authController = require("../controllers/authController");
 
 router.get(
   "/dashboard",
@@ -110,5 +111,18 @@ router.get("/history/download/:id", verifyToken, role('admin'), historyControlle
 router.post('/claim', verifyToken, role('admin'), reportController.claimReport);
 router.get("/my-claim", verifyToken, role('admin'), claimController.getMyClaimsAdmin);
 router.post("/my-claim/cancel/:id_laporan", verifyToken, role('admin'), claimController.cancelClaimAdmin);
+
+router.get(
+  "/changePassword",
+  verifyToken,
+  role("admin"),
+  authController.showChangePasswordAdminForm
+);
+router.post(
+  "/changePassword",
+  verifyToken,
+  role("admin"),
+  authController.changePasswordAdmin
+);
 
 module.exports = router;
