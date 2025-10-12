@@ -268,8 +268,8 @@ exports.getDoneReportsAdmin = async (req, res) => {
       include: [{ model: User }],
     });
 
-
-    res.render("admin/history", { reports, filterJenis, searchNama });
+const user = await User.findOne({ where: { email: req.user.email } });
+    res.render("admin/history", { reports, filterJenis, searchNama, user});
   } catch (err) {
     console.error("Error getDoneReports:", err);
     res.status(500).send("Terjadi kesalahan saat mengambil laporan");
@@ -363,6 +363,8 @@ exports.downloadReportPdfAdmin = async (req, res) => {
         ? new Date(laporan.tanggal_penyerahan).toLocaleDateString("id-ID") 
         : "-",
       lokasi_penyerahan: laporan.lokasi_penyerahan || "-",
+      foto_bukti: laporan.foto_bukti || "-",
+
       pengklaim: laporan.pengklaim || "-",
       no_hp_pengklaim: laporan.no_hp_pengklaim || "-",
       user_nama: laporan.User?.nama || "-",
