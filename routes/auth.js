@@ -5,11 +5,15 @@ const verifyToken= require ('../middleware/validTokenMiddleware');
 const role = require("../middleware/checkRoleMiddleware");
 const upload = require('../middleware/upload');
 
+const landingController = require("../controllers/landingController");
+
 router.post("/register", authController.register);
 router.post("/login", authController.login);
+router.get("/", landingController.getLandingPage);
+
 
 router.get("/", (req, res) => {
-  res.render("login", { title: "SILAPOR - Beranda" });
+  res.render("landing", { title: "SILAPOR - Beranda" });
 });
 router.get("/register", (req, res) => {
   res.render("register", { title: "SILAPOR - Register" });
