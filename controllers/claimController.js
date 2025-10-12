@@ -46,8 +46,9 @@ exports.getMyClaimsAdmin = async (req, res) => {
       laporan.Claim = claim;
       return laporan;
     });
+    const pengguna = await User.findOne({ where: { email: req.user.email } });
 
-    res.render("admin/my-claim", { reports, user: req.user });
+    res.render("admin/my-claim", { reports, user: pengguna });
   } catch (err) {
     console.error("Error getMyClaims:", err);
     res.status(500).send("Terjadi kesalahan");

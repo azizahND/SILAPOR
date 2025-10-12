@@ -347,8 +347,9 @@ exports.getAllReportsAdmin = async (req, res) => {
       ],
       order: [["createdAt", "DESC"]],
     });
+    const user = await User.findOne({ where: { email: req.user.email } });
     res.render("admin/report", {
-      reports,
+      reports,user
     });
   } catch (error) {
     console.error("Error getting all reports:", error);
@@ -556,9 +557,12 @@ exports.getAdminReports = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
+    const user = await User.findOne({ where: { email: req.user.email } });
+    
     res.render("admin/my-reports", {
       title: "Laporan Saya - Admin",
       reports,
+      user,
       success: req.query.success, // Ambil parameter success dari URL
     });
   } catch (error) {

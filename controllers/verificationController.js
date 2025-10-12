@@ -8,8 +8,10 @@ module.exports = {
         include: [{ model: User }],
         order: [["createdAt", "DESC"]],
       });
+    const user = await User.findOne({ where: { email: req.user.email } });
+      
 
-      res.render("admin/verifikasi", { reports });
+      res.render("admin/verifikasi", { reports,user });
     } catch (err) {
       console.error(err);
       res.status(500).send("Terjadi kesalahan server");

@@ -9,7 +9,9 @@ exports.listUsers = async (req, res) => {
         attributes: { exclude: ['password'] },
         order: [['createdAt', 'ASC']],
     });
-    res.render('admin/user', { title: 'Manajemen User', users });
+    const user = await User.findOne({ where: { email: req.user.email } });
+
+    res.render('admin/user', { title: 'Manajemen User', users ,user});
   } catch (error) {
     console.error('Error fetching users:', error);
     res.status(500).render('error', {
