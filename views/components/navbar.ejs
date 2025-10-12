@@ -1,176 +1,82 @@
-<header
-  class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 shadow-lg border-b border-gray-100"
->
-  <nav
-    class="max-w-[85rem] mx-auto px-4 sm:px-6 flex items-center justify-between py-3"
-  >
-    <!-- Brand -->
-    <a
-      class="flex items-center gap-x-2 text-xl sm:text-2xl font-bold text-green-700 tracking-wide hover:scale-105 transition-transform duration-300 group"
-      href="#"
-    >
+<header class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 shadow-lg border-b border-gray-100">
+  <nav class="max-w-[85rem] mx-auto px-4 sm:px-6 flex items-center justify-between py-3">
+    <a href="#" class="flex items-center gap-x-2 text-xl sm:text-2xl font-bold text-green-700 tracking-wide hover:scale-105 transition-transform duration-300 group">
       <div class="relative">
-        <div
-          class="absolute inset-0 bg-green-500/20 rounded-lg blur-md group-hover:bg-green-500/40 transition-all duration-300"
-        ></div>
-        <img
-          src="/images/logo.png"
-          alt="SILAPOR Logo"
-          class="relative w-10 h-10 sm:w-12 sm:h-12 object-contain"
-        />
+        <div class="absolute inset-0 bg-green-500/20 rounded-lg blur-md group-hover:bg-green-500/40 transition-all duration-300"></div>
+        <img src="/images/logo.png" alt="SILAPOR Logo" class="relative w-10 h-10 sm:w-12 sm:h-12 object-contain" />
       </div>
-      <span
-        class="hidden sm:inline bg-gradient-to-r from-green-700 to-green-600 bg-clip-text text-transparent"
-        >SILAPOR</span
-      >
+      <span class="hidden sm:inline bg-gradient-to-r from-green-700 to-green-600 bg-clip-text text-transparent">SILAPOR</span>
     </a>
 
-    <!-- Hamburger Button (Mobile) -->
-    <button
-      id="menuToggle"
-      class="lg:hidden text-gray-700 text-2xl focus:outline-none hover:text-green-700 transition-all duration-300 hover:scale-110 active:scale-95"
-    >
+    <button id="menuToggle" class="lg:hidden text-gray-700 text-2xl focus:outline-none hover:text-green-700 transition-all duration-300 hover:scale-110 active:scale-95">
       <i class="fas fa-bars transition-transform duration-300"></i>
     </button>
 
-    <!-- Menu Content -->
-    <div
-      id="menuContent"
-      class="hidden lg:flex flex-col lg:flex-row lg:items-center gap-0 lg:gap-8 absolute lg:static top-16 left-0 right-0 w-full lg:w-auto bg-white/95 lg:bg-transparent border-t lg:border-0 shadow-xl lg:shadow-none py-4 lg:p-0 rounded-b-2xl lg:rounded-none backdrop-blur-lg lg:backdrop-blur-none"
-    >
-      <!-- Navigation Links -->
-      <a
-        href="/mahasiswa/home"
-        class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300"
-      >
+    <div id="menuContent" class="hidden lg:flex flex-col lg:flex-row lg:items-center gap-0 lg:gap-8 absolute lg:static top-16 left-0 right-0 w-full lg:w-auto bg-white/95 lg:bg-transparent border-t lg:border-0 shadow-xl lg:shadow-none py-4 lg:p-0 rounded-b-2xl lg:rounded-none backdrop-blur-lg lg:backdrop-blur-none">
+      <a href="/mahasiswa/home" class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300">
         <div class="flex items-center gap-3">
-          <i
-            class="fas fa-home text-green-600 group-hover:scale-110 transition-transform duration-300"
-          ></i>
+          <i class="fas fa-home text-green-600 group-hover:scale-110 transition-transform duration-300"></i>
           <span>Beranda</span>
         </div>
-        <div
-          class="absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-green-600 to-green-400 group-hover:w-full transition-all duration-300 lg:block hidden"
-        ></div>
+        <div class="absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-green-600 to-green-400 group-hover:w-full transition-all duration-300 lg:block hidden"></div>
       </a>
-
-      <a
-        href="/mahasiswa/my-reports"
-        class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300"
-      >
+      <a href="/mahasiswa/my-reports" class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300">
         <div class="flex items-center gap-3">
-          <i
-            class="fas fa-file-alt text-green-600 group-hover:scale-110 transition-transform duration-300"
-          ></i>
+          <i class="fas fa-file-alt text-green-600 group-hover:scale-110 transition-transform duration-300"></i>
           <span>Laporan Saya</span>
         </div>
-        <div
-          class="absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-green-600 to-green-400 group-hover:w-full transition-all duration-300 lg:block hidden"
-        ></div>
       </a>
-
-      <a
-        href="/mahasiswa/history"
-        class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300"
-      >
+      <a href="/mahasiswa/history" class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300">
         <div class="flex items-center gap-3">
-          <i
-            class="fas fa-history text-green-600 group-hover:scale-110 transition-transform duration-300"
-          ></i>
+          <i class="fas fa-history text-green-600 group-hover:scale-110 transition-transform duration-300"></i>
           <span>Riwayat</span>
         </div>
-        <div
-          class="absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-green-600 to-green-400 group-hover:w-full transition-all duration-300 lg:block hidden"
-        ></div>
       </a>
-
-      <a
-        href="/mahasiswa/my-claim"
-        class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300"
-      >
+      <a href="/mahasiswa/my-claim" class="nav-link group relative block w-full lg:w-auto text-left px-6 py-3 lg:px-0 lg:py-2 font-medium text-gray-700 hover:text-green-700 hover:bg-green-50 lg:hover:bg-transparent border-b border-gray-100 lg:border-0 transition-all duration-300">
         <div class="flex items-center gap-3">
-          <i
-            class="fas fa-hand-holding-usd text-green-600  group-hover:scale-110 transition-transform duration-300"
-          ></i>
-          <span>Klaim</span>
+          <i class="fas fa-clipboard-check text-green-600 group-hover:scale-110 transition-transform duration-300"></i>
+          <span>Klaim Aset</span>
         </div>
-        <div
-          class="absolute bottom-0 left-0 w-0 h-[3px] bg-gradient-to-r from-green-600 to-green-400 group-hover:w-full transition-all duration-300 lg:block hidden"
-        ></div>
       </a>
 
-      <!-- Profile Dropdown -->
-      <div
-        class="relative w-full lg:w-auto mt-0 lg:mt-0 pt-0 lg:pt-0 border-t lg:border-0 border-gray-200"
-      >
-        <button
-          id="profileMenuBtn"
-          class="flex items-center justify-start lg:justify-start gap-3 w-full lg:w-auto focus:outline-none group hover:bg-green-50 lg:hover:bg-transparent py-3 px-6 lg:py-0 lg:px-0 transition-all duration-300 text-left"
-        >
+      <% if (user) { %>
+      <div class="relative w-full lg:w-auto border-t lg:border-0 border-gray-200">
+        <button id="profileMenuBtn" class="flex items-center justify-start lg:justify-start gap-3 w-full lg:w-auto focus:outline-none group hover:bg-green-50 lg:hover:bg-transparent py-3 px-6 lg:py-0 lg:px-0 transition-all duration-300 text-left">
           <div class="relative lg:block">
-            <div
-              class="absolute inset-0 bg-green-500/20 rounded-full blur-sm group-hover:bg-green-500/40 transition-all duration-300 hidden lg:block"
-            ></div>
-            <div
-              class="relative w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-full border-2 border-white shadow-lg flex items-center justify-center"
-            >
-              <i class="fas fa-user text-white text-sm"></i>
-            </div>
+            <div class="absolute inset-0 bg-green-500/20 rounded-full blur-sm group-hover:bg-green-500/40 transition-all duration-300 hidden lg:block"></div>
+            <img src="<%= user.foto ? '/uploads/' + user.foto : '/uploads/default.jpg' %>" alt="Foto Profil" class="relative w-10 h-10 rounded-full border-2 border-white shadow-lg object-cover" />
           </div>
-          <span
-            class="font-medium text-gray-700 group-hover:text-green-700 flex-1"
-            >Profile</span
-          >
-          <i
-            class="fas fa-chevron-down text-gray-600 text-sm transition-transform duration-300 group-hover:rotate-180 group-hover:text-green-700"
-          ></i>
+          <i class="fas fa-chevron-down text-gray-600 text-sm transition-transform duration-300 group-hover:rotate-180 group-hover:text-green-700"></i>
         </button>
 
-        <div
-          id="profileMenu"
-          class="hidden absolute right-0 lg:right-0 left-0 lg:left-auto mt-2 w-full lg:w-56 bg-white border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 scale-95 transition-all duration-200 overflow-hidden"
-        >
-          <div
-            class="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-green-50 to-transparent"
-          >
+        <div id="profileMenu" class="hidden absolute right-0 lg:right-0 left-0 lg:left-auto mt-2 w-full lg:w-56 bg-white border border-gray-200 rounded-xl shadow-2xl py-2 z-50 opacity-0 scale-95 transition-all duration-200 overflow-hidden">
+          <div class="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-green-50 to-transparent">
             <p class="text-sm font-semibold text-gray-800">Menu Profile</p>
           </div>
-
-          <a
-            href="/profile"
-            class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-all duration-200 group"
-          >
-            <i
-              class="fas fa-user-circle text-gray-400 group-hover:text-green-600 transition-colors duration-200"
-            ></i>
+          <a href="/profile" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-green-50 transition-all duration-200">
+            <i class="fas fa-user text-green-600"></i>
             <span>Profil Saya</span>
           </a>
-
-          <a
-            href="/changePassword"
-            class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-700 transition-all duration-200 group"
-          >
-            <i
-              class="fas fa-key text-gray-400 group-hover:text-green-600 transition-colors duration-200"
-            ></i>
+          <a href="/changePassword" class="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-green-50 transition-all duration-200">
+            <i class="fas fa-lock text-green-600"></i>
             <span>Ganti Password</span>
           </a>
-
           <div class="border-t border-gray-100 mt-1"></div>
-
           <form action="/logout" method="POST">
-            <button
-              type="submit"
-              class="flex items-center gap-3 w-full text-left px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
-            >
-              <i
-                class="fas fa-sign-out-alt text-gray-400 group-hover:text-red-600 transition-colors duration-200"
-              ></i>
+            <button type="submit" class="flex items-center gap-3 w-full px-4 py-2 text-gray-700 hover:bg-green-50 transition-all duration-200">
+              <i class="fas fa-sign-out-alt text-red-500"></i>
               <span>Logout</span>
             </button>
           </form>
         </div>
       </div>
+      <% } else { %>
+      <div class="w-full lg:w-auto mt-2 lg:mt-0 lg:ml-4 px-6 lg:px-0">
+        <a href="/login" class="block text-center lg:inline-block w-full px-6 py-2.5 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-all duration-300">
+          Login
+        </a>
+      </div>
+      <% } %>
     </div>
   </nav>
 </header>
@@ -182,82 +88,25 @@
     const menuToggle = document.getElementById("menuToggle");
     const menuContent = document.getElementById("menuContent");
 
-    // Dropdown Profile dengan animasi smooth
-    profileBtn?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isHidden = profileMenu.classList.contains("hidden");
-
-      if (isHidden) {
-        profileMenu.classList.remove("hidden");
-        setTimeout(() => {
-          profileMenu.classList.remove("opacity-0", "scale-95");
-          profileMenu.classList.add("opacity-100", "scale-100");
-        }, 10);
-      } else {
-        profileMenu.classList.add("opacity-0", "scale-95");
-        profileMenu.classList.remove("opacity-100", "scale-100");
-        setTimeout(() => {
-          profileMenu.classList.add("hidden");
-        }, 200);
-      }
-    });
-
-    // Tutup dropdown saat klik di luar
-    window.addEventListener("click", (e) => {
-      if (!profileBtn?.contains(e.target) && !profileMenu?.contains(e.target)) {
-        profileMenu?.classList.add("hidden", "opacity-0", "scale-95");
-        profileMenu?.classList.remove("opacity-100", "scale-100");
-      }
-    });
-
-    // Hamburger Toggle dengan animasi smooth
-    menuToggle?.addEventListener("click", () => {
-      const isHidden = menuContent.classList.contains("hidden");
-      const icon = menuToggle.querySelector("i");
-
-      if (isHidden) {
-        menuContent.classList.remove("hidden");
-        icon.classList.remove("fa-bars");
-        icon.classList.add("fa-times", "rotate-90");
-      } else {
-        menuContent.classList.add("hidden");
-        icon.classList.remove("fa-times", "rotate-90");
-        icon.classList.add("fa-bars");
-      }
-    });
-
-    // Tutup mobile menu saat resize ke desktop
-    window.addEventListener("resize", () => {
-      if (window.innerWidth >= 1024) {
-        menuContent.classList.add("hidden");
-        const icon = menuToggle?.querySelector("i");
-        icon?.classList.remove("fa-times", "rotate-90");
-        icon?.classList.add("fa-bars");
-      }
-    });
-
-    // Tutup mobile menu saat klik link
-    document.querySelectorAll(".nav-link").forEach((link) => {
-      link.addEventListener("click", () => {
-        if (window.innerWidth < 1024) {
-          menuContent.classList.add("hidden");
-          const icon = menuToggle?.querySelector("i");
-          icon?.classList.remove("fa-times", "rotate-90");
-          icon?.classList.add("fa-bars");
-        }
+    if (profileBtn) {
+      profileBtn.addEventListener("click", () => {
+        const isOpen = profileMenu.classList.contains("opacity-100");
+        profileMenu.classList.toggle("hidden", isOpen);
+        profileMenu.classList.toggle("opacity-100", !isOpen);
+        profileMenu.classList.toggle("scale-100", !isOpen);
+        profileMenu.classList.toggle("opacity-0", isOpen);
+        profileMenu.classList.toggle("scale-95", isOpen);
       });
+    }
+
+    menuToggle.addEventListener("click", () => {
+      menuContent.classList.toggle("hidden");
     });
 
-    // Highlight link aktif
-    const currentPath = window.location.pathname;
-    document.querySelectorAll(".nav-link").forEach((link) => {
-      if (link.getAttribute("href") === currentPath) {
-        link.classList.add("text-green-700", "font-semibold", "bg-green-50");
-        link.classList.remove("text-gray-600");
-        const underline = link.querySelector("div:last-child");
-        if (underline) {
-          underline.classList.add("!w-full");
-        }
+    window.addEventListener("click", (e) => {
+      if (profileMenu && !profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+        profileMenu.classList.add("hidden");
+        profileMenu.classList.remove("opacity-100", "scale-100");
       }
     });
   });

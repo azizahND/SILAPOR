@@ -116,27 +116,30 @@ exports.createReport = async (req, res) => {
   }
 };
 
+
 exports.getUserReports = async (req, res) => {
   try {
     const userEmail = req.user.email;
-    
+
     const reports = await Laporan.findAll({
-      where: { email: userEmail,
-        status : [ 
+      where: {
+        email: userEmail,
+        status: [
           "Waiting for upload verification",
           "Upload verification rejected",
           "On progress",
           "Claimed",
           "Waiting for end verification",
-          "End verification rejected"]
+          "End verification rejected"
+        ]
       },
       include: [
         {
           model: User,
-          atrributes: ["nama", "email"]
+          attributes: ["nama", "email"]
         },
         {
-          model: Claim, 
+          model: Claim,
           attributes: ["email", "tanggal_claim"],
           include: [{ model: User, attributes: ["nama", "email", "no_telepon", "alamat"] }]
         }
@@ -144,10 +147,14 @@ exports.getUserReports = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
+    const user = await User.findOne({ where: { email: userEmail } });
+
     res.render("my-reports", {
       title: "Laporan Saya",
       reports,
+      user
     });
+
   } catch (error) {
     console.error("Error getting reports:", error);
     res.status(500).render("error", {
@@ -155,6 +162,7 @@ exports.getUserReports = async (req, res) => {
     });
   }
 };
+
 
 exports.getDashboard = async (req, res) => {
   try {
@@ -179,15 +187,23 @@ exports.getAllReportsUser = async (req, res) => {
       include: [
         {
           model: User,
-          atrributes: ["nama", "email"],
+          attributes: ["nama", "email"],
         },
       ],
       where: { status: "On Progress" },
       order: [["createdAt", "DESC"]],
     });
+
+    let user = null;
+    if (req.user && req.user.email) {
+      user = await User.findOne({ where: { email: req.user.email } });
+    }
+
     res.render("home", {
       reports,
+      user,
     });
+
   } catch (error) {
     console.error("Error getting all reports:", error);
     res.status(500).send("Terjadi kesalahan pada server");
