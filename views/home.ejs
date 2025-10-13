@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Laporan Penemuan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/id.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -75,11 +78,12 @@
               </span>
             </div>
             <div class="absolute top-4 right-4">
-              <span
-                class="text-xs text-white bg-black/50 px-2 py-1 rounded-full font-medium"
-                >2 jam lalu</span
-              >
-            </div>
+           <span 
+              class="time-ago text-xs text-white bg-black/50 px-2 py-1 rounded-full font-medium" 
+              data-time="<%= report.tanggal_laporan.toISOString() %>"
+            >
+            </span>
+          </div>
           </div>
           <div class="p-6">
             <div class="flex items-start justify-between mb-3">
@@ -211,6 +215,7 @@
       </div>
     </div>
 
+    
     <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
     <script>
       document.querySelectorAll(".btn-klaim").forEach((btn) => {
@@ -281,6 +286,21 @@
             console.error(err);
             alert("Gagal klaim laporan");
           }
+        });
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        // 1. Aktifkan plugin dan atur bahasa ke Indonesia
+        dayjs.extend(window.dayjs_plugin_relativeTime);
+        dayjs.locale('id');
+
+        // 2. Cari semua elemen dengan kelas 'time-ago'
+        const timeElements = document.querySelectorAll('.time-ago');
+
+        // 3. Loop setiap elemen dan update teksnya
+        timeElements.forEach(element => {
+          const timestamp = element.getAttribute('data-time');
+          const relativeTime = dayjs(timestamp).fromNow(); // Contoh: "beberapa detik yang lalu", "2 jam yang lalu"
+          element.innerText = relativeTime;
         });
       });
     </script>
