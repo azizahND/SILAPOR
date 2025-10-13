@@ -110,7 +110,7 @@
             <div class="flex gap-4">
               <button
                 type="button"
-                class="flex-1 bg-green-100 hover:bg-green-200 text-green-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                class="flex-1 bg-green-500 hover:bg-green-200 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
                 data-report="<%- encodeURIComponent(JSON.stringify(report)) %>"
                 onclick="openDetailModal(this.dataset.report)"
               >
@@ -119,7 +119,7 @@
 
               <button
                 type="button"
-                class="flex-1 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                class="flex-1 bg-red-500 hover:bg-red-200 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
                 data-id="<%= report.id_laporan %>"
                 data-nama="<%= report.nama_barang %>"
                 onclick="openCancelModal(this)"

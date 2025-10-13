@@ -20,7 +20,9 @@ exports.getMyClaims = async (req, res) => {
       return laporan;
     });
 
-    res.render("my-claim", { reports, user: req.user });
+     const user = await User.findOne({ where: { email: req.user.email } });
+
+    res.render("my-claim", { reports, user: user });
   } catch (err) {
     console.error("Error getMyClaims:", err);
     res.status(500).send("Terjadi kesalahan");
