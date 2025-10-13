@@ -186,13 +186,13 @@
               <% } else { %>
               <button
                data-user='<%= JSON.stringify(report) %>' onclick='openEditModal(this.dataset.user)'
-                class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                class="bg-yellow-500 hover:bg-yellow-200 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 <i class="fas fa-edit mr-2"></i>Edit
               </button>
               <button
                 onclick="confirmDelete('<%= report.id_laporan %>')"
-                class="bg-red-100 hover:bg-red-200 text-red-600 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
+                class="bg-red-500 hover:bg-red-200 text-white py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                 <i class="fas fa-trash-alt mr-2"></i>Hapus
               </button>
