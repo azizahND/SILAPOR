@@ -12,6 +12,7 @@ exports.getMyClaims = async (req, res) => {
           include: [{ model: User }],
         },
       ],
+      order: [['id_claim', 'DESC']],
     });
 
     const reports = claims.map((claim) => {
@@ -41,6 +42,7 @@ exports.getMyClaimsAdmin = async (req, res) => {
           include: [{ model: User }],
         },
       ],
+      order: [['id_claim', 'DESC']],
     });
 
     const reports = claims.map((claim) => {
