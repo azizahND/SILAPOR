@@ -48,8 +48,21 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <% reports.forEach(report => { %>
         <div
-          class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
+          class="relative bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
         >
+        <div class="absolute top-4 left-4 z-10">
+                <% if (report.jenis_laporan === "Penemuan") { %>
+                  <span
+                    class="bg-lime-500 text-lime-800 text-xs font-bold p-1 rounded"
+                    >Penemuan</span
+                  >
+                <% } else { %>
+                  <span
+                    class="bg-yellow-400 text-yeloow-800 text-xs font-bold p-1 rounded"
+                    >Kehilangan</span
+                  >
+                <% } %>
+              </div>
           <div class="relative">
             <img
               src="/uploads/<%= report.foto_barang %>"
