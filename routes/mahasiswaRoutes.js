@@ -85,7 +85,7 @@ router.post(
   reportController.rejectClaim
 );
 
-// Update laporan
+
 router.post(
   "/reports/update/:id",
   verifyToken,

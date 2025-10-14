@@ -318,12 +318,12 @@
     </script>
 
     <script>
-      // Ambil data laporan dari script tag
+      
       const reportsData = JSON.parse(
         document.getElementById("reports-data").textContent
       );
 
-      // Fungsi untuk memformat tanggal
+      
       function formatDate(dateString) {
         const options = {
           year: "numeric",
@@ -334,7 +334,7 @@
         return date.toLocaleDateString("id-ID", options);
       }
 
-      // Fungsi untuk mendapatkan kelas Tailwind CSS berdasarkan status
+      
       function getStatusClasses(status) {
         switch (status) {
           case "pending":
@@ -360,7 +360,7 @@
         }
       }
 
-      // --- MODAL DETAIL (VERIFIKASI) ---
+      
       function openDetailModal(id_laporan) {
         const report = reportsData.find((r) => r.id_laporan == id_laporan);
         const modal = document.getElementById("detailModal");
@@ -368,7 +368,7 @@
 
         if (!report) return;
 
-        // 1. Isi Data ke Modal
+        
         document.getElementById("detail-nama-barang").textContent =
           report.nama_barang;
         document.getElementById("detail-lokasi").textContent = report.lokasi;
@@ -388,24 +388,24 @@
         document.getElementById("detail-email").textContent =
           report.User.email || "-";
 
-        // Status Badge
+        
         const statusBadge = document.getElementById("detail-status-badge");
         const status = getStatusClasses(report.status);
         statusBadge.textContent = status.text;
         statusBadge.className = `px-3 py-1.5 rounded-full text-sm font-semibold ${status.class}`;
 
-        // 2. Update Form Actions di Footer
+        
         const approveForm = document.getElementById("detail-approve-form");
         approveForm.action = `/admin/verifikasi/${id_laporan}`;
 
         const rejectButton = document.getElementById("detail-reject-btn");
         rejectButton.onclick = () => {
-          // Tutup modal detail, lalu buka modal reject
+          
           closeDetailModal();
           openRejectModal(id_laporan);
         };
 
-        // 3. Tampilkan Modal
+        
         modal.classList.remove("hidden");
         setTimeout(() => {
           modalContent.classList.remove("scale-95", "opacity-0");
@@ -421,13 +421,13 @@
         }, 300);
       }
 
-      // --- MODAL REJECT (Fungsi penolakan) ---
+      
 
       function openRejectModal(id_laporan) {
         const modal = document.getElementById(`rejectClaimModal-${id_laporan}`);
         const modalContent = modal.querySelector(".modal-content");
         modal.classList.remove("hidden");
-        // Pastikan form reject di-reset saat dibuka
+        
         const form = document.getElementById(`rejectReportForm-${id_laporan}`);
         form.reset();
         handleRejectReasonChange(id_laporan);

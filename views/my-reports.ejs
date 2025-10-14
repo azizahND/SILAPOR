@@ -20,7 +20,7 @@
       .gradient-bg {
         background-image: linear-gradient(to right, #22c55e, #16a34a);
       }
-      /* Style untuk transisi modal */
+      
       .modal-content {
           transition: transform 0.3s ease-out, opacity 0.3s ease-out;
       }
@@ -574,7 +574,7 @@
         document.getElementById("ownerPhone").innerText = noHp || "-";
         document.getElementById("ownerEmail").innerText = email || "-";
 
-        // update link action
+        
         document.getElementById("waLink").href = noHp ? `https://wa.me/${noHp}` : "#";
 
         contactModal.classList.remove("hidden");
@@ -595,8 +595,6 @@
     });
 
 
-    // ... (Kode JavaScript sebelumnya)
-
     const rejectClaimModal = document.getElementById('rejectClaimModal');
     const rejectClaimContent = rejectClaimModal.querySelector('.modal-content');
     const rejectClaimForm = document.getElementById('rejectClaimForm');
@@ -604,10 +602,10 @@
     const alasanLainnyaContainer = document.getElementById('alasanLainnyaContainer');
     const submitRejectClaimButton = document.getElementById('submitRejectClaim');
 
-    // Function untuk membuka modal Tolak Claim (Tambahkan transisi)
+
     function openRejectClaimModal(id_laporan) {
         rejectClaimForm.dataset.idLaporan = id_laporan;
-        // Reset form state
+        
         alasanSelect.value = "";
         document.getElementById('alasanLain').value = "";
         alasanLainnyaContainer.classList.add('hidden');
@@ -619,7 +617,6 @@
         }, 50);
     }
 
-    // Function untuk menutup modal Tolak Claim (Tambahkan transisi)
     function closeRejectClaimModal() {
         rejectClaimContent.classList.add('scale-95', 'opacity-0');
         setTimeout(() => {
@@ -631,17 +628,17 @@
         if (e.target === rejectClaimModal) closeRejectClaimModal();
     });
 
-    // Detect when user selects "Alasan lainnya" in the dropdown
+
     alasanSelect.addEventListener('change', function () {
-        // Show the "Alasan lainnya" field if selected
+
         if (this.value === 'Alasan lainnya') {
             alasanLainnyaContainer.classList.remove('hidden');
         } else {
             alasanLainnyaContainer.classList.add('hidden');
-            document.getElementById('alasanLain').value = ''; // Reset the field
+            document.getElementById('alasanLain').value = ''; 
         }
 
-        // Enable the submit button if an alasan is selected
+        
         if (this.value) {
             submitRejectClaimButton.disabled = false;
         } else {
@@ -649,7 +646,7 @@
         }
     });
 
-    // Handle the form submission to update the claim and report status
+
     rejectClaimForm.addEventListener('submit', async function (e) {
         e.preventDefault();
 
@@ -657,7 +654,7 @@
         const alasan = document.getElementById('alasan').value;
         const alasanLain = document.getElementById('alasanLain').value;
         
-        // Disable button saat proses
+
         submitRejectClaimButton.textContent = 'Memproses...';
         submitRejectClaimButton.disabled = true;
 
@@ -673,23 +670,23 @@
             const data = await response.json();
 
             if (data.success) {
-                // Saat BERHASIL, SweetAlert akan muncul dan memanggil window.location.reload()
+                
                 Swal.fire('Berhasil', data.message || 'Klaim berhasil ditolak.', 'success').then(() => {
-                    window.location.reload(); // Reload the page after success
+                    window.location.reload(); 
                 });
-                // TIDAK perlu closeRejectClaimModal() di sini karena halaman akan di-reload
+                
                 
             } else {
-                // Jika GAGAL, tampilkan error dan kembalikan tombol
+                
                 Swal.fire('Error', data.message || 'Terjadi kesalahan saat menolak klaim.', 'error');
-                closeRejectClaimModal(); // Tutup modal hanya jika ada error
+                    closeRejectClaimModal(); 
             }
         } catch (error) {
-            // Jika terjadi kesalahan jaringan
+            
             Swal.fire('Error', 'Terjadi kesalahan jaringan atau server.', 'error');
-            closeRejectClaimModal(); // Tutup modal saat error jaringan
+            closeRejectClaimModal(); 
         } finally {
-            // Kembalikan tombol ke keadaan semula jika TIDAK BERHASIL (karena yang berhasil akan reload)
+            
             if (!response || !response.ok || (response && response.ok && !data.success)) {
                 submitRejectClaimButton.textContent = 'Tolak Klaim';
                 submitRejectClaimButton.disabled = false;

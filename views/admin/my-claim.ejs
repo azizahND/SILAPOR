@@ -16,13 +16,13 @@
     <style>
       body {
         font-family: "Inter", sans-serif;
-        background-color: #f3f4f6; /* bg-gray-100 */
-        /* 💡 Perbaikan Utama: Tambahkan padding-left global untuk mengimbangi sidebar w-64 (16rem) yang FIXED */
+        background-color: #f3f4f6; 
+        
         padding-left: 16rem; 
-        min-height: 100vh; /* Pastikan body minimal setinggi viewport */
+        min-height: 100vh;
       }
 
-      /* CSS untuk Animasi Modal */
+
       .modal-content {
         transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         transform: scale(0.95);
@@ -313,7 +313,7 @@
 
     <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
     <script>
-      // --- Logika Modal Batal Klaim (Disederhanakan) ---
+     
       function openCancelModal(button) {
         const id = button.dataset.id;
         const nama = button.dataset.nama;
@@ -323,7 +323,7 @@
         document.getElementById("modalItemName").textContent = nama;
         document.getElementById("cancelForm").action = "/admin/cancel/" + id;
 
-        // Tampilkan modal dengan animasi
+      
         modal.classList.remove("hidden");
         modalContent.classList.remove("close");
         modalContent.classList.add("open");
@@ -333,20 +333,18 @@
         const modal = document.getElementById("cancelModal");
         const modalContent = modal.querySelector(".modal-content");
 
-        // Mulai animasi tutup
+      
         modalContent.classList.remove("open");
         modalContent.classList.add("close");
 
-        // Sembunyikan setelah animasi selesai
+       
         setTimeout(() => {
           modal.classList.add("hidden");
-          modalContent.classList.remove("close"); // Bersihkan class
+          modalContent.classList.remove("close");
         }, 300);
       }
 
-      // --- Fungsi Pembantu untuk Modal Detail ---
-
-      // Fungsi untuk membuat badge status
+ 
       function getStatusBadge(status) {
         let colorClass = "";
         if (status.includes("Waiting for approval")) {
@@ -363,7 +361,7 @@
         return { text: status, class: colorClass };
       }
 
-      // Fungsi untuk format tanggal
+
       function formatDate(dateString) {
         if (!dateString) return "-";
         try {
@@ -375,7 +373,6 @@
         }
       }
 
-      // Fungsi openDetailModal
       function openDetailModal(reportData) {
         const report = JSON.parse(decodeURIComponent(reportData));
         const modal = document.getElementById("detailModal");
@@ -425,7 +422,7 @@
             .classList.remove("opacity-50", "pointer-events-none");
         }
 
-        // Tampilkan modal Detail dengan animasi
+    
         modal.classList.remove("hidden");
         modalContent.classList.remove("close");
         modalContent.classList.add("open");
@@ -438,7 +435,7 @@
         modalContent.classList.remove("open");
         modalContent.classList.add("close");
 
-        // Timeout 300ms untuk menutup setelah animasi selesai
+    
         setTimeout(() => {
           modal.classList.add("hidden");
           modalContent.classList.remove("close");

@@ -21,7 +21,7 @@
         background-image: linear-gradient(to right, #22c55e, #16a34a);
       }
 
-      /* CSS untuk Animasi Modal */
+      
       .modal-content {
         transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         transform: scale(0.95);
@@ -310,7 +310,7 @@
 
     <script src="https://unpkg.com/preline@^2/dist/preline.js"></script>
     <script>
-      // --- Logika Modal Batal Klaim (Disederhanakan) ---
+      
       function openCancelModal(button) {
         const id = button.dataset.id;
         const nama = button.dataset.nama;
@@ -318,11 +318,11 @@
         const modalContent = modal.querySelector(".modal-content");
 
         document.getElementById("modalItemName").textContent = nama;
-        // INI SUDAH BENAR UNTUK PEMBATALAN KLAIM OLEH PENGKLAIM
+        
         document.getElementById("cancelForm").action =
           "/mahasiswa/cancel/" + id;
 
-        // Tampilkan modal dengan animasi
+        
         modal.classList.remove("hidden");
         modalContent.classList.remove("close");
         modalContent.classList.add("open");
@@ -332,22 +332,18 @@
         const modal = document.getElementById("cancelModal");
         const modalContent = modal.querySelector(".modal-content");
 
-        // Mulai animasi tutup
+        
         modalContent.classList.remove("open");
         modalContent.classList.add("close");
 
-        // Sembunyikan setelah animasi selesai
+        
         setTimeout(() => {
           modal.classList.add("hidden");
-          modalContent.classList.remove("close"); // Bersihkan class
+          modalContent.classList.remove("close"); 
         }, 300);
       }
 
-      // Catatan: Logika alasan (radio/textarea) telah dihapus karena tidak diperlukan lagi.
-
-      // --- Fungsi Pembantu untuk Modal Detail ---
-
-      // Fungsi untuk membuat badge status
+  
       function getStatusBadge(status) {
         let colorClass = "";
         if (status.includes("Waiting for approval")) {
@@ -364,7 +360,7 @@
         return { text: status, class: colorClass };
       }
 
-      // Fungsi untuk format tanggal
+     
       function formatDate(dateString) {
         if (!dateString) return "-";
         try {
@@ -376,7 +372,7 @@
         }
       }
 
-      // Fungsi openDetailModal
+      
       function openDetailModal(reportData) {
         const report = JSON.parse(decodeURIComponent(reportData));
         const modal = document.getElementById("detailModal");
@@ -425,7 +421,7 @@
             .classList.remove("opacity-50", "pointer-events-none");
         }
 
-        // Tampilkan modal Detail dengan animasi
+        
         modal.classList.remove("hidden");
         modalContent.classList.remove("close");
         modalContent.classList.add("open");
@@ -438,7 +434,7 @@
         modalContent.classList.remove("open");
         modalContent.classList.add("close");
 
-        // Timeout 300ms untuk menutup setelah animasi selesai
+        
         setTimeout(() => {
           modal.classList.add("hidden");
           modalContent.classList.remove("close");

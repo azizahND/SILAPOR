@@ -726,13 +726,11 @@ exports.reapplyReportAdmin = async (req, res) => {
   }
 };
 
-// Tolak Claim
 exports.rejectClaim = async (req, res) => {
   try {
     const { id_laporan } = req.params;
     const { alasan } = req.body;
 
-    // Cari claim yang statusnya "Waiting for approval"
     const claim = await Claim.findOne({
       where: { id_laporan: id_laporan, status: "Waiting for approval" },
     });
@@ -746,12 +744,10 @@ exports.rejectClaim = async (req, res) => {
         });
     }
 
-    // Update status claim menjadi "Rejected" dan alasan penolakan
     claim.status = "Rejected";
     claim.alasan = alasan;
     await claim.save();
 
-    // Update status laporan menjadi "On Progress"
     const laporan = await Laporan.findByPk(id_laporan);
     if (laporan) {
       laporan.status = "On progress";

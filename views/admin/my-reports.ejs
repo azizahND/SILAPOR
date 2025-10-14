@@ -16,7 +16,7 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-      /* Mengubah gradient ke warna hijau agar sesuai dengan mahasiswa */
+      
       .gradient-bg {
         background-image: linear-gradient(to right, #22c55e, #16a34a);
       }
@@ -592,7 +592,7 @@
       </div>
     </div>
 
-    <!-- Modal Tolak Claim -->
+    
     <div
       id="rejectClaimModal"
       class="hs-overlay hidden fixed top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black/50"
@@ -754,9 +754,7 @@
     </div>
 
     <script>
-      // Pastikan SweetAlert2 sudah dimuat (misalnya dari CDN)
-
-      // --- UTILITIES & MODAL EDIT/DELETE (TIDAK BERUBAH) ---
+      
 
       function confirmDelete(id_laporan) {
         Swal.fire({
@@ -850,10 +848,9 @@
         });
       }
 
-      // --- MODAL DETAIL (TIDAK BERUBAH) ---
 
       const detailModal = document.getElementById("detailReportModal");
-      // Perhatikan: detailModalContent di sini mungkin undefined jika Anda tidak menyertakan elemen HTML modal Detail
+    
       const detailModalContent = detailModal
         ? detailModal.querySelector(".modal-content")
         : null;
@@ -920,7 +917,7 @@
         });
       }
 
-      // --- MODAL CONTACT (TIDAK BERUBAH) ---
+
 
       const contactModal = document.getElementById("contactModal");
       const contactContent = contactModal
@@ -959,7 +956,7 @@
         });
       }
 
-      // --- MODAL TOLAK KLAIM (PERBAIKAN FUNGSI) ---
+   
 
       const rejectClaimModal = document.getElementById("rejectClaimModal");
       const rejectClaimContent = rejectClaimModal
@@ -967,12 +964,12 @@
         : null;
       const rejectClaimForm = document.getElementById("rejectClaimForm");
 
-      // Function untuk membuka modal Tolak Claim (menambahkan transisi)
+      
       function openRejectClaimModal(id_laporan) {
         if (!rejectClaimModal || !rejectClaimForm) return;
 
         rejectClaimForm.dataset.idLaporan = id_laporan;
-        // Reset form state dan pastikan tombol submit non-aktif saat dibuka
+       
         rejectClaimForm.reset();
         document
           .getElementById("alasanLainnyaContainer")
@@ -986,14 +983,14 @@
         }, 50);
       }
 
-      // Function untuk menutup modal Tolak Claim (menambahkan transisi)
+     
       function closeRejectClaimModal() {
         if (!rejectClaimModal || !rejectClaimContent) return;
 
         rejectClaimContent.classList.add("scale-95", "opacity-0");
         setTimeout(() => {
           rejectClaimModal.classList.add("hidden");
-          // Reset form setelah ditutup
+        
           if (rejectClaimForm) rejectClaimForm.reset();
         }, 300);
       }
@@ -1004,7 +1001,6 @@
         });
       }
 
-      // Detect when user selects "Alasan lainnya" in the dropdown
       const alasanSelect = document.getElementById("alasan");
       if (alasanSelect) {
         alasanSelect.addEventListener("change", function () {
@@ -1015,30 +1011,30 @@
 
           const isLainnya = this.value === "Alasan lainnya";
 
-          // Tampilkan/sembunyikan kolom alasan lainnya
+       
           alasanLainnyaContainer.classList.toggle("hidden", !isLainnya);
           document.getElementById("alasanLain").value = isLainnya
             ? document.getElementById("alasanLain").value
             : "";
 
-          // Aktifkan tombol submit
+         
           submitButton.disabled = !this.value;
 
-          // Jika 'Alasan lainnya' dipilih, tombol hanya aktif jika teksnya terisi
+          
           if (isLainnya) {
             const alasanLainTextarea = document.getElementById("alasanLain");
             const checkLainnya = () => {
               submitButton.disabled = !alasanLainTextarea.value.trim();
             };
             alasanLainTextarea.oninput = checkLainnya;
-            checkLainnya(); // Cek status awal
+            checkLainnya(); 
           } else {
             document.getElementById("alasanLain").oninput = null;
           }
         });
       }
 
-      // Handle the form submission to update the claim and report status
+     
       if (rejectClaimForm) {
         rejectClaimForm.addEventListener("submit", async function (e) {
           e.preventDefault();
@@ -1050,14 +1046,14 @@
           const submitButton = document.getElementById("submitRejectClaim");
           const originalText = submitButton.textContent;
 
-          // Feedback Loading
+       
           submitButton.textContent = "Memproses...";
           submitButton.disabled = true;
 
           let success = false;
 
           try {
-            // *** PERBAIKAN UTAMA: Ganti URL dari /mahasiswa menjadi /admin ***
+          
             const response = await fetch(
               `/admin/my-reports/reject-claim/${id_laporan}`,
               {
@@ -1086,7 +1082,7 @@
                 data.message || "Terjadi kesalahan saat menolak klaim.",
                 "error"
               );
-              closeRejectClaimModal(); // Tutup modal saat error
+              closeRejectClaimModal(); 
             }
           } catch (error) {
             console.error("Fetch Error:", error);
@@ -1095,12 +1091,12 @@
               "Terjadi kesalahan jaringan atau server.",
               "error"
             );
-            closeRejectClaimModal(); // Tutup modal saat error jaringan
+            closeRejectClaimModal(); 
           } finally {
-            // Kembalikan tombol ke keadaan semula hanya jika tidak terjadi reload (yaitu, jika ada error)
+            
             if (!success) {
               submitButton.textContent = originalText;
-              // Aktifkan kembali tombol berdasarkan status form yang di-reset (biasanya disabled)
+            
               const alasanSelected = document.getElementById("alasan").value;
               submitButton.disabled = !alasanSelected;
             }
