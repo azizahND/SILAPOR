@@ -99,17 +99,20 @@
           <div class="relative bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
             
             <!-- Badge Jenis Laporan -->
-            <div class="absolute top-4 left-4 z-10">
-              <% if (report.jenis_laporan === "Penemuan") { %>
-                <span class="bg-lime-100 text-lime-800 text-xs font-bold p-1 rounded">
-                  Penemuan
-                </span>
-              <% } else if (report.jenis_laporan === "Kehilangan") { %>
-                <span class="bg-yellow-100 text-yellow-800 text-xs font-bold p-1 rounded">
-                  Kehilangan
-                </span>
-              <% } %>
-            </div>
+            <!-- Jenis Laporan -->
+              <div class="absolute top-4 left-4 z-10">
+                <% if (report.jenis_laporan === "Penemuan") { %>
+                  <span
+                    class="bg-lime-500 text-lime-800 text-xs font-bold p-1 rounded"
+                    >Penemuan</span
+                  >
+                <% } else { %>
+                  <span
+                    class="bg-yellow-400 text-yeloow-800 text-xs font-bold p-1 rounded"
+                    >Kehilangan</span
+                  >
+                <% } %>
+              </div>
 
             <!-- Badge Status -->
            
